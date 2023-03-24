@@ -5,5 +5,7 @@
 4. Folder Public: chứa hình ảnh, css, font,....
 5. Folder View: chứa các file xử lý giao diện.
 6. File Index.php: là file chính của của chúng ta, file này có tác dụng nhận các request để điều hướng đến các View và Controller tương ứng để xử lý.
-#Cách chạy
+
+*Cách chạy:
+
 Đặt thư mục webAssignment vào C:\xampp\htdocs (thư mục để chạy xampp), truy cập http://localhost/webAssignment/login (tk: admin, mk: admin)
