@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Olivia</title>
+    <title>Admin Product Update</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -52,37 +52,69 @@
                 name="productTitle" style="border-radius: 20px;">
         </div>
 
-        <div class="mb-3">
-            <label for="productID" style="font-weight: bold;">Product ID</label>
-            <input type="text" class="form-control" id="productID" placeholder="Enter product ID" name="productID"
-                style="border-radius: 20px; width: 30%;">
-        </div>
-        <div class="mb-3">
-            <label for="price" style="font-weight: bold;">Price $ </label>
-            <input type="text" class="form-control" id="price" placeholder="Enter price" name="price"
-                style="border-radius: 20px; width: 30%;">
+        <div class="idandprice">
+            <div class="mb-3 idandprice1">
+                <label for="productID" style="font-weight: bold;">Product ID</label>
+                <input type="text" class="form-control" id="productID" placeholder="Enter product ID" name="productID"
+                    style="border-radius: 20px; width: 70%;">
+            </div>
+            <div class="mb-3 idandprice2">
+                <label for="price" style="font-weight: bold;">Price $ </label>
+                <input type="text" class="form-control" id="price" placeholder="Enter price" name="price"
+                    style="border-radius: 20px; width: 70%;">
+            </div>
         </div>
 
-        <label for="manufacturingDate" style="font-weight: bold;">Manufacturing Date </label>
-        <input type="date" id="manufacturingDate" name="manufacturingDate"
-            style="border-radius: 20px; margin-left:1%;border-color: rgb(230, 230, 230);">
+        <div class="date">
+            <div class="date1">
+                <label for="manufacturingDate" style="font-weight: bold;">Manufacturing Date </label>
+                <input type="date" id="manufacturingDate" name="manufacturingDate" class="form-control"
+                    style="border-radius: 20px; width: 70%">
+            </div>
+            <div class="date2">
+                <label for="exipiringDate" style="font-weight: bold;">Exipiring Date </label>
+                <input type="date" id="exipiringDate" name="exipiringDate" class="form-control"
+                    style="border-radius: 20px;width: 70%">
+            </div>
+        </div>
 
-        <label for="exipiringDate" style="font-weight: bold; margin-left: 20%">Exipiring Date </label>
-        <input type="date" id="exipiringDate" name="exipiringDate"
-            style="border-radius: 20px; margin-left:1%; border-color: rgb(230, 230, 230);">
-        <br>
         <br>
         <label for="productImage" style="font-weight: bold; margin-right: 2%;">Product Image </label>
-        <input type="file" id="productImage" name="productImage">
-
-        <div class="container">
-            <img src="/webAssignment/public/images/product4.jpg" alt="productImage" style="width:20%">
-            <button type="button" class="btn-close" aria-label="Close"></button>
+        <input type="file" id="productImage" name="productImage" multiple>
+        <br>
+        <br>
+        <div class="mb-3">
+            <label for="stock" style="font-weight: bold;">Stock</label>
+            <input type="text" class="form-control" id="stock" placeholder="Enter stock" name="stock"
+                style="border-radius: 20px; width: 30%;">
         </div>
 
+        <label for="specification" style="font-weight: bold;">Specification</label>
+        <div class=" mb-3" id="specification">
+            <label for="color">Color:</label>
+            <input type="text" class="form-control" id="color" placeholder="Enter color (separated by ',')" name="color"
+                style="border-radius: 20px;">
+            <label for="size">Size:</label>
+            <input type="text" class="form-control" id="size" placeholder="Enter size (separated by ',')" name="size"
+                style="border-radius: 20px;">
+        </div>
+
+        <div class="mb-3 mt-3">
+            <label for="productDescription" style="font-weight: bold;">Product Description</label>
+            <textarea rows="8" class="form-control" id="productDescription" name="productDescription"
+                style="border-radius: 20px;">Enter description...</textarea>
+        </div>
+
+        <div class="mb-3 mt-3">
+            <label for="ingredients" style="font-weight: bold;">Ingredients</label>
+            <textarea rows="8" class="form-control" id="ingredients" name="ingredients"
+                style="border-radius: 20px;">Enter ingredients...</textarea>
+        </div>
+        <br>
         <div class="col-md-12 text-center">
             <button type="submit" class="btn btn-outline-dark rounded-pill mx-1">UPDATE</button>
         </div>
+        <br>
     </form>
 
 

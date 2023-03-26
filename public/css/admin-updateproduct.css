@@ -81,3 +81,19 @@ h2 {
 .container .btn:hover {
     background-color: black;
 }
+
+.idandprice,
+.date {
+    display: flex;
+}
+
+.idandprice1,
+.date1 {
+    width: 100%;
+
+}
+
+.idandprice2,
+.date2 {
+    width: 100%;
+}
