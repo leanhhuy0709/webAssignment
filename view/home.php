@@ -18,19 +18,19 @@
   <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-brand-color justify-content-between">
     <div class="container-fluid">
       
-      <a class="navbar-brand">
-        <button class="btn btn-outline-dark m-1"><i class="fas fa-bars" style="font-size: 23px;"></i></button>
-        <i class="fas fa-cat" style="margin-right: 10px"></i>OLIVIA
-      </a>
+      <div class="d-flex">
+        <button class="btn btn-outline-light text-dark m-1"><i class="fas fa-bars" style="font-size: 23px;"></i></button>
+        <span><image src="public/images/Logo.png" style="width:30%; padding-top:1%"></span>
+      </div>
 
-      <form class="d-flex">
-        <input class="form-control me-2 rounded" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success mx-2" type="submit">Search</button>
+      <form class="d-flex searchbar">
+        <input class="form-control me-2 rounded-pill searchinput" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-dark rounded-pill mx-2" type="submit">Search</button>
       </form>
 
       <div class="d-flex">
-        <button class="btn btn-outline-dark m-1"><i class="fas fa-user" style="font-size: 23px;"></i></button>
-        <button class="btn btn-outline-dark m-1"><i class="fas fa-shopping-cart" style="font-size: 23px;"></i></div></button>
+        <button class="btn btn-outline-light text-dark m-1"><i class="fas fa-user" style="font-size: 23px;"></i></button>
+        <button class="btn btn-outline-light text-dark m-1"><i class="fas fa-shopping-cart" style="font-size: 23px;"></i></div></button>
       </div>
         
     </div>

@@ -38,3 +38,35 @@
 .searchbar {
     padding-right: 25%;
 }
+
+h2 {
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.flex-intro,
+.flex-mission {
+    display: flex;
+}
+
+.flex-intro1 {
+    width: 45%;
+    padding-left: 10%;
+    padding-right: 1%;
+    padding-top: 2%;
+    text-align: center;
+}
+
+.flex-intro2 {
+    width: 55%;
+    padding-left: 1%;
+    padding-bottom: 4%;
+}
+
+.flex-mission1,
+.flex-mission2,
+.flex-mission3 {
+    width: 33%;
+    text-align: center;
+}
