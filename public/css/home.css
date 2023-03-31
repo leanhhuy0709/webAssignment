@@ -1,0 +1,32 @@
+.brand-color {
+    color: #CDE8F6;
+}
+
+.bg-brand-color {
+    background-color: #CDE8F6;
+}
+
+.bg-footer-color {
+    background-color: #152E3C;
+}
+
+.centered-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.bs-list {
+    margin:auto;
+}
+
+.bs-item {
+    width: 200px;
+    margin: 0px 20px;
+}
+
+.no-decoration {
+    text-decoration: none;
+}
