@@ -29,9 +29,7 @@
             <div class="d-flex">
                 <button class="btn btn-outline-light text-dark m-1"><i class="fas fa-bars"
                         style="font-size: 23px;"></i></button>
-                <span>
-                    <image src="/webAssignment/public/images/Logo.png" style="width:30%; padding-top:1%">
-                </span>
+                    <img src="/webAssignment/public/images/Logo.png" style="width:30%; padding-top:1%">
             </div>
 
             <div class="d-flex">

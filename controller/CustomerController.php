@@ -23,6 +23,9 @@ class CustomerController {
 
             $jwt = JWT::encode($payload, $key, 'HS256');
 
+            //Tạo cookie
+            setcookie('token', $jwt, time() + 3600);
+
             // Điều hướng đến trang home và gửi token qua tham số query string
             header('Location: /webAssignment/home?token=' . $jwt);
             exit();
