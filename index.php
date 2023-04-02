@@ -1,7 +1,4 @@
 <?php
-echo "Hello world!";
-
-
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if ($_SERVER['REQUEST_URI'] === '/webAssignment/login')
     {
@@ -11,16 +8,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     {
         require_once('view/home.php');
     }
+    else if ($_SERVER['REQUEST_URI'] === '/webAssignment/signup')
+    {
+        require_once('view/signup.php');
+    }
+    else if ($_SERVER['REQUEST_URI'] === '/webAssignment/aboutus')
+    {
+        require_once('view/aboutus.php');
+    }
+    else if ($_SERVER['REQUEST_URI'] === '/webAssignment/admin-updateproduct')
+    {
+        require_once('view/admin-updateproduct.php');
+    }
     else 
         require_once('view/home.php');
 }
 else if ($_SERVER['REQUEST_METHOD'] === 'POST')
 {
-    require_once('controller/LoginController.php');
+    
     if ($_SERVER['REQUEST_URI'] === '/webAssignment/login')
     {
-        $loginController = new LoginController();
-        $loginController->login();
+        require_once('controller/CustomerController.php');
+        $customer = new CustomerController();
+        $customer->login();
+    }
+    else if ($_SERVER['REQUEST_URI'] === '/webAssignment/signup')
+    {
+        require_once('controller/CustomerController.php');
+        $customer = new CustomerController();
+        $customer->signup();
     }
 }
 
