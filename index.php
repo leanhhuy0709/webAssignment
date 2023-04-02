@@ -1,7 +1,5 @@
 <?php
-<<<<<<< HEAD
-echo "Hello world!"
-=======
+echo "Hello world!";
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -27,5 +25,4 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST')
 }
 
 
->>>>>>> 40b3bdbb55fb4c7171298d951c497f18aff4e22d
 ?>
