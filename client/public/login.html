@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Log_Sign</title>
+</head>
+<body>
+    <div class="container">
+        <div class="create">
+            <div class="header">
+                <h1>Create an account</h1>
+                <p>Get access to our wide range of products today! Be beautiful everyday!</p>
+            </div>
+            <div class="form">
+                <label for="email">Your email</label>
+                <input type="text" id="email" placeholder="e.g. hello@reallygreatsite.com">
+                <a href="#" class="dark-blue btn">Continue with email</a>
+            </div>
+            <div class="line-container">
+                <div class="line">
+                    <div class="center">Or</div>
+                </div>
+            </div>
+            <div class="other-options">
+                <a href="#" class="fb btn">
+                    <i class="fa fa-facebook fa-fw"></i> Continue with Facebook
+                </a>
+                <a href="#" class="twitter btn">
+                    <i class="fa fa-twitter fa-fw"></i> Continue with Twitter
+                </a>
+            </div>
+        </div>
+        <div class="login">
+            <div class="header"><h1>Log in</h1></div>
+            <form class="form" action="http://localhost/login"  method="post">
+                <div class="name">
+                    <label for="name">Your name</label>
+                    <input name="username" type="text" id="name" placeholder="Type your username">
+                </div>
+                <div class="pass">
+                    <label for="pass">Password</label>
+                    <input name="password" type="password" id="pass" placeholder="Type your password">
+                </div>
+                <button type="submit" class="dark-blue btn">Log in</button>
+                <div class="forget-pass">
+                    <p>Forgot your password? <a href="#">Help</a></p>
+                </div>
+            </form> 
+        </div>
+    </div>
+</body>
+</html>

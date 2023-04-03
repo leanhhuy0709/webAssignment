@@ -7,28 +7,7 @@ $check = $cookie->getUserID();
 if (isset($_COOKIE['token']) && !empty($_COOKIE['token']) && ($check != -1)) {
     // Cookie hợp lệ, xử lý tương ứng ở đây
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        if ($_SERVER['REQUEST_URI'] === '/webAssignment/login')
-        {
-            require_once('view/login.php');
-        }
-        else if ($_SERVER['REQUEST_URI'] === '/webAssignment/home')
-        {
-            require_once('view/home.html');
-        }
-        else if ($_SERVER['REQUEST_URI'] === '/webAssignment/signup')
-        {
-            require_once('view/signup.php');
-        }
-        else if ($_SERVER['REQUEST_URI'] === '/webAssignment/aboutus')
-        {
-            require_once('view/aboutus.php');
-        }
-        else if ($_SERVER['REQUEST_URI'] === '/webAssignment/admin-updateproduct')
-        {
-            require_once('view/admin-updateproduct.php');
-        }
-        else 
-            require_once('view/home.html');
+        echo "Welcome to PHP server!";
     }
     else if ($_SERVER['REQUEST_METHOD'] === 'POST')
     {
@@ -49,25 +28,17 @@ if (isset($_COOKIE['token']) && !empty($_COOKIE['token']) && ($check != -1)) {
 } else {
     // Cookie không hợp lệ, xử lý tương ứng ở đây
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        if ($_SERVER['REQUEST_URI'] === '/webAssignment/login')
-        {
-            require_once('view/login.php');
-        }
-        else if ($_SERVER['REQUEST_URI'] === '/webAssignment/signup')
-        {
-            require_once('view/signup.php');
-        }
-        else require_once('view/login.php');
+        echo "Welcome to PHP server!";
     }
     else if ($_SERVER['REQUEST_METHOD'] === 'POST')
     {
-        if ($_SERVER['REQUEST_URI'] === '/webAssignment/login')
+        if ($_SERVER['REQUEST_URI'] === '/login')
         {
             require_once('controller/CustomerController.php');
             $customer = new CustomerController();
             $customer->login();
         }
-        else if ($_SERVER['REQUEST_URI'] === '/webAssignment/signup')
+        else if ($_SERVER['REQUEST_URI'] === '/signup')
         {
             require_once('controller/CustomerController.php');
             $customer = new CustomerController();
