@@ -7,8 +7,10 @@ use \Firebase\JWT\JWT;
 class CustomerController {
     public static function login()
     {
-        $username = $_POST['username'];
-        $password = $_POST['password'];
+        $body = file_get_contents('php://input');
+        $data = json_decode($body, true);
+        $username = isset($data['username']) ? $data['username'] : null;
+        $password = isset($data['password']) ? $data['password'] : null;
         //Token nó vì không lưu tk, mk trong database!!!
         $res = loginModel($username, $password); // Trả về id người dùng
 
@@ -22,19 +24,13 @@ class CustomerController {
             );
 
             $jwt = JWT::encode($payload, $key, 'HS256');
-
+            //1 -> jsfbwfbsfnwfnoweofoiwe1231
             //Tạo cookie
             setcookie('token', $jwt, time() + 3600);
-
-            // Điều hướng đến trang home và gửi token qua tham số query string
-            header('Location: /home.html');
-            exit();
+            return "true";
         }
         else 
-        {
-            $error = 'Thông tin đăng nhập không chính xác';
-            require_once('view/login.php');
-        }
+            return "false";
     }
     public static function signup()
     {

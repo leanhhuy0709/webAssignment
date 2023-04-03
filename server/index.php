@@ -1,4 +1,9 @@
 <?php
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Methods: HEAD, GET, POST, PUT, PATCH, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method,Access-Control-Request-Headers, Authorization");
+header('Content-Type: application/json');
+
 require_once('controller/CookieController.php');
 
 $cookie = new CookieController();
@@ -11,18 +16,17 @@ if (isset($_COOKIE['token']) && !empty($_COOKIE['token']) && ($check != -1)) {
     }
     else if ($_SERVER['REQUEST_METHOD'] === 'POST')
     {
-        
-        if ($_SERVER['REQUEST_URI'] === '/webAssignment/login')
+        if ($_SERVER['REQUEST_URI'] === '/login')
         {
             require_once('controller/CustomerController.php');
             $customer = new CustomerController();
-            $customer->login();
+            echo json_encode($customer->login());
         }
-        else if ($_SERVER['REQUEST_URI'] === '/webAssignment/signup')
+        else if ($_SERVER['REQUEST_URI'] === '/signup')
         {
             require_once('controller/CustomerController.php');
             $customer = new CustomerController();
-            $customer->signup();
+            echo json_encode($customer->signup());
         }
     }
 } else {
@@ -36,14 +40,16 @@ if (isset($_COOKIE['token']) && !empty($_COOKIE['token']) && ($check != -1)) {
         {
             require_once('controller/CustomerController.php');
             $customer = new CustomerController();
-            $customer->login();
+            echo ($customer->login());
         }
         else if ($_SERVER['REQUEST_URI'] === '/signup')
         {
             require_once('controller/CustomerController.php');
             $customer = new CustomerController();
-            $customer->signup();
+            echo ($customer->signup());
         }
+        else 
+            echo $_SERVER['REQUEST_URI'];
         
     }
 }
