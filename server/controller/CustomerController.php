@@ -9,53 +9,54 @@ class CustomerController {
     {
         $body = file_get_contents('php://input');
         $data = json_decode($body, true);
-        $username = isset($data['username']) ? $data['username'] : null;
-        $password = isset($data['password']) ? $data['password'] : null;
+        $username = $data['username'];
+        $password = $data['password'];
         //Token nó vì không lưu tk, mk trong database!!!
         $res = loginModel($username, $password); // Trả về id người dùng
 
-        if ($res != -1)
+        if ($res["id"] != -1)
         {
             $key = "my_secret_key"; // Khóa bí mật
 
             // Thông tin payload để mã hóa vào token
             $payload = array(
-                "id" => $res
+                "id" => $res["id"]
             );
 
             $jwt = JWT::encode($payload, $key, 'HS256');
             //1 -> jsfbwfbsfnwfnoweofoiwe1231
             //Tạo cookie
             setcookie('token', $jwt, time() + 3600);
-            return "true";
         }
-        else 
-            return "false";
+        return json_encode(array("message" => $res["message"], "result" => $res["id"] != -1));
     }
     public static function signup()
     {
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-        $fname = $_POST['fname'];
-        $lname = $_POST['lname'];
-        $gender = $_POST['gender'];
-        $age = $_POST['age'];
-        $email = $_POST['email'];
-        $phone = $_POST['phone'];
-        $DOB = $_POST['DOB'];
+        $body = file_get_contents('php://input');
+        $data = json_decode($body, true);
+        $username = $data['username'];
+        $password = $data['password'];
+        $fname = $data['fname'];
+        $lname = $data['lname'];
+        $gender = $data['gender'];
+        $age = $data['age'];
+        $email = $data['email'];
+        $phone = $data['phone'];
+        $DOB = $data['DOB'];
         //Token nó vì không lưu tk, mk trong database!!!
         $res = signupModel($username, $password, $fname, $lname, $gender, $age, $email, $phone, $DOB); // Trả về id người dùng
 
-        if ($res != -1)
-        {
-            $error = 'Đăng ký thành công';
-            require_once('view/login.php');
-        }
-        else 
-        {
-            $error = 'Đăng kí thất bại';
-            require_once('view/login.php');
-        }
+        return json_encode($res);
+    }
+    public static function logout()
+    {
+        setcookie('token', '', time() - 3600);
+        return json_encode(array("message" => "Logout successfully"));
+    }
+    public static function getProducts()
+    {
+        $res = getProductsModel();
+        return json_encode($res);
     }
 }
 ?>

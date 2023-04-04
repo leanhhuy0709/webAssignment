@@ -23,14 +23,23 @@
             $SQLresult = $stmt->get_result();
             if ($SQLresult->num_rows > 0) {
                 while($row = $SQLresult->fetch_assoc()) {
-                    //$result = $row["lname"]." ".$row["fname"];
                     $result = $row["customerID"];
+                    $result = array(
+                        "id" => $row["customerID"],
+                        "message" => "Login successfully"
+                    );
                 }
-            } else $result = -1;
+            } 
+            else $result = array(
+                "id" => -1,
+                "message" => "Wrong username or password" 
+            );
         } else {
-            echo "Error: " . $stmt->error;
-        }
-
+            $result = array(
+                "id" => -1,
+                "message" => $stmt->error 
+            );
+        }        
         $stmt->close();
         $conn->close();
 
@@ -53,12 +62,42 @@
 
         $result = 1;
         if ($stmt->execute() === TRUE) {
-            $result = 1;
+            $result = array(
+                "result" => true,
+                "message" => "Sign up successfully"
+            );
         } else {
-            echo "Error: " . $stmt->error;
-            $result = -1;
+            $result = array(
+                "result" => false,
+                "message" => $stmt->error
+            );
         }
 
+        $stmt->close();
+        $conn->close();
+
+        return $result;
+    }
+
+    function getProductsModel()
+    {
+        global $SQLservername, $SQLusername, $SQLpassword, $SQLdbname;
+        // Create connection
+        $conn = new mysqli($SQLservername, $SQLusername, $SQLpassword, $SQLdbname);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        // Prepare and bind the INSERT statement
+        $stmt = $conn->prepare("select name, price, imageURL, description from product left join image on product.productID = image.productID;");
+        $stmt->execute();
+        $SQLresult = $stmt->get_result();
+        $result = array();
+        if ($SQLresult->num_rows > 0) {
+            while($row = $SQLresult->fetch_assoc()) {
+                $result[] = $row;
+            }
+        } 
         $stmt->close();
         $conn->close();
 
