@@ -16,7 +16,12 @@ $check = $cookie->getUserID();
         if ($_SERVER['REQUEST_URI'] === '/products')
         {
             $customer = new CustomerController();
-            echo $customer->getProducts();
+            echo $customer->getProductsByCategoryAndSearch();
+        }
+        else if ($_SERVER['REQUEST_URI'] === '/cart')
+        {
+            $customer = new CustomerController();
+            echo $customer->getCart();
         }
         else echo "Welcom to PHP server!";
     }
@@ -31,6 +36,14 @@ $check = $cookie->getUserID();
         {
             $customer = new CustomerController();
             echo $customer->signup();
+        }
+    }
+    else if ($_SERVER['REQUEST_METHOD'] === 'PUT')
+    {
+        if ($_SERVER['REQUEST_URI'] === '/cart/add')
+        {
+            $customer = new CustomerController();
+            echo $customer->addProductToCart();
         }
     }
 
