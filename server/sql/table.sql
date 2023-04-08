@@ -2,9 +2,11 @@ DROP DATABASE IF EXISTS`oliviashop`;
 CREATE DATABASE IF NOT EXISTS `oliviashop` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 USE `oliviashop`;
 
+
+
 CREATE TABLE `customer` (
 	`customerID` int primary key AUTO_INCREMENT,
-    `username` varchar(255),
+    `username` varchar(255) UNIQUE,
     `password` varchar(255),
     `fname` varchar(255),
     `lname` varchar(255),
@@ -12,7 +14,9 @@ CREATE TABLE `customer` (
     `age` int,
     `email` varchar(255),
     `phoneNumber` varchar(255),
-    `DOB` date
+    `address` varchar(255),
+    `DOB` date,
+    `imageURL` varchar(255)
 );
 
 CREATE TABLE `address` (
@@ -36,19 +40,7 @@ CREATE TABLE `cart` (
 );
 
 CREATE TABLE `admin` (
-	`adminID` int primary key AUTO_INCREMENT,
-    `username` varchar(255),
-    `password` varchar(255),
-    `fname` varchar(255),
-    `lname` varchar(255),
-    `gender` varchar(255),
-    `age` int,
-    `email` varchar(255),
-    `phoneNumber` varchar(255),
-    `DOB` date,
-    `role` varchar(255),
-    `accountStatus` varchar(255),
-    `permissionLevel` varchar(255)
+	`adminID` int primary key AUTO_INCREMENT
 );
 
 CREATE TABLE `coupon` (
@@ -156,7 +148,7 @@ CREATE TABLE `review` (
     `rating` int,
     `title` varchar(255),
     `text` varchar(255),
-    `date` date,
+    `reviewDate` date,
     `status` varchar(255),
     `helpfulVotes` varchar(255),
     `unHelpfulVotes` varchar(255),
@@ -179,7 +171,7 @@ CREATE TABLE `order` (
     `orderDate` date,
     `shippingDate` date,
     `completeDate` date,
-    `totalCost` int,
+    `totalPrice` int,
     `shippingAddress` varchar(255),
     `paymentMethod` varchar(255),
     `paymentStatus` varchar(255),
@@ -208,4 +200,5 @@ CREATE TABLE `reasonForCancellation` (
     primary key (`orderID`, `reasonID`),
     foreign key (`orderID`) references `order`(`orderID`)
 );
+
 
