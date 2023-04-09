@@ -369,7 +369,7 @@
         }
         // Prepare and bind the INSERT statement
         $stmt = $conn->prepare("UPDATE customer SET fname = ?, lname = ?, DOB = ?, phoneNumber = ?, email = ?, imageURL = ? WHERE customerID = ?;");
-        $stmt->bind_param("sssssi", $fname, $lname, $DOB, $phone, $email, $imageURL, $userID);
+        $stmt->bind_param("ssssssi", $fname, $lname, $DOB, $phone, $email, $imageURL, $userID);
         if ($stmt->execute() === TRUE) {
             $stmt = $conn->prepare("UPDATE address SET address = ? WHERE customerID = ?;");//careful
             $stmt->bind_param("si", $address, $userID);

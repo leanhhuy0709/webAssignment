@@ -90,6 +90,7 @@ function handleResponseUser(response) {
     updateForm.querySelector('#phone').value = response.phoneNumber;
     updateForm.querySelector('#email').value = response.email;
     updateForm.querySelector('#address').value = response.address[0];
+    updateForm.querySelector('#imageURL').value = response.imageURL;
     const userImage = document.getElementById('user-image');
     userImage.src = response.imageURL;
 }
@@ -125,7 +126,7 @@ function handleUpdateUser() {
     xhttp.open("POST", "http://localhost/user/update", true);
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.onload = function() {
-        //console.log(this.responseText);
+        console.log(this.responseText);
         var res = JSON.parse(this.responseText);
         console.log(res);
         alert(res.message);
@@ -146,4 +147,50 @@ function handleUpdateUser() {
     });
     xhttp.send(data);
 
+}
+
+function getCart() {
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+        //console.log(this.responseText);
+        var res = JSON.parse(this.responseText);
+        handleResponseCart(res);
+    }
+    xhttp.onerror = function(err) {
+        console.log("Error");
+        console.log(err);
+    }
+
+    // Tạo object chứa token
+    const data = {
+        token: getCookieValueByName('token')
+    };
+
+    // Chuyển object thành chuỗi JSON
+    const jsonData = JSON.stringify(data);
+
+    xhttp.open("POST", "http://localhost/cart");
+    xhttp.setRequestHeader("Content-Type", "application/json"); // Thiết lập header cho request
+    xhttp.send(jsonData); // Gửi request với body là chuỗi JSON
+}
+
+function handleResponseCart(products) {
+    console.log(products);
+    const productDiv = document.getElementById("cart");
+    productDiv.innerHTML = "";
+    var result = "";
+    products.forEach((product)=>{
+        result += `
+            <div class="card m-3" style="width: 18rem;">
+                <img src="./images/${product.imageURL}" class="card-img-top" alt="product 1">
+                <div class="card-body">
+                    <h5 class="card-title">${product.name}</h5>
+                    <p class="card-text">${product.description}</p>
+                    <p class="card-text">Price: ${product.price}</p>
+                    <p class="card-text">Quantity: ${product.quantity}</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>`;
+    })
+    productDiv.innerHTML = result;
 }
