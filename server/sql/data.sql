@@ -7,13 +7,13 @@ INSERT INTO address VALUES
 INSERT INTO paymentMethod VALUES 
 ("Momo", (SELECT MAX(customerID) FROM customer));
 
-INSERT INTO customer(username, password, fname, lname, gender, age, email, phoneNumber, DOB) VALUES 
-("hoangtien", "12345", "Tiên", "Hoàng", "Female", 20, "", "0246813579", "2002-12-31");
+INSERT INTO customer(username, password, fname, lname, gender, age, email, phoneNumber, DOB, imageURL) VALUES 
+("hoangtien", "12345", "Tiên", "Hoàng", "Female", 20, "", "0246813579", "2002-12-31", "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/HCMCUT.svg/1200px-HCMCUT.svg.png");
 INSERT INTO address VALUES 
 ("Kí túc xá khu A", (SELECT MAX(customerID) FROM customer));
 
-INSERT INTO customer(username, password, fname, lname, gender, age, email, phoneNumber, DOB) VALUES 
-("nhantho", "12345", "Thọ", "Nhân", "Male", 20, "", "0369258147", "2002-01-01");
+INSERT INTO customer(username, password, fname, lname, gender, age, email, phoneNumber, DOB, imageURL) VALUES 
+("nhantho", "12345", "Thọ", "Nhân", "Male", 20, "", "0369258147", "2002-01-01", "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/HCMCUT.svg/1200px-HCMCUT.svg.png");
 INSERT INTO address VALUES 
 ("Kí túc xá khu A", (SELECT MAX(customerID) FROM customer));
 
@@ -67,3 +67,9 @@ INSERT INTO cart(customerID) VALUES (3);
 
 INSERT INTO productAddToCart(productID, cartID, quantity) VALUES (1, 1, 1);
 INSERT INTO productAddToCart(productID, cartID, quantity) VALUES (3, 1, 3);
+
+
+CALL Comment(2, 1, 1, "Bad", "Sản phẩm rất tệ!");
+CALL Comment(3, 1, 2, "Good", "Sản phẩm rất tốt đó!");
+CALL Comment(2, 1, 5, "Good", "Không có gì!");
+CALL Comment(1, 1, 5, "Good", "Sản phẩm rất tốt!");

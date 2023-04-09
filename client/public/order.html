@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang = "en">
+
 <head>
     <!--Default-->
     <title>Olivia</title>
@@ -13,41 +14,34 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <!--Web Image-->
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <!--CSS-->
+    <link rel="stylesheet" href="./css/home.css">
     <!--Javascript-->
     <script src="./js/controller.js"></script>
 </head>
-    <form id="signup-form">
-        <label for="username">Tên đăng nhập:</label>
-        <input type="text" id="username" required>
-        <br>
-        <label for="password">Mật khẩu:</label>
-        <input type="password" id="password" required>
-        <br>
-        <label for="fname">Họ:</label>
-        <input type="text" id="fname" required>
-        <br>
-        <label for="lname">Tên:</label>
-        <input type="text" id="lname" required>
-        <br>
-        <label for="gender">Giới tính:</label>
-        <input type="text" id="gender" required>
-        <br>
-        <label for="age">Tuổi:</label>
-        <input type="number" id="age" required>
-        <br>
-        <label for="email">Email:</label>
-        <input type="email" id="email" required>
-        <br>
-        <label for="phone">Số điện thoại:</label>
-        <input type="text" id="phone" required>
-        <br>
-        <label for="DOB">Ngày sinh:</label>
-        <input type="date" id="DOB" required>
-        <br>
-        <label for="imageURL">ImageURL:</label>
-        <input type="text" id="imageURL" required>
-        <br>
-        <button onclick="handleSignUp()">Sign up</button>
-    </form>
+
+
+<body>
+    <div id="nav"></div>
+    <script>
+        getHTML("nav", "nav.html")
+    </script>
+
+    <p>Cart</p>
+    <div id="order" style = "display: flex; align-items: center; justify-content: center;"></div>
+
+    <script>
+        getOrder()
+    </script>
+
+    <div id="footer"></div>
+    <script>
+        getHTML("footer", "footer.html")
+    </script> 
+
+  
+  
+</body>
+
 </html>
 

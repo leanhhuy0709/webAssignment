@@ -4,11 +4,29 @@ require_once('vendor/autoload.php'); // Thư viện JWT
 require_once('controller/CookieController.php');
 use \Firebase\JWT\JWT;
 
+function checkIsValid($data, $string)
+{
+    for ($i = 0; $i < count($string); $i++)
+        if (!isset($data[$string[$i]]))
+            return array(
+                "result" => false,
+                "message" => $string[$i]." is not valid");
+    return array(
+        "result" => true,
+        "message" => ""
+    );
+}
+
 class CustomerController {
     public static function login()
     {
         $body = file_get_contents('php://input');
         $data = json_decode($body, true);
+
+        $check = checkIsValid($data, ['username', 'password']);
+        if (!$check["result"])
+            return json_encode($check);
+
         $username = $data['username'];
         $password = $data['password'];
         //Token nó vì không lưu tk, mk trong database!!!
@@ -33,6 +51,12 @@ class CustomerController {
     {
         $body = file_get_contents('php://input');
         $data = json_decode($body, true);
+
+        $check = checkIsValid($data, ['username', 'password', 'fname', 'lname', 'gender', 'age', 'email', 'phone', 'DOB', 'imageURL']);
+
+        if (!$check["result"])
+            return json_encode($check);
+
         $username = $data['username'];
         $password = $data['password'];
         $fname = $data['fname'];
@@ -42,8 +66,9 @@ class CustomerController {
         $email = $data['email'];
         $phone = $data['phone'];
         $DOB = $data['DOB'];
+        $imageURL = $data['imageURL'];
         //Token nó vì không lưu tk, mk trong database!!!
-        $res = signupModel($username, $password, $fname, $lname, $gender, $age, $email, $phone, $DOB); // Trả về id người dùng
+        $res = signupModel($username, $password, $fname, $lname, $gender, $age, $email, $phone, $DOB, $imageURL); // Trả về id người dùng
 
         return json_encode($res);
     }
@@ -51,11 +76,6 @@ class CustomerController {
     {
         setcookie('token', '', time() + 30*24*60*60);
         return json_encode(array("message" => "Logout successfully"));
-    }
-    public static function getProducts()
-    {
-        $res = getProductsModel();
-        return json_encode($res);
     }
     
     public static function getProductsByCategoryAndSearch()
@@ -73,7 +93,14 @@ class CustomerController {
     }
     public static function getCart()
     {
-        $res = getCartModel();
+        $body = file_get_contents('php://input');
+        $data = json_decode($body, true);
+        $check = checkIsValid($data, ['token']);
+        if (!$check["result"])
+            return json_encode($check);
+        $cookie = new CookieController();
+        $userID = $cookie->decodeCookie($data['token']);
+        $res = getCartModel($userID);
         return json_encode($res);
     }
     
@@ -81,10 +108,17 @@ class CustomerController {
     {
         $body = file_get_contents('php://input');
         $data = json_decode($body, true);
+
+        $check = checkIsValid($data, ['token', 'productID', 'quantity']);
+        if (!$check["result"])
+            return json_encode($check);
+
         $productID = $data['productID'];
         $quantity = $data['quantity'];
+
         $cookie = new CookieController();
-        $userID = $cookie->getUserID();
+        $userID = $cookie->decodeCookie($data['token']);
+
         $res = addProductToCartModel($userID, $productID, $quantity);
         return json_encode($res);
     }
@@ -92,10 +126,17 @@ class CustomerController {
     {
         $body = file_get_contents('php://input');
         $data = json_decode($body, true);
+
+        $check = checkIsValid($data, ['token', 'productID', 'quantity']);
+        if (!$check["result"])
+            return json_encode($check);
+
         $productID = $data['productID'];
         $quantity = $data['quantity'];
+        
         $cookie = new CookieController();
-        $userID = $cookie->getUserID();
+        $userID = $cookie->decodeCookie($data['token']);
+        
         $res = deleteProductToCartModel($userID, $productID, $quantity);
         return json_encode($res);
     }
@@ -104,6 +145,11 @@ class CustomerController {
     {
         $body = file_get_contents('php://input');
         $data = json_decode($body, true);
+
+        $check = checkIsValid($data, ['token']);
+        if (!$check["result"])
+            return json_encode($check);
+
         $cookie = new CookieController();
         $userID = $cookie->decodeCookie($data['token']);
         $res = getUserInfoModel($userID);
@@ -113,6 +159,11 @@ class CustomerController {
     public static function updateUserInfo() {
         $body = file_get_contents('php://input');
         $data = json_decode($body, true);
+
+        $check = checkIsValid($data, ['token', 'fname', 'lname', 'DOB', 'phone', 'email', 'address', 'imageURL']);
+        if (!$check["result"])
+            return json_encode($check);
+
         $cookie = new CookieController();
         $userID = $cookie->decodeCookie($data['token']);
         $fname = $data['fname'];
@@ -126,15 +177,26 @@ class CustomerController {
         return json_encode($res);
     }
     public static function getOrders() {
-        //check cookie to know customer
+        $body = file_get_contents('php://input');
+        $data = json_decode($body, true);
+
+        $check = checkIsValid($data, ['token']);
+        if (!$check["result"])
+            return json_encode($check);
+
         $cookie = new CookieController();
-        $userID = $cookie->getUserID();
+        $userID = $cookie->decodeCookie($data['token']);
         $res = getOrdersModel($userID);
         return json_encode($res);
     }
     public static function getOrderDetail() {
         $body = file_get_contents('php://input');
         $data = json_decode($body, true);
+
+        $check = checkIsValid($data, ['orderID']);
+        if (!$check["result"])
+            return json_encode($check);
+
         $orderID = $data['orderID'];
         $res = getOrderDetailModel($orderID);
         return json_encode($res);//?
@@ -143,17 +205,20 @@ class CustomerController {
     {
         $body = file_get_contents('php://input');
         $data = json_decode($body, true);
+
+        $check = checkIsValid($data, ['token', 'paymentMethod']);
+        if (!$check["result"])
+            return json_encode($check);
+
         $paymentMethod = $data['paymentMethod'];
         $cookie = new CookieController();
-        $userID = $cookie->getUserID();
+        $userID = $cookie->decodeCookie($data['token']);
         $res = paymentModel($userID, $paymentMethod);
         return json_encode($res);
     }
     public static function getProductDetail()
     {
-        $body = file_get_contents('php://input');
-        $data = json_decode($body, true);
-        $productID = $data['productID'];
+        $productID = $_GET['productID'];
         $res = getProductDetailModel($productID);
         return json_encode($res);
     }
@@ -164,5 +229,29 @@ class CustomerController {
         return json_encode($res);
     }
 
+    public static function comment()
+    {
+        $body = file_get_contents('php://input');
+        $data = json_decode($body, true);
+
+        /*"token": getCookieValueByName('token'),
+                "productID": 1,
+                "title": "test title",
+                "text": "test tfext",
+                "rating": 5 */
+
+        $check = checkIsValid($data, ['token', 'productID', 'title', 'text', 'rating']);
+        if (!$check["result"])
+            return json_encode($check);
+        $cookie = new CookieController();
+        $userID = $cookie->decodeCookie($data['token']);
+        $productID = $data['productID'];
+        $title = $data['title'];
+        $text = $data['text'];
+        $rating = $data['rating'];
+        //return json_encode(array("data"=>$data));
+        $res = commentModel($userID, $productID, $title, $text, $rating);
+        return json_encode($res);
+    }
 }
 ?>

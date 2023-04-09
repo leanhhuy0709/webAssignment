@@ -34,4 +34,18 @@ SELECT imageURL FROM image WHERE productID = 1;
 SELECT * FROM review WHERE productID = 1;
 
 
+SELECT cart.cartID, product.productID, product.name AS name, price, imageURL, product.description, productAddToCart.quantity
+                        FROM cart
+                        JOIN productAddToCart ON cart.cartID = productAddToCart.cartID
+                        JOIN product ON productAddToCart.productID = product.productID
+                        LEFT JOIN image ON product.productID = image.productID
+                        WHERE customerID = 1;
+                        
+                        
+CALL Payment(1, 6, "Momo");
+
+select * from `order`;
+select * from cart;
+
+
 

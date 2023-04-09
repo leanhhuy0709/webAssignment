@@ -148,7 +148,7 @@ CREATE TABLE `review` (
     `rating` int,
     `title` varchar(255),
     `text` varchar(255),
-    `reviewDate` date,
+    `reviewDate` datetime,
     `status` varchar(255),
     `helpfulVotes` varchar(255),
     `unHelpfulVotes` varchar(255),

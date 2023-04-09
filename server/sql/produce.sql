@@ -35,7 +35,7 @@ BEGIN
 END //
 DELIMITER ;
 
--- CALL Payment(1, 8, "Momo");
+-- CALL Payment(1, 1, "Momo");
 
 DROP PROCEDURE IF EXISTS Comment;
 DELIMITER //
@@ -44,7 +44,7 @@ BEGIN
     INSERT INTO review(customerID, productID) VALUES (cusID, pdID);
     SELECT MAX(reviewID) FROM review INTO @maxReviewID;
     UPDATE review SET text = cmt WHERE reviewID = @maxReviewID;
-    UPDATE review SET reviewDate = NOW() WHERE reviewID = @maxReviewID;
+    UPDATE review SET reviewDate = CURRENT_TIMESTAMP WHERE reviewID = @maxReviewID;
     UPDATE review SET title = tt WHERE reviewID = @maxReviewID;
     UPDATE review SET status = 'Pending' WHERE reviewID = @maxReviewID;
     UPDATE review SET helpfulVotes = 0 WHERE reviewID = @maxReviewID;
@@ -54,11 +54,18 @@ BEGIN
 END //
 DELIMITER ;
 
--- CALL Comment(1, 1, 5, "Gooffd", "Goodfff");
+-- CALL Comment(1, 1, 1, "Good", "Sản phẩm tốt hơn bạn nghĩ!");
+-- CALL Comment(2, 1, 1, "Bad", "Sản phẩm tệ hơn bạn nghĩ!");
 
-select * from review;
-SELECT MAX(reviewID) FROM review INTO @maxReviewID;
+SELECT fname, lname, imageURL, rating, title, text, reviewDate, status 
+FROM review 
+JOIN customer ON review.customerID = customer.customerID
+WHERE productID = 1
+ORDER BY reviewDate;
+-- CALL Comment(1, 1, 5, "test title", "test title");
 
-UPDATE review SET title = "Sha tyf 3" WHERE reviewID = @maxReviewID;
+
+
+
 
 

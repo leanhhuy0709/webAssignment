@@ -18,7 +18,9 @@
         $stmt->bind_param("ss", $username, $password);
 
         $result = "";
-        if ($stmt->execute() === TRUE) {
+
+        try {
+            $stmt->execute();
             $SQLresult = $stmt->get_result();
             if ($SQLresult->num_rows > 0) {
                 while($row = $SQLresult->fetch_assoc()) {
@@ -33,19 +35,21 @@
                 "id" => -1,
                 "message" => "Wrong username or password" 
             );
-        } else {
+        }
+        catch (Exception $e) {
             $result = array(
                 "id" => -1,
-                "message" => $stmt->error 
+                "message" => $e->getMessage()
             );
-        }        
-        $stmt->close();
-        $conn->close();
-
-        return $result;
+        }
+        finally {
+            $stmt->close();
+            $conn->close();
+            return $result;
+        }
     }
 
-    function signupModel($username, $password, $fname, $lname, $gender, $age, $email, $phone, $DOB)
+    function signupModel($username, $password, $fname, $lname, $gender, $age, $email, $phone, $DOB, $imageURL)
     {
         $DOB = date('Y-m-d', strtotime($DOB));
         global $SQLservername, $SQLusername, $SQLpassword, $SQLdbname;
@@ -56,52 +60,28 @@
             die("Connection failed: " . $conn->connect_error);
         }
         // Prepare and bind the INSERT statement
-        $stmt = $conn->prepare("INSERT INTO customer(username, password, fname, lname, gender, age, email, phoneNumber, DOB) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);");
-        $stmt->bind_param("sssssisis", $username, $password, $fname, $lname, $gender, $age, $email, $phone, $DOB);
+        $stmt = $conn->prepare("INSERT INTO customer(username, password, fname, lname, gender, age, email, phoneNumber, DOB, imageURL) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+        $stmt->bind_param("sssssisiss", $username, $password, $fname, $lname, $gender, $age, $email, $phone, $DOB, $imageURL);
 
         $result = 1;
-        if ($stmt->execute() === TRUE) {
+        try {
+            $stmt->execute();
             $result = array(
                 "result" => true,
                 "message" => "Sign up successfully"
             );
-        } else {
+        }
+        catch (Exception $e) {
             $result = array(
                 "result" => false,
-                "message" => $stmt->error
+                "message" => $e->getMessage()
             );
         }
-
-        $stmt->close();
-        $conn->close();
-
-        return $result;
-    }
-    function getProductsModel()
-    {
-        global $SQLservername, $SQLusername, $SQLpassword, $SQLdbname;
-        // Create connection
-        $conn = new mysqli($SQLservername, $SQLusername, $SQLpassword, $SQLdbname);
-        // Check connection
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
+        finally {
+            $stmt->close();
+            $conn->close();
+            return $result;
         }
-        // Prepare and bind the INSERT statement
-        $stmt = $conn->prepare("SELECT name, price, imageURL, description 
-                        from product 
-                        left join image on product.productID = image.productID;");
-        $stmt->execute();
-        $SQLresult = $stmt->get_result();
-        $result = array();
-        if ($SQLresult->num_rows > 0) {
-            while($row = $SQLresult->fetch_assoc()) {
-                $result[] = $row;
-            }
-        } 
-        $stmt->close();
-        $conn->close();
-
-        return $result;
     }
     function getProductsByCategoryAndSearchModel($category, $search) 
     {
@@ -116,26 +96,40 @@
         $category = "%".$category."%";
         $search = "%".$search."%";
         //$stmt = $conn->prepare("select product.name as name, price, imageURL, product.description, category.name as category from (product left join image on product.productID = image.productID) join category on category.categoryID = product.categoryID where category like ? and name like ?;");
-        $stmt = $conn->prepare("SELECT product.name AS name, price, imageURL, product.description, category.name AS category
+        $stmt = $conn->prepare("SELECT product.productID, product.name AS name, price, imageURL, product.description, category.name AS category
                         FROM product
                         LEFT JOIN image ON product.productID = image.productID
                         JOIN category ON category.categoryID = product.categoryID
                         WHERE category.name LIKE ? AND product.name LIKE ?;");
         $stmt->bind_param("ss", $category, $search);
-        $stmt->execute();
-        $SQLresult = $stmt->get_result();
-        $result = array();
-        if ($SQLresult->num_rows > 0) {
-            while($row = $SQLresult->fetch_assoc()) {
-                $result[] = $row;
-            }
-        } 
-        $stmt->close();
-        $conn->close();
-
-        return $result;
+        try {
+            $stmt->execute();
+            $SQLresult = $stmt->get_result();
+            $result = array();
+            if ($SQLresult->num_rows > 0) {
+                while($row = $SQLresult->fetch_assoc()) {
+                    $result[] = $row;
+                }
+            } 
+            $result = array(
+                "result" => true,
+                "message" => "Get products successfully",
+                "data" => $result
+            );
+        }
+        catch (Exception $e) {
+            $result = array(
+                "result" => false,
+                "message" => $e->getMessage()
+            );
+        }
+        finally {
+            $stmt->close();
+            $conn->close();
+            return $result;
+        }
     }
-    function getCartModel() {
+    function getCartModel($userID) {
         global $SQLservername, $SQLusername, $SQLpassword, $SQLdbname;
         // Create connection
         $conn = new mysqli($SQLservername, $SQLusername, $SQLpassword, $SQLdbname);
@@ -143,25 +137,52 @@
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
-        // Prepare and bind the INSERT statement
-        $stmt = $conn->prepare("SELECT product.name AS name, price, imageURL, product.description, productAddToCart.quantity
-                        FROM cart
-                        JOIN productAddToCart ON cart.cartID = productAddToCart.cartID
-                        JOIN product ON productAddToCart.productID = product.productID
-                        LEFT JOIN image ON product.productID = image.productID
-                        WHERE customerID = 1;");
-        $stmt->execute();
-        $SQLresult = $stmt->get_result();
-        $result = array();
-        if ($SQLresult->num_rows > 0) {
-            while($row = $SQLresult->fetch_assoc()) {
-                $result[] = $row;
+        //get cartID
+        $stmt = $conn->prepare("SELECT MAX(cartID) FROM cart WHERE customerID = ?;");
+        $stmt->bind_param("i", $userID);
+        try {
+            $stmt->execute();
+            $SQLresult = $stmt->get_result();
+            $cartID = 0;
+            if ($SQLresult->num_rows > 0) {
+                while($row = $SQLresult->fetch_assoc()) {
+                    $cartID = $row["MAX(cartID)"];
+                }
             }
-        } 
-        $stmt->close();
-        $conn->close();
-
-        return $result;
+            $stmt->close();
+            // Prepare and bind the INSERT statement
+            $stmt = $conn->prepare("SELECT product.productID, product.name AS name, price, imageURL, product.description, productAddToCart.quantity
+                            FROM cart
+                            JOIN productAddToCart ON cart.cartID = productAddToCart.cartID
+                            JOIN product ON productAddToCart.productID = product.productID
+                            LEFT JOIN image ON product.productID = image.productID
+                            WHERE customerID = ? AND cart.cartID = ?;");
+            $stmt->bind_param("ii", $userID, $cartID);
+            $stmt->execute();
+            $SQLresult = $stmt->get_result();
+            $result = array();
+            if ($SQLresult->num_rows > 0) {
+                while($row = $SQLresult->fetch_assoc()) {
+                    $result[] = $row;
+                }
+            }
+            $result = array(
+                "result" => true,
+                "message" => "Get cart successfully",
+                "data" => $result
+            );
+        }
+        catch (Exception $e) {
+            $result = array(
+                "result" => false,
+                "message" => $e->getMessage()
+            );
+        }
+        finally {
+            $stmt->close();
+            $conn->close();
+            return $result;
+        }
     }
     
     function addProductToCartModel($userID, $productID, $quantity) {
@@ -175,66 +196,54 @@
         //get cartID
         $stmt = $conn->prepare("SELECT MAX(cartID) FROM cart WHERE customerID = ?;");
         $stmt->bind_param("i", $userID);
-        if ($stmt->execute() === FALSE) {
-            return array(
+        
+        try {
+            $stmt->execute();
+            $SQLresult = $stmt->get_result();
+            $cartID = 0;
+            if ($SQLresult->num_rows > 0) {
+                while($row = $SQLresult->fetch_assoc()) {
+                    $cartID = $row["MAX(cartID)"];
+                }
+            }
+            $stmt->close();
+            //check product is already in cart
+            $stmt = $conn->prepare("SELECT * FROM productAddToCart WHERE cartID = ? AND productID = ?;");
+            $stmt->bind_param("ii", $cartID, $productID);
+            $stmt->execute();
+            $SQLresult = $stmt->get_result();
+            if ($SQLresult->num_rows > 0) {
+                //update quantity
+                $stmt = $conn->prepare("UPDATE productAddToCart SET quantity = quantity + ? WHERE cartID = ? AND productID = ?;");
+                $stmt->bind_param("iii", $quantity, $cartID, $productID);
+                $stmt->execute();
+                $result = array(
+                    "result" => true,
+                    "message" => "Update quantity successfully"
+                );
+            }
+            else {
+                //insert new product
+                $stmt = $conn->prepare("INSERT INTO productAddToCart (cartID, productID, quantity) VALUES (?, ?, ?);");
+                $stmt->bind_param("iii", $cartID, $productID, $quantity);
+                $stmt->execute();
+                $result = array(
+                    "result" => true,
+                    "message" => "Add product successfully"
+                );
+            }
+        }
+        catch (Exception $e) {
+            $result = array(
                 "result" => false,
-                "message" => $stmt->error
+                "message" => $e->getMessage()
             );
         }
-        $SQLresult = $stmt->get_result();
-        $cartID = 0;
-        if ($SQLresult->num_rows > 0) {
-            $row = $SQLresult->fetch_assoc();
-            $cartID = $row["MAX(cartID)"];
+        finally {
+            $conn->close();
+            $stmt->close();
+            return $result;
         }
-        else return array(
-            "result" => false,
-            "message" => "No cart found"
-        );
-        $stmt->close();
-        //check product is already in cart
-        $stmt = $conn->prepare("SELECT * FROM productAddToCart WHERE cartID = ? AND productID = ?;");
-        $stmt->bind_param("ii", $cartID, $productID);
-        $stmt->execute();
-        $SQLresult = $stmt->get_result();
-        if ($SQLresult->num_rows > 0) {
-            //update quantity
-            $stmt = $conn->prepare("UPDATE productAddToCart SET quantity = quantity + ? WHERE cartID = ? AND productID = ?;");
-            $stmt->bind_param("iii", $quantity, $cartID, $productID);
-            if ($stmt->execute() === TRUE) {
-                $result = array(
-                    "result" => true,
-                    "message" => "Add to cart successfully"
-                );
-            } else {
-                $result = array(
-                    "result" => false,
-                    "message" => $stmt->error
-                );
-            }
-        }
-        else {
-            // Prepare and bind the INSERT statement
-            $stmt = $conn->prepare("INSERT INTO productAddToCart(productID, cartID, quantity) 
-                            VALUES (?, ?, ?);");
-            $stmt->bind_param("iii", $productID, $cartID, $quantity);
-
-            if ($stmt->execute() === TRUE) {
-                $result = array(
-                    "result" => true,
-                    "message" => "Add to cart successfully"
-                );
-            } else {
-                $result = array(
-                    "result" => false,
-                    "message" => $stmt->error
-                );
-            }
-        }
-        $stmt->close();
-        $conn->close();
-
-        return $result;
     }
     function deleteProductToCartModel($userID, $productID, $quantity)
     {
@@ -248,70 +257,54 @@
         //get cartID
         $stmt = $conn->prepare("SELECT MAX(cartID) FROM cart WHERE customerID = ?;");
         $stmt->bind_param("i", $userID);
-        if ($stmt->execute() === FALSE) {
-            return array(
-                "result" => false,
-                "message" => $stmt->error
-            );
-        }
-        $SQLresult = $stmt->get_result();
-        $cartID = 0;
-        if ($SQLresult->num_rows > 0) {
-            $row = $SQLresult->fetch_assoc();
-            $cartID = $row["MAX(cartID)"];
-        }
-        else return array(
-            "result" => false,
-            "message" => "No cart found"
-        );
-        $stmt->close();
-        //check product is already in cart
-        $stmt = $conn->prepare("SELECT quantity FROM productAddToCart WHERE cartID = ? AND productID = ?;");
-        $stmt->bind_param("ii", $cartID, $productID);
-        $stmt->execute();
-        $SQLresult = $stmt->get_result();
-        if ($SQLresult->num_rows > 0) {
-            $row = $SQLresult->fetch_assoc();
-            if ($row["quantity"] > $quantity) {
+        
+        try {
+            $stmt->execute();
+            $SQLresult = $stmt->get_result();
+            $cartID = 0;
+            if ($SQLresult->num_rows > 0) {
+                while($row = $SQLresult->fetch_assoc()) {
+                    $cartID = $row["MAX(cartID)"];
+                }
+            }
+            $stmt->close();
+            //check product is already in cart
+            $stmt = $conn->prepare("SELECT * FROM productAddToCart WHERE cartID = ? AND productID = ?;");
+            $stmt->bind_param("ii", $cartID, $productID);
+            $stmt->execute();
+            $SQLresult = $stmt->get_result();
+            if ($SQLresult->num_rows > 0) {
                 //update quantity
                 $stmt = $conn->prepare("UPDATE productAddToCart SET quantity = quantity - ? WHERE cartID = ? AND productID = ?;");
                 $stmt->bind_param("iii", $quantity, $cartID, $productID);
-                if ($stmt->execute() === TRUE) {
-                    $result = array(
-                        "result" => true,
-                        "message" => "Delete from cart successfully"
-                    );
-                } else {
-                    $result = array(
-                        "result" => false,
-                        "message" => $stmt->error
-                    );
-                }
+                $stmt->execute();
+                $result = array(
+                    "result" => true,
+                    "message" => "Update quantity successfully"
+                );
             }
             else {
-                //delete product
-                $stmt = $conn->prepare("DELETE FROM productAddToCart WHERE cartID = ? AND productID = ?;");
-                $stmt->bind_param("ii", $cartID, $productID);
-                if ($stmt->execute() === TRUE) {
-                    $result = array(
-                        "result" => true,
-                        "message" => "Delete from cart successfully"
-                    );
-                } else {
-                    $result = array(
-                        "result" => false,
-                        "message" => $stmt->error
-                    );
-                }
+                //insert new product
+                $stmt = $conn->prepare("INSERT INTO productAddToCart (cartID, productID, quantity) VALUES (?, ?, ?);");
+                $stmt->bind_param("iii", $cartID, $productID, $quantity);
+                $stmt->execute();
+                $result = array(
+                    "result" => true,
+                    "message" => "Add product successfully"
+                );
             }
         }
-        else {
+        catch (Exception $e) {
             $result = array(
                 "result" => false,
-                "message" => "Product is not in cart"
+                "message" => $e->getMessage()
             );
         }
-        return $result;
+        finally {
+            $conn->close();
+            $stmt->close();
+            return $result;
+        }
     }
     
     function getUserInfoModel($userID)
@@ -328,33 +321,48 @@
                         FROM customer 
                         WHERE customer.customerID = ?;");
         $stmt->bind_param("i", $userID);
-        $stmt->execute();
-        $SQLresult = $stmt->get_result();
-        $result = array();
-        if ($SQLresult->num_rows > 0) {
-            while($row = $SQLresult->fetch_assoc()) {
-                $result[] = $row;
+        try {
+            $stmt->execute();
+            $SQLresult = $stmt->get_result();
+            $result = array();
+            if ($SQLresult->num_rows > 0) {
+                while($row = $SQLresult->fetch_assoc()) {
+                    $result[] = $row;
+                }
             }
-        }
-        $result = $result[0];
-        $stmt->close();
-
-        $stmt = $conn->prepare("SELECT address.address
-                        FROM address 
-                        WHERE address.customerID = ?;");
-        $stmt->bind_param("i", $userID);
-        $stmt->execute();
-        $SQLresult = $stmt->get_result();
-        $address = array();
-        if ($SQLresult->num_rows > 0) {
-            while($row = $SQLresult->fetch_assoc()) {
-                $address[] = $row["address"];
+            $result = $result[0];
+            $stmt->close();
+            //get address
+            $stmt = $conn->prepare("SELECT address.address
+                            FROM address 
+                            WHERE address.customerID = ?;");
+            $stmt->bind_param("i", $userID);
+            $stmt->execute();
+            $SQLresult = $stmt->get_result();
+            $address = array();
+            if ($SQLresult->num_rows > 0) {
+                while($row = $SQLresult->fetch_assoc()) {
+                    $address[] = $row["address"];
+                }
             }
+            $result["address"] = $address;
+            $result = array(
+                "result" => true,
+                "message" => "Get user info successfully",
+                "data" => $result
+            );
         }
-        $result["address"] = $address;
-        $stmt->close();
-        $conn->close();
-        return $result;
+        catch (Exception $e) {
+            $result = array(
+                "result" => false,
+                "message" => $e->getMessage()
+            );
+        }
+        finally {
+            $conn->close();
+            $stmt->close();
+            return $result;
+        }
     }
     
     function updateUserInfoModel($userID, $fname, $lname, $DOB, $phone, $email, $address, $imageURL)
@@ -370,27 +378,30 @@
         // Prepare and bind the INSERT statement
         $stmt = $conn->prepare("UPDATE customer SET fname = ?, lname = ?, DOB = ?, phoneNumber = ?, email = ?, imageURL = ? WHERE customerID = ?;");
         $stmt->bind_param("ssssssi", $fname, $lname, $DOB, $phone, $email, $imageURL, $userID);
-        if ($stmt->execute() === TRUE) {
-            $stmt = $conn->prepare("UPDATE address SET address = ? WHERE customerID = ?;");//careful
+
+        try {
+            $stmt->execute();
+            $stmt->close();
+            //update address
+            $stmt = $conn->prepare("UPDATE address SET address = ? WHERE customerID = ?;");
             $stmt->bind_param("si", $address, $userID);
-            if ($stmt->execute() === TRUE) {
-                $result = array(
-                    "result" => true,
-                    "message" => "Update user info successfully"
-                );
-            } else {
-                $result = array(
-                    "result" => false,
-                    "message" => $stmt->error
-                );
-            }
-        } else {
+            $stmt->execute();
             $result = array(
-                "result" => false,
-                "message" => $stmt->error
+                "result" => true,
+                "message" => "Update user info successfully"
             );
         }
-        return $result;
+        catch (Exception $e) {
+            $result = array(
+                "result" => false,
+                "message" => $e->getMessage()
+            );
+        }
+        finally {
+            $conn->close();
+            $stmt->close();
+            return $result;
+        }
     }
     //Doing ..., don't use anything below this line
     function getOrdersModel($userID)
@@ -403,21 +414,36 @@
             die("Connection failed: " . $conn->connect_error);
         }
         // Prepare and bind the INSERT statement
-        $stmt = $conn->prepare("SELECT orderID, orderDate, orderStatus, totalAmount, paymentMethod, shippingMethod, shippingAddress, shippingPhone 
-                        FROM orders 
+        $stmt = $conn->prepare("SELECT * 
+                        FROM `order` 
                         WHERE customerID = ?;");
         $stmt->bind_param("i", $userID);
-        $stmt->execute();
-        $SQLresult = $stmt->get_result();
-        $result = array();
-        if ($SQLresult->num_rows > 0) {
-            while($row = $SQLresult->fetch_assoc()) {
-                $result[] = $row;
+        try {
+            $stmt->execute();
+            $SQLresult = $stmt->get_result();
+            $result = array();
+            if ($SQLresult->num_rows > 0) {
+                while($row = $SQLresult->fetch_assoc()) {
+                    $result[] = $row;
+                }
             }
+            $result = array(
+                "result" => true,
+                "message" => "Get orders successfully",
+                "data" => $result
+            );
         }
-        $stmt->close();
-        $conn->close();
-        return $result;
+        catch (Exception $e) {
+            $result = array(
+                "result" => false,
+                "message" => $e->getMessage()
+            );
+        }
+        finally {
+            $conn->close();
+            $stmt->close();
+            return $result;
+        }
     }
     function getOrderDetailModel($orderID)
     {
@@ -433,17 +459,32 @@
                         FROM orders 
                         WHERE orderID = ?;");
         $stmt->bind_param("i", $orderID);
-        $stmt->execute();
-        $SQLresult = $stmt->get_result();
-        $result = array();
-        if ($SQLresult->num_rows > 0) {
-            while($row = $SQLresult->fetch_assoc()) {
-                $result[] = $row;
+        try {
+            $stmt->execute();
+            $SQLresult = $stmt->get_result();
+            $result = array();
+            if ($SQLresult->num_rows > 0) {
+                while($row = $SQLresult->fetch_assoc()) {
+                    $result[] = $row;
+                }
             }
+            $result = array(
+                "result" => true,
+                "message" => "Get order detail successfully",
+                "data" => $result
+            );
         }
-        $stmt->close();
-        $conn->close();
-        return $result;
+        catch (Exception $e) {
+            $result = array(
+                "result" => false,
+                "message" => $e->getMessage()
+            );
+        }
+        finally {
+            $conn->close();
+            $stmt->close();
+            return $result;
+        }
     }
     function paymentModel($userID, $paymentMethod)
     {
@@ -457,33 +498,36 @@
         //find cart id
         $stmt = $conn->prepare("SELECT MAX(cartID) FROM cart WHERE customerID = ?;");
         $stmt->bind_param("i", $userID);
-        $stmt->execute();
-        $SQLresult = $stmt->get_result();
         $result = array();
-        if ($SQLresult->num_rows > 0) {
-            while($row = $SQLresult->fetch_assoc()) {
-                $result[] = $row;
+        try {
+            $stmt->execute();
+            $SQLresult = $stmt->get_result();
+            $cartID = 0;
+            if ($SQLresult->num_rows > 0) {
+                while($row = $SQLresult->fetch_assoc()) {
+                    $cartID = $row["MAX(cartID)"];
+                }
             }
-        }
-        $cartID = $result[0]["MAX(cartID)"];
-        $stmt->close();
-        //payment
-        $stmt = $conn->prepare("CALL Payment(?, ?, ?);");
-        $stmt->bind_param("iis", $userID, $cartID, $paymentMethod);
-        if ($stmt->execute() === TRUE) {
+            $stmt->close();
+            $stmt = $conn->prepare("CALL Payment(?, ?, ?);");
+            $stmt->bind_param("iis", $userID, $cartID, $paymentMethod);
+            $stmt->execute();
             $result = array(
                 "result" => true,
-                "message" => "Payment successfully"
-            );
-        } else {
-            $result = array(
-                "result" => false,
-                "message" => $stmt->error
+                "message" => "Get cart id successfully"
             );
         }
-        $stmt->close();
-        $conn->close();
-        return $result;
+        catch (Exception $e) {
+            $result = array(
+                "result" => false,
+                "message" => $e->getMessage()
+            );
+        }
+        finally {
+            $conn->close();
+            $stmt->close();
+            return $result;
+        }
     }
     function getProductDetailModel($productID)
     {
@@ -497,44 +541,63 @@
         $stmt = $conn->prepare("SELECT productID, name, price, description, price 
                         FROM product WHERE productID = ?;");
         $stmt->bind_param("i", $productID);
-        $stmt->execute();
-        $SQLresult = $stmt->get_result();
-        $result = array();
-        if ($SQLresult->num_rows > 0) {
-            while($row = $SQLresult->fetch_assoc()) {
-                $result[] = $row;
-            }
-        }
-        $stmt->close();
 
-        $stmt = $conn->prepare("SELECT imageURL FROM image WHERE productID = ?;");
-        $stmt->bind_param("i", $productID);
-        $stmt->execute();
-        $SQLresult = $stmt->get_result();
-        $imageResult = array();
-        if ($SQLresult->num_rows > 0) {
-            while($row = $SQLresult->fetch_assoc()) {
-                $imageResult[] = $row;
+        try {
+            $stmt->execute();
+            $SQLresult = $stmt->get_result();
+            $result = array();
+            if ($SQLresult->num_rows > 0) {
+                while($row = $SQLresult->fetch_assoc()) {
+                    $result = $row;
+                }
             }
-        }
-        $result[0]["imageURL"] = $imageResult;
-        $stmt->close();
-        $stmt = $conn->prepare("SELECT * FROM review WHERE productID = ?;");
-        $stmt->bind_param("i", $productID);
-        $stmt->execute();
-        $SQLresult = $stmt->get_result();
-        $reviewResult = array();
-        if ($SQLresult->num_rows > 0) {
-            while($row = $SQLresult->fetch_assoc()) {
-                $reviewResult[] = $row;
+            $stmt->close();
+
+            $stmt = $conn->prepare("SELECT imageURL FROM image WHERE productID = ?;");
+            $stmt->bind_param("i", $productID);
+            $stmt->execute();
+            $SQLresult = $stmt->get_result();
+            $imageResult = array();
+            if ($SQLresult->num_rows > 0) {
+                while($row = $SQLresult->fetch_assoc()) {
+                    $imageResult[] = $row["imageURL"];
+                }
             }
+            $result["imageURL"] = $imageResult;
+            $stmt->close();
+            $stmt = $conn->prepare("SELECT fname, lname, imageURL, rating, title, text, reviewDate, status 
+                            FROM review 
+                            JOIN customer ON review.customerID = customer.customerID
+                            WHERE productID = ?
+                            ORDER BY reviewDate;");
+            $stmt->bind_param("i", $productID);
+            $stmt->execute();
+            $SQLresult = $stmt->get_result();
+            $reviewResult = array();
+            if ($SQLresult->num_rows > 0) {
+                while($row = $SQLresult->fetch_assoc()) {
+                    $reviewResult[] = $row;
+                }
+            }
+            $result["review"] = $reviewResult;
+            $result = array(
+                "result" => true,
+                "message" => "Get product detail successfully",
+                "data" => $result
+            );
         }
-        $result[0]["review"] = $reviewResult;
-        $stmt->close();
-        $conn->close();
-        return $result;
+        catch (Exception $e) {
+            $result = array(
+                "result" => false,
+                "message" => $e->getMessage()
+            );
+        }
+        finally {
+            $conn->close();
+            $stmt->close();
+            return $result;
+        }
     }
-
     function getCategoriesModel()
     {
         global $SQLservername, $SQLusername, $SQLpassword, $SQLdbname;
@@ -545,16 +608,62 @@
             die("Connection failed: " . $conn->connect_error);
         }
         $stmt = $conn->prepare("SELECT * FROM category;");
-        $stmt->execute();
-        $SQLresult = $stmt->get_result();
-        $result = array();
-        if ($SQLresult->num_rows > 0) {
-            while($row = $SQLresult->fetch_assoc()) {
-                $result[] = $row;
+        try {
+            $stmt->execute();
+            $SQLresult = $stmt->get_result();
+            $result = array();
+            if ($SQLresult->num_rows > 0) {
+                while($row = $SQLresult->fetch_assoc()) {
+                    $result[] = $row;
+                }
             }
+            $result = array(
+                "result" => true,
+                "message" => "Get categories successfully",
+                "data" => $result
+            );
         }
-        $stmt->close();
-        $conn->close();
-        return $result;
+        catch (Exception $e) {
+            $result = array(
+                "result" => false,
+                "message" => $e->getMessage()
+            );
+        }
+        finally {
+            $conn->close();
+            $stmt->close();
+            return $result;
+        }
+    }
+
+    function commentModel($userID, $productID, $title, $text, $rating)
+    {
+        global $SQLservername, $SQLusername, $SQLpassword, $SQLdbname;
+        // Create connection
+        $conn = new mysqli($SQLservername, $SQLusername, $SQLpassword, $SQLdbname);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        $stmt = $conn->prepare("CALL Comment(?, ?, ?, ?, ?);");
+        $stmt->bind_param("iiiss", $userID, $productID, $rating, $title, $text);
+        try {
+            $stmt->execute();
+            $result = array(
+                "result" => true,
+                "message" => "Comment successfully"
+            );
+        }
+        catch (Exception $e) {
+            $result = array(
+                "result" => false,
+                "message" => $e->getMessage()
+            );
+        }
+        finally {
+            $conn->close();
+            $stmt->close();
+            return $result;
+        }
     }
 ?>

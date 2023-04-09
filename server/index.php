@@ -14,6 +14,11 @@ if (strpos($_SERVER['REQUEST_URI'], '/products') !== false)
     $customer = new CustomerController();
     echo $customer->getProductsByCategoryAndSearch();
 }
+else if (strpos($_SERVER['REQUEST_URI'], '/product/detail') !== false)
+{
+    $customer = new CustomerController();
+    echo $customer->getProductDetail();
+}
 else if ($_SERVER['REQUEST_URI'] === '/cart')
 {
     $customer = new CustomerController();
@@ -23,11 +28,6 @@ else if ($_SERVER['REQUEST_URI'] === '/user')
 {
     $customer = new CustomerController();
     echo $customer->getUserInfo();
-}
-else if ($_SERVER['REQUEST_URI'] === '/product/detail')
-{
-    $customer = new CustomerController();
-    echo $customer->getProductDetail();
 }
 else if ($_SERVER['REQUEST_URI'] === '/login')
 {
@@ -54,10 +54,25 @@ else if ($_SERVER['REQUEST_URI'] === '/cart/delete')
     $customer = new CustomerController();
     echo $customer->deleteProductToCart();
 }
+else if ($_SERVER['REQUEST_URI'] === '/cart/payment')
+{
+    $customer = new CustomerController();
+    echo $customer->payment();
+}
+else if ($_SERVER['REQUEST_URI'] === '/orders')
+{
+    $customer = new CustomerController();
+    echo $customer->getOrders();
+}
 else if ($_SERVER['REQUEST_URI'] === '/category')
 {
     $customer = new CustomerController();
     echo $customer->getCategories();
+}
+else if ($_SERVER['REQUEST_URI'] === '/product/review')
+{
+    $customer = new CustomerController();
+    echo $customer->comment();
 }
 else echo "Welcom to PHP server!";
 ?>

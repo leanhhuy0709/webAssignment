@@ -76,7 +76,8 @@ function handleSignUp() {
         lname: form.querySelector("#lname").value,
         gender: form.querySelector("#gender").value,
         age: form.querySelector("#age").value,
-        DOB: form.querySelector("#DOB").value
+        DOB: form.querySelector("#DOB").value,
+        imageURL: form.querySelector("#imageURL").value
     });
     xhr.send(data);
 }
@@ -98,9 +99,14 @@ function handleResponseUser(response) {
 function getUserInfo() {
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
-        console.log(this.responseText);
-        var res = JSON.parse(this.responseText);
-        handleResponseUser(res);
+        console.log(this.responseText)
+        if(!JSON.parse(this.responseText).result) {
+            alert(JSON.parse(this.responseText).message);
+        }
+        else {
+            var res = JSON.parse(this.responseText).data;
+            handleResponseUser(res);
+        }
     }
     xhttp.onerror = function(err) {
         console.log("Error");
@@ -153,8 +159,14 @@ function getCart() {
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
         //console.log(this.responseText);
-        var res = JSON.parse(this.responseText);
-        handleResponseCart(res);
+
+        if(!JSON.parse(this.responseText).result) {
+            alert(JSON.parse(this.responseText).message);
+        }   
+        else {
+            var res = JSON.parse(this.responseText).data;
+            handleResponseCart(res);
+        }   
     }
     xhttp.onerror = function(err) {
         console.log("Error");
@@ -188,9 +200,79 @@ function handleResponseCart(products) {
                     <p class="card-text">${product.description}</p>
                     <p class="card-text">Price: ${product.price}</p>
                     <p class="card-text">Quantity: ${product.quantity}</p>
+                    <button onclick="handleAddToCart(${product.productID})">Add to cart</button>
+                    <button onclick="handleDeleteToCart(${product.productID})">Delete to cart</button>
                     <a href="#" class="btn btn-primary">Go somewhere</a>
                 </div>
             </div>`;
     })
     productDiv.innerHTML = result;
+}
+
+function handleAddToCart(id) {
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+        var res = JSON.parse(this.responseText);
+        console.log(res);
+        alert(res.message);
+        if (window.location.pathname == "/cart.html")
+            getCart();
+    }
+    xhttp.onerror = function(err) {
+        console.log("Error");
+        console.log(err);
+    }
+    const data = JSON.stringify({
+        token: getCookieValueByName('token'),
+        productID: id,
+        quantity: 1
+    });
+    xhttp.open("POST", "http://localhost/cart/add");
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.send(data);
+}
+
+function handleDeleteToCart(id) {
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+        var res = JSON.parse(this.responseText);
+        console.log(res);
+        alert(res.message);
+        if (window.location.pathname == "/cart.html")
+            getCart();
+    }
+    xhttp.onerror = function(err) {
+        console.log("Error");
+        console.log(err);
+    }
+    const data = JSON.stringify({
+        token: getCookieValueByName('token'),
+        productID: id,
+        quantity: 1
+    });
+    xhttp.open("POST", "http://localhost/cart/delete");
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.send(data);
+}
+
+function handlePayment(paymentMethod)
+{
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+        console.log(this.responseText);
+        var res = JSON.parse(this.responseText);
+        console.log(res);
+        alert(res.message);
+    }
+    xhttp.onerror = function(err) {
+        console.log("Error");
+        console.log(err);
+    }
+    const data = JSON.stringify({
+        token: getCookieValueByName('token'),
+        paymentMethod: paymentMethod
+    });
+    xhttp.open("POST", "http://localhost/cart/payment");
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.send(data);
 }

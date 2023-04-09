@@ -39,9 +39,13 @@
             const xhttp = new XMLHttpRequest();
             xhttp.onload = function() {
                 //console.log(this.responseText);
-                var res = JSON.parse(this.responseText);
-                console.log(res);
-                showProducts(res);
+                if(!JSON.parse(this.responseText).result) {
+                    alert(JSON.parse(this.responseText).message);
+                }   
+                else {
+                    var res = JSON.parse(this.responseText).data;
+                    showProducts(res);
+                }   
             }
             xhttp.open("GET", "http://localhost/products?search="+searchInput, true);
             xhttp.send();
@@ -65,7 +69,8 @@
                         <div class="card-body">
                             <h5 class="card-title">${product.name}</h5>
                             <p class="card-text">${product.description}</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                            <a href="./product-detail.html?productID=${product.productID}" class="btn btn-primary">Go somewhere</a>
+                            <button onclick="handleAddToCart(${product.productID})">Add to cart</button>
                         </div>
                     </div>`;
             })
@@ -75,10 +80,14 @@
         {
             const xhttp = new XMLHttpRequest();
             xhttp.onload = function() {
-                console.log(this.responseText);
-                var res = JSON.parse(this.responseText);
-                console.log(res);
-                showCategories(res);
+                //console.log(this.responseText);
+                if(!JSON.parse(this.responseText).result) {
+                    alert(JSON.parse(this.responseText).message);
+                }   
+                else {
+                    var res = JSON.parse(this.responseText).data;
+                    showCategories(res);
+                }   
             }
             xhttp.open("GET", "http://localhost/category", true);
             xhttp.send();

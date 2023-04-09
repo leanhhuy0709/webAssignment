@@ -67,39 +67,44 @@
         function getProducts() {
             const xhttp = new XMLHttpRequest();
             xhttp.onload = function() {
-            var res = JSON.parse(this.responseText);
-            //console.log(res);
-            productsLength = res.length;
-            if (n + 1 == productsLength && (step == 3 || step == 2))
-                data = [res[n], res[0], res[1]];
-            else if (n + 2 == productsLength && step == 3)
-                data = [res[n], res[n + 1], res[0]];
-            else
-                data = res.slice(n, n + step);
-            const BSPTable = document.getElementById("best-seller-products-list");
-            BSPTable.innerHTML = "";
-            const leftBtn = document.createElement("div");
-            leftBtn.style="display: flex; align-items: center; justify-content: center;";
-            leftBtn.innerHTML = `<button class="btn btn-outline-primary rounded-circle" onclick="leftButton()"><i class="fas fa-solid fa-arrow-left"></i></button>`;
-            const rightBtn = document.createElement("div");
-            rightBtn.innerHTML = `<button class="btn btn-outline-primary rounded-circle" onclick="rightButton()"><i class="fas fa-solid fa-arrow-right"></i></button>`;
-            rightBtn.style="display: flex; align-items: center; justify-content: center;";
-            BSPTable.appendChild(leftBtn);
-            data.forEach((product) => {
-                const BSPRow = document.createElement("div");
-                BSPRow.innerHTML = `
-                    <div class="card m-3" style="width: 18rem;">
-                        <img src="./images/${product.imageURL}" class="card-img-top" alt="product 1">
-                        <div class="card-body">
-                            <h5 class="card-title">${product.name}</h5>
-                            <p class="card-text">${product.description}</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
-                        </div>
-                    </div>`;
-                BSPTable.appendChild(BSPRow);
-            })
-            BSPTable.appendChild(rightBtn);
-        }
+                if(!JSON.parse(this.responseText).result) {
+                    alert(JSON.parse(this.responseText).message);
+                }  
+                else {
+                    var res = JSON.parse(this.responseText).data;
+                    //console.log(res);
+                    productsLength = res.length;
+                    if (n + 1 == productsLength && (step == 3 || step == 2))
+                        data = [res[n], res[0], res[1]];
+                    else if (n + 2 == productsLength && step == 3)
+                        data = [res[n], res[n + 1], res[0]];
+                    else
+                        data = res.slice(n, n + step);
+                    const BSPTable = document.getElementById("best-seller-products-list");
+                    BSPTable.innerHTML = "";
+                    const leftBtn = document.createElement("div");
+                    leftBtn.style="display: flex; align-items: center; justify-content: center;";
+                    leftBtn.innerHTML = `<button class="btn btn-outline-primary rounded-circle" onclick="leftButton()"><i class="fas fa-solid fa-arrow-left"></i></button>`;
+                    const rightBtn = document.createElement("div");
+                    rightBtn.innerHTML = `<button class="btn btn-outline-primary rounded-circle" onclick="rightButton()"><i class="fas fa-solid fa-arrow-right"></i></button>`;
+                    rightBtn.style="display: flex; align-items: center; justify-content: center;";
+                    BSPTable.appendChild(leftBtn);
+                    data.forEach((product) => {
+                        const BSPRow = document.createElement("div");
+                        BSPRow.innerHTML = `
+                            <div class="card m-3" style="width: 18rem;">
+                                <img src="./images/${product.imageURL}" class="card-img-top" alt="product 1">
+                                <div class="card-body">
+                                    <h5 class="card-title">${product.name}</h5>
+                                    <p class="card-text">${product.description}</p>
+                                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                                </div>
+                            </div>`;
+                        BSPTable.appendChild(BSPRow);
+                    })
+                    BSPTable.appendChild(rightBtn);
+                }
+            }
             xhttp.open("GET", "http://localhost/products");
             xhttp.send();
         }
