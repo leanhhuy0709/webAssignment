@@ -44,8 +44,17 @@ SELECT cart.cartID, product.productID, product.name AS name, price, imageURL, pr
                         
 CALL Payment(1, 6, "Momo");
 
-select * from `order`;
-select * from cart;
+SELECT orderDate, shippingDate, completeDate, totalPrice, shippingAddress, paymentMethod, orderStatus 
+FROM `order`
+WHERE customerID = 1;
 
+SELECT `cartID`
+FROM `order`
+WHERE customerID = 1;
 
-
+SELECT product.productID, product.name AS name, price, imageURL, product.description, productAddToCart.quantity
+                            FROM cart
+                            JOIN productAddToCart ON cart.cartID = productAddToCart.cartID
+                            JOIN product ON productAddToCart.productID = product.productID
+                            LEFT JOIN image ON product.productID = image.productID
+                            WHERE customerID = 1 AND cart.cartID = 1;

@@ -31,10 +31,30 @@
                     );
                 }
             } 
-            else $result = array(
-                "id" => -1,
-                "message" => "Wrong username or password" 
-            );
+            else
+            {
+                $stmt->close();
+                $stmt = $conn->prepare("SELECT * FROM customer WHERE email = ? AND password = ?;");
+                $stmt->bind_param("ss", $username, $password);
+                $stmt->execute();
+                $SQLresult = $stmt->get_result();
+                if ($SQLresult->num_rows > 0) {
+                    while($row = $SQLresult->fetch_assoc()) {
+                        $result = $row["customerID"];
+                        $result = array(
+                            "id" => $row["customerID"],
+                            "message" => "Login successfully"
+                        );
+                    }
+                }
+                else 
+                {
+                    $result = array(
+                        "id" => -1,
+                        "message" => "Wrong username or password" 
+                    );
+                }
+            }
         }
         catch (Exception $e) {
             $result = array(
@@ -414,9 +434,9 @@
             die("Connection failed: " . $conn->connect_error);
         }
         // Prepare and bind the INSERT statement
-        $stmt = $conn->prepare("SELECT * 
-                        FROM `order` 
-                        WHERE customerID = ?;");
+        $stmt = $conn->prepare("SELECT orderID, orderDate, shippingDate, completeDate, totalPrice, shippingAddress, paymentMethod, orderStatus 
+                            FROM `order`
+                            WHERE customerID = ?;");
         $stmt->bind_param("i", $userID);
         try {
             $stmt->execute();
@@ -440,12 +460,12 @@
             );
         }
         finally {
-            $conn->close();
             $stmt->close();
+            $conn->close();
             return $result;
         }
     }
-    function getOrderDetailModel($orderID)
+    function getOrderDetailModel($userID, $orderID)
     {
         global $SQLservername, $SQLusername, $SQLpassword, $SQLdbname;
         // Create connection
@@ -455,19 +475,53 @@
             die("Connection failed: " . $conn->connect_error);
         }
         // Prepare and bind the INSERT statement
-        $stmt = $conn->prepare("SELECT orderID, orderDate, orderStatus, totalAmount, paymentMethod, shippingMethod, shippingAddress, shippingPhone 
-                        FROM orders 
-                        WHERE orderID = ?;");
+        $stmt = $conn->prepare("SELECT orderID, orderDate, shippingDate, completeDate, totalPrice, shippingAddress, paymentMethod, orderStatus 
+                        FROM `order`
+                        WHERE orderID = ?");
         $stmt->bind_param("i", $orderID);
         try {
             $stmt->execute();
             $SQLresult = $stmt->get_result();
-            $result = array();
+            $result = 0;
             if ($SQLresult->num_rows > 0) {
                 while($row = $SQLresult->fetch_assoc()) {
-                    $result[] = $row;
+                    $result = $row;
                 }
             }
+            $stmt->close();
+            //get cart id
+
+            $stmt = $conn->prepare("SELECT cartID 
+                            FROM `order`
+                            WHERE orderID = ?;");
+            $stmt->bind_param("i", $orderID);
+            $stmt->execute();
+            $SQLresult = $stmt->get_result();
+            $cartID = 0;
+            if ($SQLresult->num_rows > 0) {
+                while($row = $SQLresult->fetch_assoc()) {
+                    $cartID = $row["cartID"];
+                }
+            }
+            $stmt->close();
+            //get cart detail
+            $stmt = $conn->prepare("SELECT product.productID, product.name AS name, price, imageURL, product.description, productAddToCart.quantity
+                            FROM cart
+                            JOIN productAddToCart ON cart.cartID = productAddToCart.cartID
+                            JOIN product ON productAddToCart.productID = product.productID
+                            LEFT JOIN image ON product.productID = image.productID
+                            WHERE customerID = ? AND cart.cartID = ?;");
+            $stmt->bind_param("ii", $userID, $cartID);
+            $stmt->execute();
+            $SQLresult = $stmt->get_result();
+            $cartDetail = array();
+            if ($SQLresult->num_rows > 0) {
+                while($row = $SQLresult->fetch_assoc()) {
+                    $cartDetail[] = $row;
+                }
+            }
+            $result["products"] = $cartDetail;
+
             $result = array(
                 "result" => true,
                 "message" => "Get order detail successfully",

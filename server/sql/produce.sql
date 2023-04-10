@@ -54,6 +54,7 @@ BEGIN
 END //
 DELIMITER ;
 
+
 -- CALL Comment(1, 1, 1, "Good", "Sản phẩm tốt hơn bạn nghĩ!");
 -- CALL Comment(2, 1, 1, "Bad", "Sản phẩm tệ hơn bạn nghĩ!");
 

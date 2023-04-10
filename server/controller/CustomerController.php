@@ -25,7 +25,7 @@ class CustomerController {
 
         $check = checkIsValid($data, ['username', 'password']);
         if (!$check["result"])
-            return json_encode($check);
+            return json_encode($check);//
 
         $username = $data['username'];
         $password = $data['password'];
@@ -193,12 +193,15 @@ class CustomerController {
         $body = file_get_contents('php://input');
         $data = json_decode($body, true);
 
-        $check = checkIsValid($data, ['orderID']);
+        $check = checkIsValid($data, ['orderID', 'token']);
         if (!$check["result"])
             return json_encode($check);
 
         $orderID = $data['orderID'];
-        $res = getOrderDetailModel($orderID);
+        $cookie = new CookieController();
+        $userID = $cookie->decodeCookie($data['token']);
+
+        $res = getOrderDetailModel($userID, $orderID);
         return json_encode($res);//?
     }
     public static function payment()

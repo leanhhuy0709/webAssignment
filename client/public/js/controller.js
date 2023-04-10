@@ -232,6 +232,14 @@ function handleAddToCart(id) {
     xhttp.send(data);
 }
 
+function handleLogout()
+{
+    var time = new Date();
+    time.setTime(time.getTime() - (1 * 60 * 60 * 1000));   // 1 hour
+    document.cookie = "token=a; expires=" + time.toUTCString() + "; path=/";
+    window.location.pathname = "/login.html";
+}
+
 function handleDeleteToCart(id) {
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
@@ -275,4 +283,198 @@ function handlePayment(paymentMethod)
     xhttp.open("POST", "http://localhost/cart/payment");
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.send(data);
+}
+
+function getProducts(searchInput = "") {
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+        //console.log(this.responseText);
+        if(!JSON.parse(this.responseText).result) {
+            alert(JSON.parse(this.responseText).message);
+        }   
+        else {
+            var res = JSON.parse(this.responseText).data;
+            showProducts(res);
+        }   
+    }
+    xhttp.open("GET", "http://localhost/products?search="+searchInput, true);
+    xhttp.send();
+}
+function handleSearch()
+{
+    if (window.location.pathname != "/product.html")
+        window.location.pathname = "/product.html";
+    const searchInput = document.getElementById("search");
+    getProducts(searchInput.value);
+}
+function showProducts(products)
+{
+    const productDiv = document.getElementById("product-list");
+    productDiv.innerHTML = "";
+    var result = "";
+    products.forEach((product)=>{
+        result += `
+            <div class="card m-3" style="width: 18rem;">
+                <img src="./images/${product.imageURL}" class="card-img-top" alt="product 1">
+                <div class="card-body">
+                    <h5 class="card-title">${product.name}</h5>
+                    <p class="card-text">${product.description}</p>
+                    <a href="./product-detail.html?productID=${product.productID}" class="btn btn-primary">Go somewhere</a>
+                    <button onclick="handleAddToCart(${product.productID})">Add to cart</button>
+                </div>
+            </div>`;
+    })
+    productDiv.innerHTML = result;
+}
+function getCategories()
+{
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+        //console.log(this.responseText);
+        if(!JSON.parse(this.responseText).result) {
+            alert(JSON.parse(this.responseText).message);
+        }   
+        else {
+            var res = JSON.parse(this.responseText).data;
+            showCategories(res);
+        }   
+    }
+    xhttp.open("GET", "http://localhost/category", true);
+    xhttp.send();
+}
+function showCategories(categories)
+{
+    const categoryDiv = document.getElementById("category-list");
+    categoryDiv.innerHTML = "";
+    var result = "";
+    categories.forEach((category)=>{
+        result += `<h3>${category.name}</h3>`;
+    })
+    categoryDiv.innerHTML = result;
+}
+
+function getOrder()
+{
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+        //console.log(this.responseText);
+
+        if(!JSON.parse(this.responseText).result) {
+            alert(JSON.parse(this.responseText).message);
+        }   
+        else {
+            var res = JSON.parse(this.responseText).data;
+            console.log(res);
+            handleResponseOrder(res);
+        }   
+    }
+    xhttp.onerror = function(err) {
+        console.log("Error");
+        console.log(err);
+    }
+
+    // Tạo object chứa token
+    const data = {
+        token: getCookieValueByName('token')
+    };
+
+    // Chuyển object thành chuỗi JSON
+    const jsonData = JSON.stringify(data);
+
+    xhttp.open("POST", "http://localhost/orders");
+    xhttp.setRequestHeader("Content-Type", "application/json"); // Thiết lập header cho request
+    xhttp.send(jsonData); // Gửi request với body là chuỗi JSON
+}
+
+function handleResponseOrder(orders) {
+    console.log(orders);
+    const orderDiv = document.getElementById("order");
+    orderDiv.innerHTML = "";
+    var result = "";
+    orders.forEach((order)=>{
+        //show block which have orderID, orderDate, shippingDate, completeDate, totalPrice, shippingAddress, paymentMethod, orderStatus of order
+        result += `<div class="card m-3" style="width: 18rem;">
+                <div class="card-body">
+                <h5 class="card-title">Order ID: ${order.orderID}</h5>
+                <p class="card-text">Order Date: ${order.orderDate}</p>
+                <p class="card-text">Shipping Date: ${order.shippingDate}</p>
+                <p class="card-text">Complete Date: ${order.completeDate?order.completeDate:"None"}</p>
+                <p class="card-text">Total Price: ${order.totalPrice}</p>
+                <p class="card-text">Shipping Address: ${order.shippingAddress}</p>
+                <p class="card-text">Payment Method: ${order.paymentMethod}</p>
+                <p class="card-text">Order Status: ${order.orderStatus}</p>
+                <button onclick="handleOrderDetail(${order.orderID})">Order Detail</button>
+                </div>
+            </div>
+        `;
+    })
+    orderDiv.innerHTML = result;
+}
+
+
+function getOrderDetail() {
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+        //console.log(this.responseText);
+
+        if(!JSON.parse(this.responseText).result) {
+            alert(JSON.parse(this.responseText).message);
+        }   
+        else {
+            var res = JSON.parse(this.responseText).data;
+            handleResponseOrderDetail(res);
+        }   
+    }
+    xhttp.onerror = function(err) {
+        console.log("Error");
+        console.log(err);
+    }
+
+    // Tạo object chứa token
+    const data = {
+        token: getCookieValueByName('token'),
+        orderID: window.location.search.split("=")[1]
+    };
+
+    // Chuyển object thành chuỗi JSON
+    const jsonData = JSON.stringify(data);
+
+    xhttp.open("POST", "http://localhost/order/detail");
+    xhttp.setRequestHeader("Content-Type", "application/json"); // Thiết lập header cho request
+    xhttp.send(jsonData); // Gửi request với body là chuỗi JSON
+}
+
+
+function handleResponseOrderDetail(order) {
+    const orderDetailDiv = document.getElementById("order-detail");
+    orderDetailDiv.innerHTML = "";
+    //show order detail: orderID, orderDate, shippingDate, completeDate, totalPrice, shippingAddress, paymentMethod, orderStatus of order
+    var result = `<div class="card m-3" style="width: 18rem;">
+                <div class="card-body">
+                <h5 class="card-title">Order ID: ${order.orderID}</h5>
+                <p class="card-text">Order Date: ${order.orderDate}</p>
+                <p class="card-text">Shipping Date: ${order.shippingDate}</p>
+                <p class="card-text">Complete Date: ${order.completeDate?order.completeDate:"None"}</p>
+                <p class="card-text">Total Price: ${order.totalPrice}</p>
+                <p class="card-text">Shipping Address: ${order.shippingAddress}</p>
+                <p class="card-text">Payment Method: ${order.paymentMethod}</p>
+                <p class="card-text">Order Status: ${order.orderStatus}</p>
+                </div>
+                </div>
+    `;
+
+    order.products.forEach((product)=>{
+        result += `
+            <div class="card m-3" style="width: 18rem;">
+                <img src="./images/${product.imageURL}" class="card-img-top" alt="product 1">
+                <div class="card-body">
+                    <h5 class="card-title">${product.name}</h5>
+                    <p class="card-text">${product.description}</p>
+                    <p class="card-text">Price: ${product.price}</p>
+                    <p class="card-text">Quantity: ${product.quantity}</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>`;
+    })
+    orderDetailDiv.innerHTML = result;
 }

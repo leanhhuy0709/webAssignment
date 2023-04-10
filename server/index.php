@@ -64,6 +64,11 @@ else if ($_SERVER['REQUEST_URI'] === '/orders')
     $customer = new CustomerController();
     echo $customer->getOrders();
 }
+else if ($_SERVER['REQUEST_URI'] === '/order/detail')
+{
+    $customer = new CustomerController();
+    echo $customer->getOrderDetail();
+}
 else if ($_SERVER['REQUEST_URI'] === '/category')
 {
     $customer = new CustomerController();
