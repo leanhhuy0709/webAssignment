@@ -58,6 +58,9 @@ function handleLogin()
 
 function handleSignUp() {
     const form = document.getElementById("signup-form");
+    if(validateForm() == false){
+        return;
+    }
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "http://localhost/signup", true);
     xhr.setRequestHeader("Content-Type", "application/json");
@@ -314,8 +317,8 @@ function showProducts(products)
     var result = "";
     products.forEach((product)=>{
         result += `
-            <div class="card m-3" style="width: 18rem;">
-                <img src="./images/${product.imageURL}" class="card-img-top" alt="product 1">
+            <div class="card m-3 d-inline-block" style="width: 18rem;">
+                <img src="${product.imageURL}" class="card-img-top" onerror="this.onerror=null; this.src='https://media.istockphoto.com/id/1216251206/vector/no-image-available-icon.jpg?s=170667a&w=0&k=20&c=N-XIIeLlhUpm2ZO2uGls-pcVsZ2FTwTxZepwZe4DuE4=';">
                 <div class="card-body">
                     <h5 class="card-title">${product.name}</h5>
                     <p class="card-text">${product.description}</p>
@@ -477,4 +480,45 @@ function handleResponseOrderDetail(order) {
             </div>`;
     })
     orderDetailDiv.innerHTML = result;
+}
+
+// Kiểm tra dữ liệu đầu vào
+function validateForm() {
+    // có nên đổi thứ tự ở đây ko ?
+    var username = form.querySelector("#username").value;
+    var password = form.querySelector("#password").value;
+    var email = form.querySelector("#email").value;
+    var phone = form.querySelector("#phone").value;
+    var firstName = form.querySelector("#fname").value;
+    var lastName = form.querySelector("#lname").value;
+    var gender = form.querySelector("#gender").value;
+    var age = form.querySelector("#age").value;
+    var DOB = form.querySelector("#DOB").value;
+    var imageURL = form.querySelector("#imageURL").value;
+    var regex = /\S+@\S+\.\S+/;
+
+    if (!regex.test(email)) {
+        alert("Invalid email address");
+        return false;
+    }
+    if (phone.length != 10){
+        alert("Invalid phone");
+        return false;
+    }
+    if (firstName.length < 2 || firstName.length > 30){
+        alert("Invalid first name.");
+        return false;
+    }
+    if (lastName.length < 2 || lastName.length > 30){
+        alert("Invalid last name.");
+        return false;
+    }
+    if (age < 0){
+        alert("Invalid age");
+        return false;
+    }
+    if (imageURL.length < 100){
+        alert("Invalid link");
+        return false;
+    }
 }
