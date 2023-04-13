@@ -314,8 +314,8 @@ function showProducts(products)
     var result = "";
     products.forEach((product)=>{
         result += `
-            <div class="card m-3" style="width: 18rem;">
-                <img src="./images/${product.imageURL}" class="card-img-top" alt="product 1">
+            <div class="card m-3 d-inline-block" style="width: 18rem;">
+                <img src="${product.imageURL}" class="card-img-top" onerror="this.onerror=null; this.src='https://media.istockphoto.com/id/1216251206/vector/no-image-available-icon.jpg?s=170667a&w=0&k=20&c=N-XIIeLlhUpm2ZO2uGls-pcVsZ2FTwTxZepwZe4DuE4=';">
                 <div class="card-body">
                     <h5 class="card-title">${product.name}</h5>
                     <p class="card-text">${product.description}</p>
