@@ -93,11 +93,11 @@
                         const BSPRow = document.createElement("div");
                         BSPRow.innerHTML = `
                             <div class="card m-3" style="width: 18rem;">
-                                <img src="./images/${product.imageURL}" class="card-img-top" alt="product 1">
+                                <img src="${product.imageURL}" class="card-img-top" alt="product 1">
                                 <div class="card-body">
                                     <h5 class="card-title">${product.name}</h5>
                                     <p class="card-text">${product.description}</p>
-                                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                                    <a href="./product-detail.html?productID=${product.productID}" class="btn btn-primary">Go somewhere</a>
                                 </div>
                             </div>`;
                         BSPTable.appendChild(BSPRow);

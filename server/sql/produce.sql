@@ -58,11 +58,6 @@ DELIMITER ;
 -- CALL Comment(1, 1, 1, "Good", "Sản phẩm tốt hơn bạn nghĩ!");
 -- CALL Comment(2, 1, 1, "Bad", "Sản phẩm tệ hơn bạn nghĩ!");
 
-SELECT fname, lname, imageURL, rating, title, text, reviewDate, status 
-FROM review 
-JOIN customer ON review.customerID = customer.customerID
-WHERE productID = 1
-ORDER BY reviewDate;
 -- CALL Comment(1, 1, 5, "test title", "test title");
 
 

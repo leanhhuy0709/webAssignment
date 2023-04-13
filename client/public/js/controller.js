@@ -50,8 +50,8 @@ function handleLogin()
     }
     
     const data = JSON.stringify({
-        username: form.querySelector("#username").value,
-        password: form.querySelector("#password").value
+        username: form.querySelector("#login-username").value,
+        password: form.querySelector("#login-password").value
     });
     xhr.send(data);
 }
@@ -67,7 +67,7 @@ function handleSignUp() {
     xhr.onload = function() {
         //console.log(this.responseText);
         alert("Sign up successfully!");
-        window.location.pathname = "/login.html";
+        window.location.pathname = "/signup-login.html";
     }
     
     const data = JSON.stringify({
@@ -77,7 +77,7 @@ function handleSignUp() {
         phone: form.querySelector("#phone").value,
         fname: form.querySelector("#fname").value,
         lname: form.querySelector("#lname").value,
-        gender: form.querySelector("#gender").value,
+        gender: document.querySelector('input[name="gender"]:checked').value,
         age: form.querySelector("#age").value,
         DOB: form.querySelector("#DOB").value,
         imageURL: form.querySelector("#imageURL").value
@@ -197,7 +197,7 @@ function handleResponseCart(products) {
     products.forEach((product)=>{
         result += `
             <div class="card m-3" style="width: 18rem;">
-                <img src="./images/${product.imageURL}" class="card-img-top" alt="product 1">
+                <img src="${product.imageURL}" class="card-img-top" alt="product 1">
                 <div class="card-body">
                     <h5 class="card-title">${product.name}</h5>
                     <p class="card-text">${product.description}</p>
@@ -240,7 +240,7 @@ function handleLogout()
     var time = new Date();
     time.setTime(time.getTime() - (1 * 60 * 60 * 1000));   // 1 hour
     document.cookie = "token=a; expires=" + time.toUTCString() + "; path=/";
-    window.location.pathname = "/login.html";
+    window.location.pathname = "/signup-login.html";
 }
 
 function handleDeleteToCart(id) {
@@ -469,7 +469,7 @@ function handleResponseOrderDetail(order) {
     order.products.forEach((product)=>{
         result += `
             <div class="card m-3" style="width: 18rem;">
-                <img src="./images/${product.imageURL}" class="card-img-top" alt="product 1">
+                <img src="${product.imageURL}" class="card-img-top" alt="product 1">
                 <div class="card-body">
                     <h5 class="card-title">${product.name}</h5>
                     <p class="card-text">${product.description}</p>
@@ -485,13 +485,14 @@ function handleResponseOrderDetail(order) {
 // Kiểm tra dữ liệu đầu vào
 function validateForm() {
     // có nên đổi thứ tự ở đây ko ?
+    const form = document.getElementById("signup-form");
     var username = form.querySelector("#username").value;
     var password = form.querySelector("#password").value;
     var email = form.querySelector("#email").value;
     var phone = form.querySelector("#phone").value;
     var firstName = form.querySelector("#fname").value;
     var lastName = form.querySelector("#lname").value;
-    var gender = form.querySelector("#gender").value;
+    var gender = document.querySelector('input[name="gender"]:checked').value;
     var age = form.querySelector("#age").value;
     var DOB = form.querySelector("#DOB").value;
     var imageURL = form.querySelector("#imageURL").value;
@@ -517,7 +518,7 @@ function validateForm() {
         alert("Invalid age");
         return false;
     }
-    if (imageURL.length < 100){
+    if (imageURL.length >= 100){
         alert("Invalid link");
         return false;
     }

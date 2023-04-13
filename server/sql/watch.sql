@@ -58,3 +58,8 @@ SELECT product.productID, product.name AS name, price, imageURL, product.descrip
                             JOIN product ON productAddToCart.productID = product.productID
                             LEFT JOIN image ON product.productID = image.productID
                             WHERE customerID = 1 AND cart.cartID = 1;
+		
+SELECT * from Customer;
+SELECT username, fname, lname, gender, age, DOB, email, phoneNumber, imageURL 
+                        FROM customer 
+                        WHERE customer.customerID = 2;

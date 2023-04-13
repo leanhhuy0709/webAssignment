@@ -26,7 +26,7 @@ class CookieController {
         $key = "my_secret_key"; // Khóa bí mật
         try{
             $decode = (array) JWT::decode($cookie, new Key($key, 'HS256'));
-            return $decode;
+            return $decode["id"];
         }
         catch(Exception $e){
             echo "Error: ", $e;
