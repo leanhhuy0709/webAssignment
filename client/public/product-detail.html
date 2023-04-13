@@ -63,7 +63,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-6">
-                            <img src="./images/${res.imageURL[0]}" alt="" style="width: 100%;">
+                            <img src="${res.imageURL[0]}" alt="" style="width: 100%;">
                         </div>
                         <div class="col-6">
                             <h1>${res.name}</h1>
@@ -78,7 +78,7 @@
                     <div id="comment-block" class="container">
                         <div class="row">
                             <div class="col-2">
-                                <img src="${res.review[i].imageURL}" alt="" style="width: 100%;">
+                                <img src="${res.review[i].imageURL}" alt="No Image" style="width: 100%;">
                             </div>
                             <div class="col-10">
                                 <p>${res.review[i].fname + " " + res.review[i].lname + " " + res.review[i].rating} sao</p>
