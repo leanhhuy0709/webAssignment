@@ -521,5 +521,4 @@ function validateForm() {
         alert("Invalid link");
         return false;
     }
-    
 }
