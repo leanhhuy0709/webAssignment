@@ -23,33 +23,10 @@
 
 <body>
   <!-- Header -->
-  <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-brand-color justify-content-between">
-    <div class="container-fluid">
-
-      <div class="d-flex">
-        <button class="btn btn-outline-light text-dark m-1"><i class="fas fa-bars"
-            style="font-size: 23px;"></i></button>
-
-          <img src="./images/Logo.png" style="width:30%; padding-top:1%">
-
-      </div>
-
-      <form class="d-flex searchbar">
-        <input class="form-control me-2 rounded-pill searchinput" type="search" placeholder="Search"
-          aria-label="Search">
-        <button class="btn btn-outline-dark rounded-pill mx-1 searchbutton" type="submit">Search</button>
-      </form>
-
-      <div class="d-flex">
-        <button class="btn btn-outline-light text-dark m-1"><i class="fas fa-user"
-            style="font-size: 23px;"></i></button>
-        <button class="btn btn-outline-light text-dark m-1"><i class="fas fa-shopping-cart"
-            style="font-size: 23px;"></i></button>
-      </div>
-    </div>
-
-    </div>
-  </nav>
+  <div id="nav"></div>
+  <script>
+      getHTML("nav", "nav.html")
+  </script>
   <!-- Header -->
   <div style="margin: 5%"></div>
 
@@ -95,146 +72,10 @@
         </div>
 
         <!-- Footer -->
-        <footer class=" text-center text-white bg-footer-color">
-          <!-- Grid container -->
-          <div class="container p-4">
-            <!-- Section: Social media -->
-            <section class="mb-4">
-              <!-- Facebook -->
-              <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i
-                  class="fab fa-facebook-f"></i></a>
-
-              <!-- Twitter -->
-              <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i
-                  class="fab fa-twitter"></i></a>
-
-              <!-- Google -->
-              <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i
-                  class="fab fa-google"></i></a>
-
-              <!-- Instagram -->
-              <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i
-                  class="fab fa-instagram"></i></a>
-
-              <!-- Linkedin -->
-              <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i
-                  class="fab fa-linkedin-in"></i></a>
-
-              <!-- Github -->
-              <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i
-                  class="fab fa-github"></i></a>
-            </section>
-            <!-- Section: Social media -->
-
-            <!-- Section: Form -->
-            <section class="">
-              <form action="">
-                <!--Grid row-->
-                <div class="row d-flex justify-content-center">
-                  <!--Grid column-->
-                  <div class="col-auto">
-                    <p class="pt-2">
-                      <strong>Subscribe for more product information and beauty tips!</strong>
-                    </p>
-                  </div>
-                  <!--Grid column-->
-
-                  <!--Grid column-->
-                  <div class="col-md-5 col-12">
-                    <!-- Email input -->
-                    <div class="form-outline form-white mb-4">
-                      <input type="email" id="form5Example21" class="form-control"
-                        placeholder="Enter your email address" />
-                    </div>
-                  </div>
-                  <!--Grid column-->
-
-                  <!--Grid column-->
-                  <div class="col-auto">
-                    <!-- Submit button -->
-                    <button type="submit" class="btn btn-outline-light mb-4">
-                      Subscribe
-                    </button>
-                  </div>
-                  <!--Grid column-->
-                </div>
-                <!--Grid row-->
-              </form>
-            </section>
-            <!-- Section: Form -->
-
-            <!-- Section: Links -->
-            <section class="">
-              <!--Grid row-->
-              <div class="row">
-                <!--Grid column-->
-                <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
-                  <h5 class="text-uppercase">OLIVIA</h5>
-
-                  <ul class="list-unstyled mb-0">
-                    <li>
-                      <a href="#!" class="text-white no-decoration">Our story</a>
-                    </li>
-                    <li>
-                      <a href="#!" class="text-white no-decoration">Location</a>
-                    </li>
-                    <li>
-                      <a href="#!" class="text-white no-decoration">Careers</a>
-                    </li>
-                    <li>
-                      <a href="#!" class="text-white no-decoration">Blogs</a>
-                    </li>
-                  </ul>
-                </div>
-                <!--Grid column-->
-
-                <!--Grid column-->
-                <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
-                  <h5 class="text-uppercase">Category</h5>
-
-                  <ul class="list-unstyled mb-0">
-                    <li>
-                      <a href="#!" class="text-white no-decoration">Make-up</a>
-                    </li>
-                    <li>
-                      <a href="#!" class="text-white no-decoration">Hair Care</a>
-                    </li>
-                    <li>
-                      <a href="#!" class="text-white no-decoration">Skin Care</a>
-                    </li>
-                    <li>
-                      <a href="#!" class="text-white no-decoration">Body Care</a>
-                    </li>
-                  </ul>
-                </div>
-                <!--Grid column-->
-
-                <!--Grid column-->
-                <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
-                  <h5 class="text-uppercase">HELP</h5>
-
-                  <ul class="list-unstyled mb-0">
-                    <li>
-                      <a href="#!" class="text-white no-decoration">Track My Orders</a>
-                    </li>
-                    <li>
-                      <a href="#!" class="text-white no-decoration">Payment</a>
-                    </li>
-                    <li>
-                      <a href="#!" class="text-white no-decoration">Delivery</a>
-                    </li>
-                    <li>
-                      <a href="#!" class="text-white no-decoration">Returns Policy</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <!--Grid row-->
-            </section>
-            <!-- Section: Links -->
-          </div>
-          <!-- Grid container -->
-        </footer>
+        <div id="footer"></div>
+        <script>
+            getHTML("footer", "footer.html")
+        </script>  
         <!-- Footer -->
     </div>
 </body>
