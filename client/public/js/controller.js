@@ -197,15 +197,16 @@ function handleResponseCart(products) {
     products.forEach((product)=>{
         result += `
             <div class="product">
-                <img src="${product.imageURL}" alt="product 1">
-                <div class="card-body">
-                    <h5 class="card-title">${product.name}</h5>
-                    <p class="card-text">${product.description}</p>
-                    <p class="card-text">Price: ${product.price}</p>
-                    <p class="card-text">Quantity: ${product.quantity}</p>
-                    <button onclick="handleAddToCart(${product.productID})">Add to cart</button>
-                    <button onclick="handleDeleteToCart(${product.productID})">Delete to cart</button>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                <div class="img"><img src="${product.imageURL}" alt="product 1"></div>
+                <div class="info">
+                    <h5>${product.name}</h5>
+                    <div class="quantity-price">
+                        <button onclick="handleAddToCart(${product.productID})"><span>&#43;</span></button>
+                        <div class="quantity">${product.quantity}</div>
+                        <button onclick="handleDeleteToCart(${product.productID})"><span>&#8722;</span></button>
+                        <div>Price: ${product.price}</div>
+                        <div id="total">Total:</div>
+                    </div>
                 </div>
             </div>`;
     })
