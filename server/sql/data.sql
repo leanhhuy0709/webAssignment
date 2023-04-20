@@ -38,22 +38,22 @@ INSERT INTO category(name) VALUES ("Make-up");
 
 -- Dạng cơ bản khi insert product, image phải ở ngay sau sản phẩm thêm vào
 INSERT INTO product(productID, name, price, categoryID, supplierID, brandID, description) VALUES
-(1, "Kem dưỡng ẩm Avene", 200000, 1, 1, 1, "Kem dưỡng ẩm Avene giúp dưỡng ẩm và bảo vệ da khỏi tác hại của ánh nắng mặt trời, giúp da trở nên mềm mại và mịn màng.");
+(1, "Avene Moisturizing Cream", 200000, 1, 1, 1, "Avene Moisturizing Cream moisturizes and protects the skin from sun damage, making it soft and smooth." );
 
 INSERT INTO product(name, price, categoryID, supplierID, brandID, description) VALUES
-("Tinh chất dưỡng tóc Kerastase", 500000, 2, 1, 1, "Tinh chất dưỡng tóc Kerastase giúp nuôi dưỡng tóc, giảm gãy rụng và phục hồi tóc hư tổn."),
-("Phấn phủ Innisfree", 300000, 3, 1, 1, "Phấn phủ Innisfree có kết cấu mịn, che phủ tốt các khuyết điểm trên da, giúp làn da trông tươi sáng và mịn màng hơn."),
-("Sữa rửa mặt Laneige", 250000, 1, 1, 1, "Sữa rửa mặt Laneige giúp làm sạch da, se khít lỗ chân lông và làm sáng da."),
-("Kem che khuyết điểm The Saem", 150000, 3, 1, 1, "Kem che khuyết điểm The Saem giúp che phủ các khuyết điểm trên da như mụn, vết thâm, tàn nhang,..."),
-("Kem dưỡng ẩm Neutrogena", 200000, 1, 1, 1, "Kem dưỡng ẩm Neutrogena giúp cấp ẩm sâu cho da, giúp da mềm mại và mịn màng hơn."),
-("Dầu gội Pantene", 120000, 2, 1, 1, "Dầu gội Pantene giúp làm sạch tóc, nuôi dưỡng tóc và giúp tóc chắc khỏe hơn."),
-("Mascara Maybelline", 150000, 3, 1, 1, "Mascara Maybelline giúp làm dày mi, làm cong mi và giúp mi trông dài hơn."),
-("Nước hoa Lancome", 2500000, 3, 1, 1, "Nước hoa Lancome có hương thơm dịu nhẹ, sang trọng, giúp bạn tự tin và quyến rũ."),
-("Serum trị mụn Kiehl's", 300000, 1, 1, 1, "Serum trị mụn Kiehl's giúp làm sạch mụn và giúp ngăn ngừa mụn trở lại."),
-("Sữa tắm Dove", 80000, 2, 1, 1, "Sữa tắm Dove giúp làm sạch da, nuôi dưỡng da và giúp da mềm mại hơn."),
-("Nước hoa hồng Klairs Supple Preparation Facial Toner", 300000, 1, 1, 1, "Nước hoa hồng dành cho mọi loại da, giúp cân bằng độ pH của da và cung cấp độ ẩm cho da."),
-("Tinh chất dưỡng da The Ordinary Niacinamide 10% + Zinc 1%", 250000, 1, 1, 1, "Tinh chất dưỡng da giúp se khít lỗ chân lông, làm mờ vết thâm và kiềm dầu cho da."),
-("Gel rửa mặt Cerave Foaming Facial Cleanser", 250000, 1, 1, 1, "Gel rửa mặt nhẹ nhàng loại bỏ bụi bẩn và tạp chất trên da, đồng thời bổ sung các thành phần giúp dưỡng ẩm cho da.");
+("Kerastase Hair Essence", 500000, 2, 1, 1, "Kerastase Hair Essence helps to nourish hair, reduce breakage and repair damaged hair."),
+("Innisfree Powder", 300000, 3, 1, 1, "Innisfree Powder has a smooth texture that covers skin imperfections well, making the skin look brighter and smoother."),
+("Laneige Cleanser", 250000, 1, 1, 1, "Laneige Facial Cleanser helps to clear skin, tighten pores, and brighten skin."),
+("The Saem Concealer", 150000, 3, 1, 1, "The Saem Concealer helps cover skin imperfections such as acne, dark spots, freckles,..."),
+("Neutrogena Moisturizing Cream", 200000, 1, 1, 1, "Neutrogena Moisturizing Cream deeply hydrates the skin, making it softer and smoother."),
+("Pantene shampoo", 120000, 2, 1, 1, "Pantene shampoo cleans hair, nourishes hair and makes hair stronger."),
+("Maybelline Mascara", 150000, 3, 1, 1, "Maybelline Mascara thickens, curls, and makes them look longer."),
+("Lancome perfume", 2500000, 3, 1, 1, "Lancome perfume has a gentle, luxurious fragrance that makes you confident and seductive."),
+("Kiehl's Acne Serum", 300000, 1, 1, 1, "Kiehl's Acne Serum helps clear up acne and helps prevent it from coming back."),
+("Dove Shower Gel", 80000, 2, 1, 1, "Dove Body Wash helps to clean, nourish, and soften skin."),
+("Klairs Supple Preparation Facial Toner", 300000, 1, 1, 1, "A toner for all skin types that helps balance the skin's pH and provides moisture."),
+("The Ordinary Niacinamide 10% + Zinc 1%", 250000, 1, 1, 1, "The skin essence helps to tighten pores, fade dark spots and control oil for the skin."),
+("Cerave Foaming Facial Cleanser", 250000, 1, 1, 1, "Cerave Foaming Facial Cleanser gently removes dirt and impurities from the skin, while adding ingredients to help moisturize the skin.") ;
 
 INSERT INTO image VALUES 
 ("https://cdn.chanhtuoi.com/uploads/2021/07/kem-duong-am-phuc-hoi-da-avene-cicalfate-repair-cream-40ml-1-1.jpg", 1),

@@ -1,4 +1,4 @@
-// Lấy cookie từ trình duyệt
+
 function getHTML(id, file)
 {
     //get tag by id
@@ -11,7 +11,7 @@ function getHTML(id, file)
             tag.innerHTML = text;
         });
 }
-
+// Lấy cookie từ trình duyệt
 function getCookieValueByName(cname)
 {
     var cookieList = document.cookie.split(";");
@@ -255,8 +255,9 @@ function handleResponseCart(products) {
                     <p class="card-text">${product.description}</p>
                     <p class="card-text">Price: ${product.price}</p>
                     <p class="card-text">Quantity: ${product.quantity}</p>
-                    <button onclick="handleAddToCart(${product.productID})">Add to cart</button>
-                    <button onclick="handleDeleteToCart(${product.productID})">Delete to cart</button>
+                    <button onclick="handleAddToCart(${product.productID})">+</button>
+                    <button onclick="handleDeleteToCart(${product.productID})">-</button>
+                    <button onclick="handleDeleteToCart(${product.productID}, 10000)">Delete</button>
                     <a href="#" class="btn btn-primary">Go somewhere</a>
                 </div>
             </div>`;
@@ -300,7 +301,7 @@ function handleLogout()
     window.location.pathname = "/signup-login.html";
 }
 
-function handleDeleteToCart(id) {
+function handleDeleteToCart(id, num = 1) {
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
         console.log(this.responseText);
@@ -317,7 +318,7 @@ function handleDeleteToCart(id) {
     const data = JSON.stringify({
         token: getCookieValueByName('token'),
         productID: id,
-        quantity: 1
+        quantity: num
     });
     xhttp.open("POST", "http://localhost/cart/delete");
     xhttp.setRequestHeader("Content-Type", "application/json");
@@ -332,6 +333,7 @@ function handlePayment(paymentMethod)
         var res = JSON.parse(this.responseText);
         console.log(res);
         createModal(res.message);
+        getCart();
     }
     xhttp.onerror = function(err) {
         console.log("Error");
@@ -363,9 +365,10 @@ function getProducts(searchInput = "", page = 1) {
 }
 function handleSearch()
 {
-    if (window.location.pathname != "/product.html")
-        window.location.pathname = "/product.html";
     const searchInput = document.getElementById("search");
+    var pn = window.location.pathname;
+    if (pn != "/new.html" && pn != "/sale.html" && pn != "/category.html")
+        window.location.pathname = "/new.html";
     getProducts(searchInput.value);
 }
 function showProducts(products, searchInput, page = 1)
@@ -475,7 +478,7 @@ function handleResponseOrder(orders) {
                 <p class="card-text">Shipping Address: ${order.shippingAddress}</p>
                 <p class="card-text">Payment Method: ${order.paymentMethod}</p>
                 <p class="card-text">Order Status: ${order.orderStatus}</p>
-                <button onclick="handleOrderDetail(${order.orderID})">Order Detail</button>
+                <button onclick="handleResponseOrderDetail(${order.orderID})">Order Detail</button>
                 </div>
             </div>
         `;
@@ -594,11 +597,11 @@ function validateForm() {
 
 function createModal(message, isSuccess = true) {
     var color = isSuccess ? "success" : "danger";
-    var modalHtml = '<div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel" aria-hidden="true">';
+    var modalHtml = '<div class="modal fade" id="createModalModal" tabindex="-1" role="dialog" aria-labelledby="createModalModalLabel" aria-hidden="true">';
     modalHtml += '<div class="modal-dialog" role="document">';
     modalHtml += '<div class="modal-content">';
     modalHtml += '<div class="modal-header bg-' + color + '">';
-    modalHtml += '<h5 class="modal-title" id="alertModalLabel">Alert</h5>';
+    modalHtml += '<h5 class="modal-title" id="createModalModalLabel">Alert</h5>';
     modalHtml += '<button type="button" class="close" data-dismiss="modal" aria-label="Close">';
     modalHtml += '<span aria-hidden="true">&times;</span>';
     modalHtml += '</button>';
@@ -614,8 +617,138 @@ function createModal(message, isSuccess = true) {
     modalHtml += '</div>';
   
     $(modalHtml).modal('show');
+    // Lắng nghe sự kiện 'show.bs.modal' để chặn chuyển trang khi modal được mở
+    $('#createModalModal').on('show.bs.modal', function(e) {
+        $(this).data('bs.modal').isShown = false;
+    });
+
+    // Lắng nghe sự kiện 'hide.bs.modal' để cho phép chuyển trang khi modal bị đóng
+    $('#createModalModal').on('hide.bs.modal', function(e) {
+        $(this).data('bs.modal').isShown = false;
+    });
+    
 }
   
+function getProductDetail() {
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+        //console.log(this.responseText);
+        if(!JSON.parse(this.responseText).result) {
+            createModal(JSON.parse(this.responseText).message);
+        }   
+        else {
+            var res = JSON.parse(this.responseText).data;
+            console.log(res);
+            showProductDeatil(res);
+        }   
+    }
+    //?productID=1
+    var productID = window.location.search.split("=")[1];
+    xhttp.open("GET", "http://localhost/product/detail?productID=" + productID, true);
+    xhttp.send();
+}
+function showProductDeatil(res) {
+    var productDetail = document.getElementById("product-detail");
+    var productDetailHTML = "";
+    productDetailHTML += `
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <img src="${res.imageURL[0]}" alt="" style="width: 100%;">
+                </div>
+                <div class="col-6 product-info">
+                    <h1>${res.name}</h1>
+                    <h3>${res.price} đồng</h3>
+                    <button class="btn btn-primary" onclick="buyNow(${res.productID})">Buy now</button>
+                    <button class="btn btn-primary" onclick="handleAddToCart(${res.productID})">Add to cart</button>
+                </div>
+            </div>
+            <div class="description">
+                <h2>Description</h2>
+                <p>${res.description}</p>
+            </div>
+            <h2 id="comment-title">Comments</h2>
+        </div>
+    `;
+    for(var i = 0; i < res.review.length; i++) {
+        //comment
+        productDetailHTML += `
+            <div id="comment-block" class="container">
+                <div class="row">
+                    <div class="col-2">
+                        <img src="${res.review[i].imageURL}" alt="No Image">
+                    </div>
+                    <div class="col-2 name">
+                        <h3>${res.review[i].fname + " " + res.review[i].lname}</h3>
+                        <p>${res.review[i].rating} star</p>
+                    </div>
+                    <div class="col-8">
+                        <div class="detail">
+                            <h3>${res.review[i].title}</h3>
+                            <p>${res.review[i].text}</p>
+                            <p>${res.review[i].reviewDate}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    productDetailHTML += `   
+    <div class="write-comment container">
+        <h2>What do you thing about this product ?</h2>
+        <div class="input-name">
+            <input type="text" id="title" placeholder="Overview">
+            <span class="underline-animation"></span>
+        </div>
+        <div class="input-name">
+            <input type="text" id="text" placeholder="Detail">
+            <span class="underline-animation"></span>
+        </div>
+        <div class="input-name">
+            <input type="number" id="rating" placeholder="Rating">
+            <span class="underline-animation"></span>
+        </div>
+        <button onclick="handleComment()">Comment</button>
+    </div>
+    `;
+    productDetail.innerHTML = productDetailHTML;
+}
+function handleComment()
+{
+    if (document.getElementById("title").value == "" 
+        || document.getElementById("text").value == "")
+    {
+        createModal("Please fill all fields", false);
+        return;
+    }
+    if (document.getElementById("rating").value < 1 || document.getElementById("rating").value > 5) {
+        createModal("Rating must be between 1 and 5", false);
+        return;
+    }
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+        console.log(this.responseText);
+        if(!JSON.parse(this.responseText).result) {
+            createModal(JSON.parse(this.responseText).message);
+        }   
+        else {
+            createModal("Comment successfully");
+            getProductDetail();
+        }   
+    }
+    xhttp.open("POST", "http://localhost/product/review", true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    var productID = window.location.search.split("=")[1];
+    xhttp.send(JSON.stringify({
+        "token": getCookieValueByName('token'),
+        "productID": productID,
+        "title": document.getElementById("title").value,
+        "text": document.getElementById("text").value,
+        "rating": document.getElementById("rating").value
+    }));
+}
+
   
 // Check cookie is valid!
 if (getCookieValueByName('token')) {
@@ -624,6 +757,7 @@ else
 {
     if (window.location.pathname != "/signup-login.html")
     {
+        alert("You need to login first!");
         window.location.pathname = "/signup-login.html";
     }
 }

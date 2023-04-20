@@ -1,8 +1,6 @@
 <?php
 require_once('model/CustomerModel.php');
-require_once('vendor/autoload.php'); // Thư viện JWT
 require_once('controller/CookieController.php');
-use \Firebase\JWT\JWT;
 
 function checkIsValid($data, $string)
 {
@@ -41,8 +39,10 @@ class CustomerController {
                 "id" => $res["id"]
             );
 
-            $jwt = JWT::encode($payload, $key, 'HS256');
-            //1 -> jsfbwfbsfnwfnoweofoiwe1231
+            $cookie = new CookieController();
+            $jwt = $cookie->encodeCookie($payload, $key);
+            
+
             $result["token"] = $jwt;
         }
         return json_encode($result);

@@ -319,7 +319,7 @@
                     while($row = $SQLresult->fetch_assoc()) {
                         $quantity = $row["quantity"];
                     }
-                    if ($quantity == 0) {
+                    if ($quantity <= 0) {
                         $stmt->close();
                         $stmt = $conn->prepare("DELETE FROM productAddToCart WHERE cartID = ? AND productID = ?;");
                         $stmt->bind_param("ii", $cartID, $productID);
