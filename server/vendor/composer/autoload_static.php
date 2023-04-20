@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit57ec0d70a63a5154aa876e039748c1e2
+class ComposerStaticInit3af4e5bf101cc8ec3f662bf887536e7d
 {
     public static $files = array (
         '3109cb1a231dcd04bee1f9f620d46975' => __DIR__ . '/..' . '/paragonie/sodium_compat/autoload.php',
@@ -31,9 +31,9 @@ class ComposerStaticInit57ec0d70a63a5154aa876e039748c1e2
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit57ec0d70a63a5154aa876e039748c1e2::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit57ec0d70a63a5154aa876e039748c1e2::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit57ec0d70a63a5154aa876e039748c1e2::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit3af4e5bf101cc8ec3f662bf887536e7d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit3af4e5bf101cc8ec3f662bf887536e7d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit3af4e5bf101cc8ec3f662bf887536e7d::$classMap;
 
         }, null, ClassLoader::class);
     }
