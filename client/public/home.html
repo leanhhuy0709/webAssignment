@@ -47,7 +47,7 @@
         <span class="sr-only">Next</span>
         </a>
         <p class="carousel-caption">
-        <button class="btn btn-primary">Show now</button>
+        <a class="btn btn-primary" href="./new.html">Show now</a>
         </p>
     </div>
 
@@ -92,7 +92,7 @@
                     data.forEach((product) => {
                         const BSPRow = document.createElement("div");
                         BSPRow.innerHTML = `
-                            <div class="card m-3" style="width: 18rem;">
+                            <div class="card m-3" style="width: 18rem; height: 40rem;">
                                 <img src="${product.imageURL}" class="card-img-top" alt="product 1">
                                 <div class="card-body">
                                     <h5 class="card-title">${product.name}</h5>

@@ -1,8 +1,6 @@
 <?php
 require_once('model/CustomerModel.php');
-require_once('vendor/autoload.php'); // Thư viện JWT
 require_once('controller/CookieController.php');
-use \Firebase\JWT\JWT;
 
 function checkIsValid($data, $string)
 {
@@ -41,8 +39,10 @@ class CustomerController {
                 "id" => $res["id"]
             );
 
-            $jwt = JWT::encode($payload, $key, 'HS256');
-            //1 -> jsfbwfbsfnwfnoweofoiwe1231
+            $cookie = new CookieController();
+            $jwt = $cookie->encodeCookie($payload, $key);
+            
+
             $result["token"] = $jwt;
         }
         return json_encode($result);
@@ -67,8 +67,10 @@ class CustomerController {
         $phone = $data['phone'];
         $DOB = $data['DOB'];
         $imageURL = $data['imageURL'];
+        //$address = $data['address'];
+        $address = "None";
         //Token nó vì không lưu tk, mk trong database!!!
-        $res = signupModel($username, $password, $fname, $lname, $gender, $age, $email, $phone, $DOB, $imageURL); // Trả về id người dùng
+        $res = signupModel($username, $password, $fname, $lname, $gender, $age, $email, $phone, $DOB, $imageURL, $address); // Trả về id người dùng
 
         return json_encode($res);
     }

@@ -63,3 +63,10 @@ SELECT * from Customer;
 SELECT username, fname, lname, gender, age, DOB, email, phoneNumber, imageURL 
                         FROM customer 
                         WHERE customer.customerID = 2;
+                        
+select * from customer;
+select * from cart;
+select * from address;
+INSERT INTO cart(customerID) VALUES ((SELECT MAX(customerID) FROM Customer));
+
+SELECT quantity FROM productAddToCart WHERE cartID = 11 AND productID = 1;

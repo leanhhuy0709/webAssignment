@@ -16,6 +16,7 @@
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     <!--CSS-->
     <link rel="stylesheet" href="./css/home.css">
+    <link rel="stylesheet" href="./css/user.css">
     <!--Javascript-->
     <script src="./js/controller.js"></script>
 </head>
@@ -27,32 +28,17 @@
         getHTML("nav", "nav.html")
     </script>
     
-    <p>Image here</p>
-
-    <img id="user-image">
-
-    <form id="update-form" class="m-2">
-        <label>First name</label>
-        <input id="fname" type="text" placeholder="Type your first name"> <br>
-        <label>Last name</label>
-        <input id="lname" type="text" placeholder="Type your last name"> <br>
-        <label>Date of birth</label>
-        <input id="dob" type="date" placeholder="Type your date of birth"> <br>
-        <label>Phone number</label>
-        <input id="phone" type="text" placeholder="Type your phone number"> <br>
-        <label>Email</label>
-        <input id="email" type="text" placeholder="Type your email"> <br>
-        <label>Address</label>
-        <input id="address" type="text" placeholder="Type your address"> <br>
-        <label>ImageURL</label>
-        <input id="imageURL" type="text" placeholder="Type your image URL"> <br>
-        <button type="button" onclick="handleUpdateUser()">Update</button>
-    </form>
+    <section id = "user-info">
+    </section>
 
     <script>
-        //Get data from localhost/user and load to form value by AJAX
-        getUserInfo()
+        getUserInfo();
     </script>
+
+
+
+
+
 
     <div id="footer"></div>
     <script>
@@ -60,7 +46,7 @@
     </script> 
 
   
-  
+
 </body>
 
 </html>

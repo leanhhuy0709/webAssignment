@@ -2,6 +2,15 @@
     color: #CDE8F6;
 }
 
+.btn-brand-color {
+    background-color: #CDE8F6;
+}
+
+.btn-brand-color:hover {
+    background-color: #000000;
+    color: #CDE8F6;
+}
+
 .bg-brand-color {
     background-color: #CDE8F6;
 }
