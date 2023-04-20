@@ -16,26 +16,18 @@
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     <!--CSS-->
     <link rel="stylesheet" href="./css/home.css">
+    <link rel="stylesheet" href="./css/product-detail.css">
     <!--Javascript-->
     <script src="./js/controller.js"></script>
 </head>
-
 
 <body>
     <div id="nav"></div>
     <script>
         getHTML("nav", "nav.html")
     </script>
-    <div id="product-detail" style = "display: flex; align-items: center; justify-content: center;"></div>
-
-    <div>
-        <h1>Comment</h1>
-        <input type="text" id="title" placeholder="Title">
-        <input type="text" id="text" placeholder="Text">
-        <input type="number" id="rating" placeholder="Rating">
-    </div>
-    <button onclick="handleComment()">Comment</button>
-
+    <div id="product-detail" style = "display: flex; flex-direction: column"></div>
+    <a href="./cart.html"></a>
     <script>
         getProductDetail()
         function getProductDetail() {
@@ -65,42 +57,63 @@
                         <div class="col-6">
                             <img src="${res.imageURL[0]}" alt="" style="width: 100%;">
                         </div>
-                        <div class="col-6">
+                        <div class="col-6 product-info">
                             <h1>${res.name}</h1>
                             <h3>${res.price} đồng</h3>
-                            <p>${res.description}</p>
+                            <button class="btn btn-primary" onclick="buyNow(${res.productID})">Buy now</button>
                             <button class="btn btn-primary" onclick="handleAddToCart(${res.productID})">Add to cart</button>
-                            <p>Comments</p>`;
-            
+                        </div>
+                    </div>
+                    <div class="description">
+                        <h2>Description</h2>
+                        <p>${res.description}</p>
+                    </div>
+                    <h2 id="comment-title">Comments</h2>
+                </div>
+            `;
             for(var i = 0; i < res.review.length; i++) {
                 //comment
                 productDetailHTML += `
                     <div id="comment-block" class="container">
                         <div class="row">
                             <div class="col-2">
-                                <img src="${res.review[i].imageURL}" alt="No Image" style="width: 100%;">
+                                <img src="${res.review[i].imageURL}" alt="No Image">
                             </div>
-                            <div class="col-10">
-                                <p>${res.review[i].fname + " " + res.review[i].lname + " " + res.review[i].rating} sao</p>
-                                <h3>${res.review[i].title}</h3>
-                                <p>${res.review[i].text}</p>
-                                <p>${res.review[i].reviewDate}</p>
+                            <div class="col-2 name">
+                                <h3>${res.review[i].fname + " " + res.review[i].lname}</h3>
+                                <p>${res.review[i].rating} star</p>
+                            </div>
+                            <div class="col-8">
+                                <div class="detail">
+                                    <h3>${res.review[i].title}</h3>
+                                    <p>${res.review[i].text}</p>
+                                    <p>${res.review[i].reviewDate}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 `;
             }
-
-
-
             productDetailHTML += `   
-                        </div>
-                    </div>
+            <div class="write-comment container">
+                <h2>What do you thing about this product ?</h2>
+                <div class="input-name">
+                    <input type="text" id="title" placeholder="Overview">
+                    <span class="underline-animation"></span>
                 </div>
+                <div class="input-name">
+                    <input type="text" id="text" placeholder="Detail">
+                    <span class="underline-animation"></span>
+                </div>
+                <div class="input-name">
+                    <input type="number" id="rating" placeholder="Rating">
+                    <span class="underline-animation"></span>
+                </div>
+                <button onclick="handleComment()">Comment</button>
+            </div>
             `;
             productDetail.innerHTML = productDetailHTML;
         }
-
         function handleComment()
         {
             var xhttp = new XMLHttpRequest();

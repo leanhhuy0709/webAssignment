@@ -248,8 +248,8 @@ function handleResponseCart(products) {
     var result = "";
     products.forEach((product)=>{
         result += `
-            <div class="card m-3" style="width: 18rem;">
-                <img src="${product.imageURL}" class="card-img-top" alt="product 1">
+            <div class="product">
+                <img src="${product.imageURL}" alt="product 1">
                 <div class="card-body">
                     <h5 class="card-title">${product.name}</h5>
                     <p class="card-text">${product.description}</p>
@@ -285,6 +285,11 @@ function handleAddToCart(id) {
     xhttp.open("POST", "http://localhost/cart/add");
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.send(data);
+}
+
+function buyNow(pID) {
+    handleAddToCart(pID);
+    window.location.pathname = "/cart.html";
 }
 
 function handleLogout()
@@ -548,7 +553,6 @@ function handleResponseOrderDetail(order) {
 
 // Kiểm tra dữ liệu đầu vào
 function validateForm() {
-    // có nên đổi thứ tự ở đây ko ?
     const form = document.getElementById("signup-form");
     var username = form.querySelector("#username").value;
     var password = form.querySelector("#password").value;

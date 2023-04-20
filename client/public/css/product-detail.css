@@ -1,0 +1,155 @@
+:root {
+    --light-blue: #03a9f4;
+}
+
+.product-info{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.product-info h3{
+    margin: 40px 0;
+}
+
+.product-info h3{
+    color: red;
+}
+
+.product-info button{
+    margin: 5px 0;
+    background-color: white;
+    color: var(--light-blue);
+    border: 1px solid var(--light-blue);
+    border-radius: 20px;
+    width: 40%;
+    height: 50px;
+    font-size: 1.5em;
+    padding-bottom: 7px;
+}
+
+.product-info button:hover{
+    background-color: var(--light-blue) ;
+}
+
+.product-info a{
+    width: 100%;
+}
+
+.product-info a button {
+    background-color: var(--light-blue);
+    color: white;
+    border: 2px solid var(--light-blue);
+}  
+
+.description{
+    margin: 20px 0;
+    padding: 10px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.description h2{
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 1.8em;
+}
+
+.description p{
+    font-size: 1.5em;
+}
+
+#comment-title{
+    font-size: 1.7em;
+}
+#comment-block{
+    margin: 20px auto;
+}
+
+#comment-block .row{
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid black;
+}
+
+#comment-block img{
+    border-radius: 50%;
+    height: 70px;
+    width: 65px;
+}
+
+.name{
+    text-align: center;
+}
+
+.name h3{
+    font-size: 1.6em;
+}
+
+.name p{
+    font-size: 1.4em;
+}
+
+#comment-block .detail{
+    margin-left: 100px;
+}
+
+#comment-block .detail h3{
+    font-size: 1.6em;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+#comment-block .detail p{
+    font-size: 1.3em;
+}
+
+.write-comment{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-name{
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    margin: 10px 0;
+    width: 100%;
+}
+
+.input-name > input{
+    border: none;
+    width: 100%;
+    border-bottom: 2px solid gray;
+    outline: none;
+    font-size: 1.5em;
+}
+
+.underline-animation{
+    transition: all 0.5s;
+    display: inline-block;
+    bottom: 0;
+    left: -100%;
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: var(--light-blue);
+}
+
+.input-name > input:focus + .underline-animation{
+    left: 0;
+}
+
+.write-comment button {
+    margin: 40px 0;
+    background-color: var(--light-blue);
+    color: white;
+    border: 2px solid var(--light-blue);
+    border-radius: 20px;
+    width: 20%;
+    height: 50px;
+    font-size: 1.8em;
+    padding-bottom: 5px;
+}
