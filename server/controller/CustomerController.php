@@ -67,8 +67,10 @@ class CustomerController {
         $phone = $data['phone'];
         $DOB = $data['DOB'];
         $imageURL = $data['imageURL'];
+        //$address = $data['address'];
+        $address = "None";
         //Token nó vì không lưu tk, mk trong database!!!
-        $res = signupModel($username, $password, $fname, $lname, $gender, $age, $email, $phone, $DOB, $imageURL); // Trả về id người dùng
+        $res = signupModel($username, $password, $fname, $lname, $gender, $age, $email, $phone, $DOB, $imageURL, $address); // Trả về id người dùng
 
         return json_encode($res);
     }

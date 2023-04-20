@@ -70,3 +70,4 @@ INSERT INTO image VALUES
 ("https://bloganchoi.com/wp-content/uploads/2019/04/nuoc-hoa-hong.jpg", 12),
 ("https://cdn.chiaki.vn/unsafe/0x800/left/top/smart/filters:quality(75)/https://chiaki.vn/upload/product/2023/01/serum-the-ordinary-niacinamide-10-zinc-1-chong-viem-63c4b06bd97d1-16012023090323.jpg", 13),
 ("https://bizweb.dktcdn.net/100/345/186/files/sua-rua-mat-cerave-foaming-3.jpg?v=1621325346102", 14);
+

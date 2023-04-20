@@ -69,7 +69,7 @@
         }
     }
 
-    function signupModel($username, $password, $fname, $lname, $gender, $age, $email, $phone, $DOB, $imageURL)
+    function signupModel($username, $password, $fname, $lname, $gender, $age, $email, $phone, $DOB, $imageURL, $address)
     {
         $DOB = date('Y-m-d', strtotime($DOB));
         global $SQLservername, $SQLusername, $SQLpassword, $SQLdbname;
@@ -82,14 +82,23 @@
         // Prepare and bind the INSERT statement
         $stmt = $conn->prepare("INSERT INTO customer(username, password, fname, lname, gender, age, email, phoneNumber, DOB, imageURL) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
         $stmt->bind_param("sssssisiss", $username, $password, $fname, $lname, $gender, $age, $email, $phone, $DOB, $imageURL);
-
         $result = 1;
         try {
+            $stmt->execute();
+            $stmt->close();
+            //insert address
+            $stmt = $conn->prepare("INSERT INTO address(address, customerID) VALUES (?, (SELECT MAX(customerID) FROM Customer));");
+            $stmt->bind_param("s", $address);
+            $stmt->execute();
+            $stmt->close();
+            //insert cart
+            $stmt = $conn->prepare("INSERT INTO cart(customerID) VALUES ((SELECT MAX(customerID) FROM Customer));");
             $stmt->execute();
             $result = array(
                 "result" => true,
                 "message" => "Sign up successfully"
             );
+
         }
         catch (Exception $e) {
             $result = array(
@@ -277,7 +286,6 @@
         //get cartID
         $stmt = $conn->prepare("SELECT MAX(cartID) FROM cart WHERE customerID = ?;");
         $stmt->bind_param("i", $userID);
-        
         try {
             $stmt->execute();
             $SQLresult = $stmt->get_result();
@@ -298,19 +306,45 @@
                 $stmt = $conn->prepare("UPDATE productAddToCart SET quantity = quantity - ? WHERE cartID = ? AND productID = ?;");
                 $stmt->bind_param("iii", $quantity, $cartID, $productID);
                 $stmt->execute();
-                $result = array(
-                    "result" => true,
-                    "message" => "Update quantity successfully"
-                );
+                $stmt->close();
+
+                //check quantity == 0
+                $stmt = $conn->prepare("SELECT quantity FROM productAddToCart WHERE cartID = ? AND productID = ?;");
+                $stmt->bind_param("ii", $cartID, $productID);
+                $stmt->execute();
+
+                $SQLresult = $stmt->get_result();
+                $quantity = 0;
+                if ($SQLresult->num_rows > 0) {
+                    while($row = $SQLresult->fetch_assoc()) {
+                        $quantity = $row["quantity"];
+                    }
+                    if ($quantity == 0) {
+                        $stmt->close();
+                        $stmt = $conn->prepare("DELETE FROM productAddToCart WHERE cartID = ? AND productID = ?;");
+                        $stmt->bind_param("ii", $cartID, $productID);
+                        $stmt->execute();
+                    }
+
+                    $result = array(
+                        "result" => true,
+                        "message" => "Update quantity successfully"
+                    );
+                }
+                else {
+                    $result = array(
+                        "result" => false,
+                        "message" => "Product is not in cart"
+                    );
+                    return $result;
+                }
+
+                
             }
             else {
-                //insert new product
-                $stmt = $conn->prepare("INSERT INTO productAddToCart (cartID, productID, quantity) VALUES (?, ?, ?);");
-                $stmt->bind_param("iii", $cartID, $productID, $quantity);
-                $stmt->execute();
                 $result = array(
-                    "result" => true,
-                    "message" => "Add product successfully"
+                    "result" => false,
+                    "message" => "Product is not in cart"
                 );
             }
         }
