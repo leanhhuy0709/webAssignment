@@ -67,8 +67,8 @@
 
         <br>
         <label for="productImage" style="font-weight: bold; margin-right: 2%;">Product Image </label>
-        <input id="productImage" name="productImage" onchange="handleImageChange()" onerror = "setDefaultImage(document.getElementById('image'))"> <br>
-        <img id="image" height="200px">
+        <input id="productImage" name="productImage" onchange="handleImageChange()"> <br>
+        <img id="image" height="200px" onerror = "setDefaultImage(document.getElementById('image'))">
         <br>
         <br>
         <div class="mb-3">

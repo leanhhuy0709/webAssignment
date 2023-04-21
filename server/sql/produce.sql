@@ -3,6 +3,11 @@ DROP PROCEDURE IF EXISTS Payment;
 DELIMITER //
 CREATE PROCEDURE Payment(IN cusID INT, IN caID INT, IN paMethod VARCHAR(255))
 BEGIN
+	DECLARE rowCount INT;
+	DECLARE couponPercent INT;
+    DECLARE couponValue INT;
+    SET couponPercent = 0;
+	SET couponValue = 0;
     -- Check if cart have product
     SELECT COUNT(*) INTO @count FROM productAddToCart WHERE cartID = caID;
     IF @count = 0 THEN
@@ -16,9 +21,30 @@ BEGIN
     JOIN product ON productAddToCart.productID = product.productID 
     WHERE cartID = caID;
     
+    SELECT COUNT(*) INTO rowCount
+	FROM cart
+	JOIN cartApplyCoupon ON cart.cartID = cartApplyCoupon.cartID
+	JOIN Coupon ON cartApplyCoupon.couponCode = Coupon.couponCode
+	WHERE cart.cartID = caID;
+    
+    IF rowCount > 0 THEN
+    	SELECT percent INTO couponPercent
+		FROM cart
+		JOIN cartApplyCoupon ON cart.cartID = cartApplyCoupon.cartID
+		JOIN Coupon ON cartApplyCoupon.couponCode = Coupon.couponCode
+		WHERE cart.cartID = caID;
+        
+        SELECT value INTO couponValue
+		FROM cart
+		JOIN cartApplyCoupon ON cart.cartID = cartApplyCoupon.cartID
+		JOIN Coupon ON cartApplyCoupon.couponCode = Coupon.couponCode
+		WHERE cart.cartID = caID;
+	END IF;
+    
+        
     SELECT MAX(orderID) FROM `order` INTO @maxOrderID;
     -- Update total price to max orderID
-    UPDATE `order` SET totalPrice = @total WHERE orderID = @maxOrderID;
+    UPDATE `order` SET totalPrice = (@total + 22000) * (100 - couponPercent) / 100 - couponValue WHERE orderID = @maxOrderID;
     -- Update shippingAddress
     SELECT address INTO @address FROM address WHERE customerID = cusID;
     UPDATE `order` SET shippingAddress = @address WHERE orderID = @maxOrderID;

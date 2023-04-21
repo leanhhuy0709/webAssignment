@@ -427,7 +427,7 @@ function showProducts(products, page = 1)
     result = "";
     var maxPage = Math.ceil(products.length / 6);
     for (var i = 1; i <= maxPage; i++) {
-        result += `<button class="btn btn-primary m-2" onclick="getProducts('${i})">${i}</button>`;
+        result += `<button class="btn btn-primary m-2" onclick="getProducts(${i})">${i}</button>`;
     }
     pageDiv.innerHTML = result;
 
@@ -924,6 +924,7 @@ function handleApplyCoupon()
         var res = JSON.parse(this.responseText);
         console.log(res);
         createModal(res.message, res.result);
+        getCart();
     }
     xhttp.onerror = function(err) {
         console.log("Error");
