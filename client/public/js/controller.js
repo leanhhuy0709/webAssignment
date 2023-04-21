@@ -257,7 +257,7 @@ function handleResponseCart(products) {
                         <div class="quantity">${product.quantity}</div>
                         <button onclick="handleDeleteToCart(${product.productID})"><span>&#8722;</span></button>
                         <div>Price: ${product.price}</div>
-                        <div id="total">Total:</div>
+                        <div id="total">Total: ${product.total}</div>
                     </div>
                 </div>
             </div>`;
@@ -304,9 +304,9 @@ function handleLogout()
 function handleDeleteToCart(id, num = 1) {
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
-        console.log(this.responseText);
+        //console.log(this.responseText);
         var res = JSON.parse(this.responseText);
-        console.log(res);
+        //console.log(res);
         createModal(res.message);
         if (window.location.pathname == "/cart.html")
             getCart();
@@ -329,9 +329,9 @@ function handlePayment(paymentMethod)
 {
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
-        console.log(this.responseText);
+        //console.log(this.responseText);
         var res = JSON.parse(this.responseText);
-        console.log(res);
+        //console.log(res);
         createModal(res.message);
         getCart();
     }
@@ -348,7 +348,21 @@ function handlePayment(paymentMethod)
     xhttp.send(data);
 }
 
-function getProducts(searchInput = "", page = 1) {
+function getProducts(page = 1) {
+    var searchInput = "", categoryInput = "";
+    var list = window.location.search.split("&");
+    //delete first char in list[0]
+    list[0] = list[0].substring(1);
+
+    for(var i = 0; i < list.length; i++) {
+        tmp = list[i].split("=");
+        if (tmp[0] == "search")
+            searchInput = tmp[1];
+        else if (tmp[0] == "category")
+            categoryInput = tmp[1];
+    }
+
+
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
         //console.log(this.responseText);
@@ -357,21 +371,25 @@ function getProducts(searchInput = "", page = 1) {
         }   
         else {
             var res = JSON.parse(this.responseText).data;
-            showProducts(res, searchInput, page);
+            showProducts(res, page);
         }   
     }
-    xhttp.open("GET", "http://localhost/products?search="+searchInput, true);
+    xhttp.open("GET", "http://localhost/products?search=" + searchInput + "&category=" + categoryInput, true);
     xhttp.send();
 }
 function handleSearch()
 {
     const searchInput = document.getElementById("search");
     var pn = window.location.pathname;
+    var host = window.location.origin;
     if (pn != "/new.html" && pn != "/sale.html" && pn != "/category.html")
-        window.location.pathname = "/new.html";
-    getProducts(searchInput.value);
+    {
+        window.location.href = host + "/new.html?search=" + searchInput.value;
+    }
+    else 
+        window.location.href = host + pn +"?search=" + searchInput.value;
 }
-function showProducts(products, searchInput, page = 1)
+function showProducts(products, page = 1)
 {
     const productDiv = document.getElementById("product-list");
     productDiv.innerHTML = "";
@@ -396,7 +414,7 @@ function showProducts(products, searchInput, page = 1)
     result = "";
     var maxPage = Math.ceil(products.length / 6);
     for (var i = 1; i <= maxPage; i++) {
-        result += `<button class="btn btn-primary m-2" onclick="getProducts('${searchInput}', ${i})">${i}</button>`;
+        result += `<button class="btn btn-primary m-2" onclick="getProducts('${i})">${i}</button>`;
     }
     pageDiv.innerHTML = result;
 
@@ -439,7 +457,7 @@ function getOrder()
         }   
         else {
             var res = JSON.parse(this.responseText).data;
-            console.log(res);
+            //console.log(res);
             handleResponseOrder(res);
         }   
     }
@@ -462,7 +480,7 @@ function getOrder()
 }
 
 function handleResponseOrder(orders) {
-    console.log(orders);
+    //console.log(orders);
     const orderDiv = document.getElementById("order");
     orderDiv.innerHTML = "";
     var result = "";
@@ -638,7 +656,7 @@ function getProductDetail() {
         }   
         else {
             var res = JSON.parse(this.responseText).data;
-            console.log(res);
+            //console.log(res);
             showProductDeatil(res);
         }   
     }
@@ -728,7 +746,7 @@ function handleComment()
 
     var xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
-        console.log(this.responseText);
+        //console.log(this.responseText);
         if(!JSON.parse(this.responseText).result) {
             createModal(JSON.parse(this.responseText).message);
         }   

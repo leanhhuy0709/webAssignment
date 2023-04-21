@@ -190,15 +190,21 @@
             $stmt->execute();
             $SQLresult = $stmt->get_result();
             $result = array();
+            $total = 0;
             if ($SQLresult->num_rows > 0) {
                 while($row = $SQLresult->fetch_assoc()) {
+                    //insert a row to cart
+                    $totalPerProduct = $row["price"] * $row["quantity"];
+                    $total += $totalPerProduct;
+                    $row["total"] = $totalPerProduct;
                     $result[] = $row;
                 }
             }
             $result = array(
                 "result" => true,
                 "message" => "Get cart successfully",
-                "data" => $result
+                "data" => $result,
+                "total" => $total
             );
         }
         catch (Exception $e) {
