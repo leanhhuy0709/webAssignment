@@ -239,12 +239,6 @@ class CustomerController {
         $body = file_get_contents('php://input');
         $data = json_decode($body, true);
 
-        /*"token": getCookieValueByName('token'),
-                "productID": 1,
-                "title": "test title",
-                "text": "test tfext",
-                "rating": 5 */
-
         $check = checkIsValid($data, ['token', 'productID', 'title', 'text', 'rating']);
         if (!$check["result"])
             return json_encode($check);
@@ -256,6 +250,23 @@ class CustomerController {
         $rating = $data['rating'];
         //return json_encode(array("data"=>$data));
         $res = commentModel($userID, $productID, $title, $text, $rating);
+        return json_encode($res);
+    }
+
+    public static function cartApplyCoupon()
+    {
+        $body = file_get_contents('php://input');
+        $data = json_decode($body, true);
+
+        $check = checkIsValid($data, ['token', 'couponCode']);
+        if (!$check["result"])
+            return json_encode($check);
+
+        $cookie = new CookieController();
+        $userID = $cookie->decodeCookie($data['token']);
+
+        $couponCode = $data["couponCode"];
+        $res = cartApplyCouponModel($userID, $couponCode);
         return json_encode($res);
     }
 }

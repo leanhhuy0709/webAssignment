@@ -41,4 +41,77 @@
             return $result;
         }
     }
+
+    function addProductModel($name, $price, $categoryID, $supplierID, $brandID, $description, $imageURL)
+    {
+        global $SQLservername, $SQLusername, $SQLpassword, $SQLdbname;
+        // Create connection
+        $conn = new mysqli($SQLservername, $SQLusername, $SQLpassword, $SQLdbname);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        // Prepare and bind the INSERT statement
+        $stmt = $conn->prepare("INSERT INTO product(name, price, categoryID, supplierID, brandID, description) VALUES (?, ?, ?, ?, ?, ?);");
+        $stmt->bind_param("siiiis", $name, $price, $categoryID, $supplierID, $brandID, $description);
+        try {
+            $stmt->execute();
+            $stmt->close();
+            //insert address
+            $stmt = $conn->prepare("INSERT INTO image VALUES (?, (SELECT MAX(customerID) FROM Customer));");
+            $stmt->bind_param("s", $imageURL);
+            $stmt->execute();
+            $result = array(
+                "result" => true,
+                "message" => "Add product successfully"
+            );
+
+        }
+        catch (Exception $e) {
+            $result = array(
+                "result" => false,
+                "message" => $e->getMessage()
+            );
+        }
+        finally {
+            $stmt->close();
+            $conn->close();
+            return $result;
+        }
+    }
+
+    function updateProductModel($name, $price, $categoryID, $supplierID, $brandID, $description, $imageURL, $productID)
+    {
+        global $SQLservername, $SQLusername, $SQLpassword, $SQLdbname;
+        // Create connection
+        $conn = new mysqli($SQLservername, $SQLusername, $SQLpassword, $SQLdbname);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        $stmt = $conn->prepare("UPDATE product SET name = ?, price = ?, categoryID = ?, supplierID = ?, brandID = ?, description = ? WHERE productID = ?");
+        $stmt->bind_param("siiiisi", $name, $price, $categoryID, $supplierID, $brandID, $description, $productID);
+        try {
+            $stmt->execute();
+            $stmt->close();
+            $stmt = $conn->prepare("UPDATE image SET imageURL = ? WHERE productID = ?");
+            $stmt->bind_param("si", $imageURL, $productID);
+            $stmt->execute();
+            $result = array(
+                "result" => true,
+                "message" => "Update product successfully"
+            );
+        }
+        catch (Exception $e) {
+            $result = array(
+                "result" => false,
+                "message" => $e->getMessage()
+            );
+        }
+        finally {
+            $conn->close();
+            $stmt->close();
+            return $result;
+        }
+    }
 ?>

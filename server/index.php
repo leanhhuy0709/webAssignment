@@ -80,10 +80,25 @@ else if ($_SERVER['REQUEST_URI'] === '/product/review')
     $customer = new CustomerController();
     echo $customer->comment();
 }
+else if ($_SERVER['REQUEST_URI'] === '/cart/coupon')
+{
+    $customer = new CustomerController();
+    echo $customer->cartApplyCoupon();
+}
 else if ($_SERVER['REQUEST_URI'] === '/admin/userlist')
 {
     $admin = new AdminController();
     echo $admin->getUserList();
 }
-else echo "Welcom to PHP server!";
+else if ($_SERVER['REQUEST_URI'] === '/admin/product/add')
+{
+    $admin = new AdminController();
+    echo $admin->addProduct();
+}
+else if ($_SERVER['REQUEST_URI'] === '/admin/product/update')
+{
+    $admin = new AdminController();
+    echo $admin->updateProduct();
+}
+else echo $tmp;
 ?>
