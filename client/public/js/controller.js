@@ -496,7 +496,7 @@ function handleResponseOrder(orders) {
                 <p class="card-text">Shipping Address: ${order.shippingAddress}</p>
                 <p class="card-text">Payment Method: ${order.paymentMethod}</p>
                 <p class="card-text">Order Status: ${order.orderStatus}</p>
-                <button onclick="handleResponseOrderDetail(${order.orderID})">Order Detail</button>
+                <a class="btn btn-primary" href="./order-detail.html?orderID=${order.orderID}">Order Detail</a>
                 </div>
             </div>
         `;

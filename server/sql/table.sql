@@ -14,7 +14,6 @@ CREATE TABLE `customer` (
     `age` int,
     `email` varchar(255),
     `phoneNumber` varchar(255),
-    `address` varchar(255),
     `DOB` date,
     `imageURL` varchar(255)
 );

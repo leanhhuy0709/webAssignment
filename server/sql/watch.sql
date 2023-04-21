@@ -69,4 +69,4 @@ select * from cart;
 select * from address;
 INSERT INTO cart(customerID) VALUES ((SELECT MAX(customerID) FROM Customer));
 
-SELECT quantity FROM productAddToCart WHERE cartID = 11 AND productID = 1;
+SELECT * from customer;
