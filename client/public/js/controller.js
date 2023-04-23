@@ -257,7 +257,7 @@ function handleResponseCart(products) {
                         <div class="quantity">${product.quantity}</div>
                         <button onclick="handleDeleteToCart(${product.productID})"><span>&#8722;</span></button>
                         <div>Price: ${product.price}</div>
-                        <div id="total">Total: ${product.total}</div>
+                        <div id="total">${product.total}</div>
                     </div>
                 </div>
             </div>`;
@@ -676,8 +676,11 @@ function showProductDeatil(res) {
                 </div>
                 <div class="col-6 product-info">
                     <h1>${res.name}</h1>
+                    <p style=“--percent: calc(1);”>4.3<meter class="average-rating" min="0" max="5"></meter></p>
+                    <!-- Cho gia tri sao trung binh nhu vi du duoi day-->
+                    <!-- <p>${res.averageStar}<meter class="average-rating" min="0" max="5"></meter></p>-->
                     <h3>${res.price} đồng</h3>
-                    <button class="btn btn-primary" onclick="buyNow(${res.productID})">Buy now</button>
+                    <button class="btn btn-primary buy-now" onclick="buyNow(${res.productID})">Buy now</button>
                     <button class="btn btn-primary" onclick="handleAddToCart(${res.productID})">Add to cart</button>
                 </div>
             </div>
@@ -688,6 +691,15 @@ function showProductDeatil(res) {
             <h2 id="comment-title">Comments</h2>
         </div>
     `;
+    const headTag = document.getElementsByTagName('head')[0];
+    const styleTag = document.createElement("style");
+    styleTag.innerHTML = `
+        :root {
+            --percent: calc(4.3/5*100%);
+        }
+        `;
+        // --percent: calc([gia tri sao trung binh]/5*100%);
+    headTag.appendChild(styleTag);
     for(var i = 0; i < res.review.length; i++) {
         //comment
         productDetailHTML += `

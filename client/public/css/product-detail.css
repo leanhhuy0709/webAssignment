@@ -2,11 +2,24 @@
     --light-blue: #03a9f4;
 }
 
+.container{
+    margin-top: 40px;
+}
+
 .product-info{
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
+    font-size: 1.5em;
+}
+
+.product-info p {
+    margin: 10px 30% 10px 0;
+}
+
+.product-info meter {
+    margin-left: 5px;
 }
 
 .product-info h3{
@@ -18,14 +31,14 @@
 }
 
 .product-info button{
-    margin: 5px 0;
+    margin: 10px 0;
     background-color: white;
     color: var(--light-blue);
     border: 1px solid var(--light-blue);
     border-radius: 20px;
-    width: 40%;
+    width: 30%;
     height: 50px;
-    font-size: 1.5em;
+    font-size: 1em;
     padding-bottom: 7px;
 }
 
@@ -33,15 +46,34 @@
     background-color: var(--light-blue) ;
 }
 
-.product-info a{
-    width: 100%;
-}
-
-.product-info a button {
+.product-info .buy-now {
     background-color: var(--light-blue);
     color: white;
     border: 2px solid var(--light-blue);
 }  
+
+.average-rating {
+    position: relative;
+    appearance: none;
+    color: transparent;
+    width: auto;
+    display: inline-block;
+    vertical-align: baseline;
+    font-size: 1.7em;
+    line-height: 55px;
+}
+  
+.average-rating::before {
+    content: '★★★★★';
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: rgba(0,0,0,0.2);
+    background: linear-gradient(90deg, gold var(--percent), rgba(0,0,0,0.2) var(--percent));
+    background-clip: border-box;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
 .description{
     margin: 20px 0;
