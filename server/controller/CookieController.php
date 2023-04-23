@@ -17,6 +17,8 @@ class CookieController {
 
         return strval($magicNum);
     }
+
+    
 }
 
 

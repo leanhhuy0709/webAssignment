@@ -3,6 +3,11 @@ DROP PROCEDURE IF EXISTS Payment;
 DELIMITER //
 CREATE PROCEDURE Payment(IN cusID INT, IN caID INT, IN paMethod VARCHAR(255))
 BEGIN
+	DECLARE rowCount INT;
+	DECLARE couponPercent INT;
+    DECLARE couponValue INT;
+    SET couponPercent = 0;
+	SET couponValue = 0;
     -- Check if cart have product
     SELECT COUNT(*) INTO @count FROM productAddToCart WHERE cartID = caID;
     IF @count = 0 THEN
@@ -16,9 +21,30 @@ BEGIN
     JOIN product ON productAddToCart.productID = product.productID 
     WHERE cartID = caID;
     
+    SELECT COUNT(*) INTO rowCount
+	FROM cart
+	JOIN cartApplyCoupon ON cart.cartID = cartApplyCoupon.cartID
+	JOIN Coupon ON cartApplyCoupon.couponCode = Coupon.couponCode
+	WHERE cart.cartID = caID;
+    
+    IF rowCount > 0 THEN
+    	SELECT percent INTO couponPercent
+		FROM cart
+		JOIN cartApplyCoupon ON cart.cartID = cartApplyCoupon.cartID
+		JOIN Coupon ON cartApplyCoupon.couponCode = Coupon.couponCode
+		WHERE cart.cartID = caID;
+        
+        SELECT value INTO couponValue
+		FROM cart
+		JOIN cartApplyCoupon ON cart.cartID = cartApplyCoupon.cartID
+		JOIN Coupon ON cartApplyCoupon.couponCode = Coupon.couponCode
+		WHERE cart.cartID = caID;
+	END IF;
+    
+        
     SELECT MAX(orderID) FROM `order` INTO @maxOrderID;
     -- Update total price to max orderID
-    UPDATE `order` SET totalPrice = @total WHERE orderID = @maxOrderID;
+    UPDATE `order` SET totalPrice = (@total + 22000) * (100 - couponPercent) / 100 - couponValue WHERE orderID = @maxOrderID;
     -- Update shippingAddress
     SELECT address INTO @address FROM address WHERE customerID = cusID;
     UPDATE `order` SET shippingAddress = @address WHERE orderID = @maxOrderID;
@@ -54,6 +80,38 @@ BEGIN
 END //
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS ApplyCoupon;
+DELIMITER //
+
+CREATE PROCEDURE ApplyCoupon(IN cpCode VARCHAR(255), IN cID INT)
+BEGIN
+	DECLARE rowCount INT;
+    DECLARE cpCount INT;
+
+	-- Check coupon is exist
+    SELECT COUNT(*) INTO rowCount
+	FROM cart
+	JOIN cartApplyCoupon ON cart.cartID = cartApplyCoupon.cartID
+	JOIN Coupon ON cartApplyCoupon.couponCode = Coupon.couponCode
+	WHERE cart.cartID = cID;
+
+    IF rowCount > 0 THEN
+    	DELETE FROM cartApplyCoupon WHERE cartID = cID;
+	END IF;
+    
+    SELECT COUNT(*) INTO cpCount
+    FROM coupon WHERE couponCode = cpCode;
+    
+    IF cpCount = 0 THEN
+    	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Coupon is not exist!';
+	END IF;
+    
+    INSERT INTO cartApplyCoupon VALUES (cpCode, cID);
+END //
+
+DELIMITER ;
+
+-- CALL ApplyCoupon("welcomef2", 1);
 
 -- CALL Comment(1, 1, 1, "Good", "Sản phẩm tốt hơn bạn nghĩ!");
 -- CALL Comment(2, 1, 1, "Bad", "Sản phẩm tệ hơn bạn nghĩ!");

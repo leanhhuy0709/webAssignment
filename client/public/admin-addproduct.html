@@ -3,7 +3,7 @@
 
 <head>
     <!--Default-->
-    <title>Admin Update Product</title>
+    <title>Admin Add Product</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--Bootstrap-->
@@ -30,7 +30,7 @@
 
     <h2>PRODUCT UPDATE</h2>
 
-    <form id="update-form" style="padding: 0 20% 0 20%;">
+    <form id="add-product-form" style="padding: 0 20% 0 20%;">
         <div class="mb-3 mt-3">
             <label for="productTitle" style="font-weight: bold;">Product Title</label>
             <input type="text" class="form-control" id="productTitle" placeholder="Enter product name"
@@ -100,15 +100,10 @@
         </div>
         <br>
         <div class="col-md-12 text-center">
-            <button type="button" class="btn btn-outline-dark rounded-pill mx-1" onclick="handleUpdateProduct()">UPDATE</button>
+            <button type="button" class="btn btn-outline-dark rounded-pill mx-1" onclick="handleAddProduct()">ADD</button>
         </div>
         <br>
     </form>
-
-    <script>
-        getProductDetail2();
-    </script>
-
     <!-- Footer -->
     <div id="footer"></div>
     <script>

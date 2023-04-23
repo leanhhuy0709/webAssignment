@@ -38,7 +38,7 @@ function handleLogin()
     xhr.onload = function() {
         console.log(this.responseText);
         var response = JSON.parse(this.responseText);
-        createModal(response.message);
+        createModal(response.message, res.result);
         if (response.result)
         {
             var token = response.token;
@@ -243,10 +243,10 @@ function getCart() {
 
 function handleResponseCart(products) {
     console.log(products);
-    const productDiv = document.getElementById("cart");
+    const productDiv = document.getElementById("cart-products");
     productDiv.innerHTML = "";
     var result = "";
-    products.forEach((product)=>{
+    products.data.forEach((product)=>{
         result += `
             <div class="product">
                 <div class="img"><img src="${product.imageURL}" alt="product 1"></div>
@@ -263,6 +263,19 @@ function handleResponseCart(products) {
             </div>`;
     })
     productDiv.innerHTML = result;
+
+    const infoDiv = document.getElementById("cart-info");
+    infoDiv.innerHTML = `
+    <p>couponName: ${products.couponName} </p>
+    <p>couponPercent: ${products.couponPercent} %</p>
+    <p>couponValue: ${products.couponValue}</p>
+    <p>total: ${products.total}</p>
+    <p>shippingCost: ${products.shippingCost}</p>
+    <p>totalWithShipping: ${products.totalWithShipping}</p>
+    <p>totalWithShippingAndCoupon: ${products.totalWithShippingAndCoupon}</p>
+    <p>Coupon: <input id="coupon"></p>
+    <button onclick="handleApplyCoupon()">Apply</button>
+    `;    
 }
 
 function handleAddToCart(id) {
@@ -332,7 +345,7 @@ function handlePayment(paymentMethod)
         //console.log(this.responseText);
         var res = JSON.parse(this.responseText);
         //console.log(res);
-        createModal(res.message);
+        createModal(res.message, res.result);
         getCart();
     }
     xhttp.onerror = function(err) {
@@ -414,7 +427,7 @@ function showProducts(products, page = 1)
     result = "";
     var maxPage = Math.ceil(products.length / 6);
     for (var i = 1; i <= maxPage; i++) {
-        result += `<button class="btn btn-primary m-2" onclick="getProducts('${i})">${i}</button>`;
+        result += `<button class="btn btn-primary m-2" onclick="getProducts(${i})">${i}</button>`;
     }
     pageDiv.innerHTML = result;
 
@@ -496,7 +509,7 @@ function handleResponseOrder(orders) {
                 <p class="card-text">Shipping Address: ${order.shippingAddress}</p>
                 <p class="card-text">Payment Method: ${order.paymentMethod}</p>
                 <p class="card-text">Order Status: ${order.orderStatus}</p>
-                <button onclick="handleResponseOrderDetail(${order.orderID})">Order Detail</button>
+                <a class="btn btn-primary" href="./order-detail.html?orderID=${order.orderID}">Order Detail</a>
                 </div>
             </div>
         `;
@@ -657,7 +670,7 @@ function getProductDetail() {
         else {
             var res = JSON.parse(this.responseText).data;
             //console.log(res);
-            showProductDeatil(res);
+            showProductDetail(res);
         }   
     }
     //?productID=1
@@ -665,7 +678,43 @@ function getProductDetail() {
     xhttp.open("GET", "http://localhost/product/detail?productID=" + productID, true);
     xhttp.send();
 }
-function showProductDeatil(res) {
+
+function getProductDetail2() {
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+        //console.log(this.responseText);
+        if(!JSON.parse(this.responseText).result) {
+            createModal(JSON.parse(this.responseText).message);
+        }   
+        else {
+            var res = JSON.parse(this.responseText).data;
+            console.log(res);
+            const updateForm = document.getElementById("update-form");
+            updateForm.querySelector("#productTitle").value = res.name;
+            updateForm.querySelector('#productID').value = res.productID;
+            updateForm.querySelector("#price").value = res.price;
+            updateForm.querySelector("#productDescription").value = res.description;
+            updateForm.querySelector("#productImage").value = res.imageURL;
+            updateForm.querySelector("#image").src = res.imageURL;
+        }   
+    }
+    //?productID=1
+    var productID = window.location.search.split("=")[1];
+    xhttp.open("GET", "http://localhost/product/detail?productID=" + productID, true);
+    xhttp.send();
+}
+
+function handleImageChange()
+{
+    var image = document.getElementById("productImage").value;
+    document.getElementById("image").src = image;
+}
+
+function setDefaultImage(img) {
+    img.src = "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg";
+}
+
+function showProductDetail(res) {
     var productDetail = document.getElementById("product-detail");
     var productDetailHTML = "";
     productDetailHTML += `
@@ -682,6 +731,7 @@ function showProductDeatil(res) {
                     <h3>${res.price} đồng</h3>
                     <button class="btn btn-primary buy-now" onclick="buyNow(${res.productID})">Buy now</button>
                     <button class="btn btn-primary" onclick="handleAddToCart(${res.productID})">Add to cart</button>
+                    <a class="btn btn-primary" href="./admin-updateproduct.html?productID=${res.productID}">Edit</a>
                 </div>
             </div>
             <div class="description">
@@ -779,7 +829,128 @@ function handleComment()
     }));
 }
 
-  
+function getUserList()
+{
+    var xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+        //console.log(this.responseText);
+        if(!JSON.parse(this.responseText).result) {
+            createModal(JSON.parse(this.responseText).message);
+        }   
+        else {
+            var res = JSON.parse(this.responseText).data;
+            //console.log(res);
+            showUserList(res);
+        }   
+    }
+    xhttp.open("POST", "http://localhost/admin/userlist", true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify({
+        "token": getCookieValueByName('token')
+    }));
+}
+
+function showUserList(users)
+{
+    const userListDiv = document.getElementById("user-list");
+    userListDiv.innerHTML = "";
+    users.forEach(user => {
+        userListDiv.innerHTML += `
+            <div class="user">
+                <div class="user-info">
+                    <img src="${user.imageURL}" alt="No Image">
+                    <h3>${user.fname + " " + user.lname}</h3>
+                    <p>${user.email}</p>
+                </div>
+            </div>
+        `;
+    });
+
+}  
+
+function handleUpdateProduct()
+{
+    const updateForm = document.getElementById('update-form');
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost/admin/product/update", true);
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.onload = function() {
+        console.log(this.responseText);
+        var res = JSON.parse(this.responseText);
+        console.log(res);
+        createModal(res.message);
+    }
+    xhttp.onerror = function(err) {
+        console.log("Error");
+        console.log(err);
+    }
+    console.log(updateForm.querySelector('#productID').value);
+    const data = JSON.stringify({
+        token: getCookieValueByName('token'),
+        name: updateForm.querySelector('#productTitle').value,
+        productID: updateForm.querySelector('#productID').value,
+        price: updateForm.querySelector('#price').value,
+        description: updateForm.querySelector('#productDescription').value,
+        imageURL: updateForm.querySelector('#productImage').value,
+        categoryID: 1
+    });
+    xhttp.send(data);
+}
+
+function handleAddProduct()
+{
+    const updateForm = document.getElementById('add-product-form');
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost/admin/product/add", true);
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.onload = function() {
+        console.log(this.responseText);
+        var res = JSON.parse(this.responseText);
+        console.log(res);
+        createModal(res.message);
+    }
+    xhttp.onerror = function(err) {
+        console.log("Error");
+        console.log(err);
+    }
+    const data = JSON.stringify({
+        token: getCookieValueByName('token'),
+        name: updateForm.querySelector('#productTitle').value,
+        price: updateForm.querySelector('#price').value,
+        description: updateForm.querySelector('#productDescription').value,
+        imageURL: updateForm.querySelector('#productImage').value,
+        categoryID: 1
+    });
+    
+    xhttp.send(data);
+}
+
+function handleApplyCoupon()
+{
+    var couponCode = document.getElementById("coupon").value;
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost/cart/coupon", true);
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.onload = function() {
+        console.log(this.responseText);
+        var res = JSON.parse(this.responseText);
+        console.log(res);
+        createModal(res.message, res.result);
+        getCart();
+    }
+    xhttp.onerror = function(err) {
+        console.log("Error");
+        console.log(err);
+    }
+    const data = JSON.stringify({
+        token: getCookieValueByName('token'),
+        couponCode: couponCode
+    });
+    
+    xhttp.send(data);
+}
+
+
 // Check cookie is valid!
 if (getCookieValueByName('token')) {
 }
@@ -791,3 +962,4 @@ else
         window.location.pathname = "/signup-login.html";
     }
 }
+

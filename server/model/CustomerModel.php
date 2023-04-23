@@ -200,11 +200,41 @@
                     $result[] = $row;
                 }
             }
+            $stmt->close();
+            $stmt = $conn->prepare("SELECT cart.cartID, Coupon.CouponCode, name, percent, value, adminID
+                FROM cart
+                JOIN cartApplyCoupon ON cart.cartID = cartApplyCoupon.cartID
+                JOIN Coupon ON cartApplyCoupon.couponCode = Coupon.couponCode
+                WHERE cart.cartID = ?;");
+            $stmt->bind_param("i", $cartID);
+            $stmt->execute();
+            $SQLresult = $stmt->get_result();
+            $couponName = "None";
+            $couponValue = 0;
+            $couponPercent = 0;
+            if ($SQLresult->num_rows > 0)
+            {
+                while($row = $SQLresult->fetch_assoc()) {
+                    //insert a row to cart
+                    $couponName = $row["name"];
+                    $couponValue = $row["value"];
+                    $couponPercent = $row["percent"];
+                }
+            }
+            $result = array(
+                "data" => $result,
+                "total" => $total,
+                "shippingCost" => 22000,
+                "totalWithShipping" => $total + 22000,
+                "couponName" => $couponName,
+                "couponPercent" => $couponPercent,
+                "couponValue" => $couponValue,
+                "totalWithShippingAndCoupon" => ($total + 22000) * (100 - $couponPercent) / 100 - $couponValue
+            );
             $result = array(
                 "result" => true,
                 "message" => "Get cart successfully",
-                "data" => $result,
-                "total" => $total
+                "data" => $result
             );
         }
         catch (Exception $e) {
@@ -760,4 +790,49 @@
             return $result;
         }
     }
+
+    function cartApplyCouponModel($userID, $couponCode)
+    {
+        global $SQLservername, $SQLusername, $SQLpassword, $SQLdbname;
+        // Create connection
+        $conn = new mysqli($SQLservername, $SQLusername, $SQLpassword, $SQLdbname);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        //find cart id
+        $stmt = $conn->prepare("SELECT MAX(cartID) FROM cart WHERE customerID = ?;");
+        $stmt->bind_param("i", $userID);
+        $result = array();
+        try {
+            $stmt->execute();
+            $SQLresult = $stmt->get_result();
+            $cartID = 0;
+            if ($SQLresult->num_rows > 0) {
+                while($row = $SQLresult->fetch_assoc()) {
+                    $cartID = $row["MAX(cartID)"];
+                }
+            }
+            $stmt->close();
+            $stmt = $conn->prepare("CALL applyCoupon(?, ?);");
+            $stmt->bind_param("si", $couponCode, $cartID);
+            $stmt->execute();
+            $result = array(
+                "result" => true,
+                "message" => "Apply coupon sucessfull"
+            );
+        }
+        catch (Exception $e) {
+            $result = array(
+                "result" => false,
+                "message" => $e->getMessage()
+            );
+        }
+        finally {
+            $conn->close();
+            $stmt->close();
+            return $result;
+        }
+    }
+
 ?>

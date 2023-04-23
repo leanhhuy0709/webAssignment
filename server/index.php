@@ -7,6 +7,7 @@ header('Access-Control-Allow-Credentials: true');
 
 require_once('controller/CookieController.php');
 require_once('controller/CustomerController.php');
+require_once('controller/AdminController.php');
 
 
 if (strpos($_SERVER['REQUEST_URI'], '/products') !== false)
@@ -79,5 +80,25 @@ else if ($_SERVER['REQUEST_URI'] === '/product/review')
     $customer = new CustomerController();
     echo $customer->comment();
 }
-else echo "Welcom to PHP server!";
+else if ($_SERVER['REQUEST_URI'] === '/cart/coupon')
+{
+    $customer = new CustomerController();
+    echo $customer->cartApplyCoupon();
+}
+else if ($_SERVER['REQUEST_URI'] === '/admin/userlist')
+{
+    $admin = new AdminController();
+    echo $admin->getUserList();
+}
+else if ($_SERVER['REQUEST_URI'] === '/admin/product/add')
+{
+    $admin = new AdminController();
+    echo $admin->addProduct();
+}
+else if ($_SERVER['REQUEST_URI'] === '/admin/product/update')
+{
+    $admin = new AdminController();
+    echo $admin->updateProduct();
+}
+else echo $tmp;
 ?>
