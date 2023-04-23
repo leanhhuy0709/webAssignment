@@ -1,46 +1,38 @@
 
-function getHTML(id, file)
-{
+function getHTML(id, file) {
     //get tag by id
     const tag = document.getElementById(id);
-        //load nav.html to nav
-        fetch(file)
-        .then(response=> response.text())
-        .then(text => 
-        {
+    //load nav.html to nav
+    fetch(file)
+        .then(response => response.text())
+        .then(text => {
             tag.innerHTML = text;
         });
 }
 // Lấy cookie từ trình duyệt
-function getCookieValueByName(cname)
-{
+function getCookieValueByName(cname) {
     var cookieList = document.cookie.split(";");
-    for (var i = 0; i < cookieList.length; i++)
-    {
+    for (var i = 0; i < cookieList.length; i++) {
         var cookie = cookieList[i];
-        while (cookie.charAt(0) == ' ')
-        {
+        while (cookie.charAt(0) == ' ') {
             cookie = cookie.substring(1);
         }
-        if (cookie.indexOf(cname) == 0)
-        {
+        if (cookie.indexOf(cname) == 0) {
             return cookie.substring(cname.length + 1, cookie.length);
         }
     }
 }
 // Xử lý khi người dùng click vào nút đăng nhập
-function handleLogin()
-{
+function handleLogin() {
     const form = document.getElementById("login-form");
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "http://localhost/login", true);
     xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.onload = function() {
+    xhr.onload = function () {
         console.log(this.responseText);
         var response = JSON.parse(this.responseText);
         createModal(response.message, response.result);
-        if (response.result)
-        {
+        if (response.result) {
             var token = response.token;
             var time = new Date();
             time.setTime(time.getTime() + (1 * 60 * 60 * 1000));   // 1 hour
@@ -48,7 +40,7 @@ function handleLogin()
             window.location.pathname = "/home.html";
         }
     }
-    
+
     const data = JSON.stringify({
         username: form.querySelector("#login-username").value,
         password: form.querySelector("#login-password").value
@@ -58,18 +50,18 @@ function handleLogin()
 
 function handleSignUp() {
     const form = document.getElementById("signup-form");
-    if(validateForm() == false){
+    if (validateForm() == false) {
         return;
     }
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "http://localhost/signup", true);
     xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.onload = function() {
+    xhr.onload = function () {
         //console.log(this.responseText);
         createModal("Sign up successfully!");
         window.location.pathname = "/signup-login.html";
     }
-    
+
     const data = JSON.stringify({
         username: form.querySelector("#username").value,
         password: form.querySelector("#password").value,
@@ -100,7 +92,7 @@ function handleResponseUser(response, isEdit = false) {
                     <p class="text-muted mb-4">${response.address[0]}</p>
                     <div class="d-flex justify-content-center mb-2">
                         <button type="button" class="btn m-1 btn-brand-color" onclick="editUserProfile()">Edit</button>
-                        <button type="button" class="btn m-1 btn-brand-color" onclick="${isEdit?"handleUpdateUser()":"createModal('You have to press edit before updating!', false)"}">Update</button>
+                        <button type="button" class="btn m-1 btn-brand-color" onclick="${isEdit ? "handleUpdateUser()" : "createModal('You have to press edit before updating!', false)"}">Update</button>
                     </div>
                 </div>
             </div>
@@ -111,31 +103,31 @@ function handleResponseUser(response, isEdit = false) {
                     <form id="update-form">
                     <div class="row">
                         <div class="col-sm-3"><p class="mb-0">First Name</p></div>
-                        <div class="col-sm-9"><p class="text-muted mb-0">${isEdit?'<input id="fname" class="input w-100" value="' + response.fname + '">':response.fname}</p></div>
+                        <div class="col-sm-9"><p class="text-muted mb-0">${isEdit ? '<input id="fname" class="input w-100" value="' + response.fname + '">' : response.fname}</p></div>
                     </div><hr>
                     <div class="row">
                         <div class="col-sm-3"><p class="mb-0">Last Name</p></div>
-                        <div class="col-sm-9"><p class="text-muted mb-0">${isEdit?'<input id="lname" class="input w-100" value="' + response.lname + '">':response.lname}</p></div>
+                        <div class="col-sm-9"><p class="text-muted mb-0">${isEdit ? '<input id="lname" class="input w-100" value="' + response.lname + '">' : response.lname}</p></div>
                     </div><hr>
                     <div class="row">
                         <div class="col-sm-3"><p class="mb-0">Date of birth</p></div>
-                        <div class="col-sm-9"><p class="text-muted mb-0">${isEdit?'<input id="dob" class="input w-100" value="' + response.DOB + '" type="date">':response.DOB}</p></div>
+                        <div class="col-sm-9"><p class="text-muted mb-0">${isEdit ? '<input id="dob" class="input w-100" value="' + response.DOB + '" type="date">' : response.DOB}</p></div>
                     </div><hr>
                     <div class="row">
                         <div class="col-sm-3"><p class="mb-0">Phone number</p></div>
-                        <div class="col-sm-9"><p class="text-muted mb-0">${isEdit?'<input id="phone" class="input w-100" value="' + response.phoneNumber + '">':response.phoneNumber}</p></div>
+                        <div class="col-sm-9"><p class="text-muted mb-0">${isEdit ? '<input id="phone" class="input w-100" value="' + response.phoneNumber + '">' : response.phoneNumber}</p></div>
                     </div><hr>
                     <div class="row">
                         <div class="col-sm-3"><p class="mb-0">Email</p></div>
-                        <div class="col-sm-9"><p class="text-muted mb-0">${isEdit?'<input id="email" class="input w-100" value="' + response.email + '">':response.email}</p></div>
+                        <div class="col-sm-9"><p class="text-muted mb-0">${isEdit ? '<input id="email" class="input w-100" value="' + response.email + '">' : response.email}</p></div>
                     </div><hr>
                     <div class="row">
                         <div class="col-sm-3"><p class="mb-0">Address</p></div>
-                        <div class="col-sm-9"><p class="text-muted mb-0">${isEdit?'<input id="address" class="input w-100" value="' + response.address[0] + '">':response.address[0]}</p></div>
+                        <div class="col-sm-9"><p class="text-muted mb-0">${isEdit ? '<input id="address" class="input w-100" value="' + response.address[0] + '">' : response.address[0]}</p></div>
                     </div><hr>
                     <div class="row">
                         <div class="col-sm-3"><p class="mb-0">ImageURL</p></div>
-                        <div class="col-sm-9"><p class="text-muted mb-0">${isEdit?'<input id="imageURL" class="input w-100" value="' + response.imageURL + '">':response.imageURL}</p></div>
+                        <div class="col-sm-9"><p class="text-muted mb-0">${isEdit ? '<input id="imageURL" class="input w-100" value="' + response.imageURL + '">' : response.imageURL}</p></div>
                     </div><hr>
                     </form>
                 </div>
@@ -152,9 +144,9 @@ function editUserProfile() {
 
 function getUserInfo(isEdit = false) {
     const xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
+    xhttp.onload = function () {
         console.log(this.responseText)
-        if(!JSON.parse(this.responseText).result) {
+        if (!JSON.parse(this.responseText).result) {
             createModal(JSON.parse(this.responseText).message, false);
         }
         else {
@@ -162,7 +154,7 @@ function getUserInfo(isEdit = false) {
             handleResponseUser(res, isEdit);
         }
     }
-    xhttp.onerror = function(err) {
+    xhttp.onerror = function (err) {
         console.log("Error");
         console.log(err);
     }
@@ -185,14 +177,14 @@ function handleUpdateUser() {
     const xhttp = new XMLHttpRequest();
     xhttp.open("POST", "http://localhost/user/update", true);
     xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.onload = function() {
+    xhttp.onload = function () {
         console.log(this.responseText);
         var res = JSON.parse(this.responseText);
         console.log(res);
         createModal(res.message);
         getUserInfo();
     }
-    xhttp.onerror = function(err) {
+    xhttp.onerror = function (err) {
         console.log("Error");
         console.log(err);
     }
@@ -212,18 +204,18 @@ function handleUpdateUser() {
 
 function getCart() {
     const xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
+    xhttp.onload = function () {
         //console.log(this.responseText);
 
-        if(!JSON.parse(this.responseText).result) {
+        if (!JSON.parse(this.responseText).result) {
             createModal(JSON.parse(this.responseText).message, false);
-        }   
+        }
         else {
             var res = JSON.parse(this.responseText).data;
             handleResponseCart(res);
-        }   
+        }
     }
-    xhttp.onerror = function(err) {
+    xhttp.onerror = function (err) {
         console.log("Error");
         console.log(err);
     }
@@ -246,11 +238,11 @@ function handleResponseCart(products) {
     const productDiv = document.getElementById("cart-products");
     productDiv.innerHTML = "";
     var result = "";
-    if(products.total == 0){
+    if (products.total == 0) {
         productDiv.innerHTML = `<div class="cart-empty">Cart empty</div>`;
     }
-    else{
-        products.data.forEach((product)=>{
+    else {
+        products.data.forEach((product) => {
             result += `
                 <div class="product">
                     <div class="img"><img src="${product.imageURL}" alt="product 1"></div>
@@ -280,19 +272,19 @@ function handleResponseCart(products) {
     <p>totalWithShippingAndCoupon: ${products.totalWithShippingAndCoupon}</p>
     <p>Coupon: <input id="coupon"></p>
     <button onclick="handleApplyCoupon()">Apply</button>
-    `;    
+    `;
 }
 
 function handleAddToCart(id) {
     const xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
+    xhttp.onload = function () {
         var res = JSON.parse(this.responseText);
         console.log(res);
         createModal(res.message);
         if (window.location.pathname == "/cart.html")
             getCart();
     }
-    xhttp.onerror = function(err) {
+    xhttp.onerror = function (err) {
         console.log("Error");
         console.log(err);
     }
@@ -311,8 +303,7 @@ function buyNow(pID) {
     window.location.pathname = "/cart.html";
 }
 
-function handleLogout()
-{
+function handleLogout() {
     var time = new Date();
     time.setTime(time.getTime());
     document.cookie = "token=a; expires=" + time.toUTCString() + "; path=/";
@@ -321,7 +312,7 @@ function handleLogout()
 
 function handleDeleteToCart(id, num = 1) {
     const xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
+    xhttp.onload = function () {
         //console.log(this.responseText);
         var res = JSON.parse(this.responseText);
         //console.log(res);
@@ -329,7 +320,7 @@ function handleDeleteToCart(id, num = 1) {
         if (window.location.pathname == "/cart.html")
             getCart();
     }
-    xhttp.onerror = function(err) {
+    xhttp.onerror = function (err) {
         console.log("Error");
         console.log(err);
     }
@@ -343,17 +334,16 @@ function handleDeleteToCart(id, num = 1) {
     xhttp.send(data);
 }
 
-function handlePayment(paymentMethod)
-{
+function handlePayment(paymentMethod) {
     const xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
+    xhttp.onload = function () {
         //console.log(this.responseText);
         var res = JSON.parse(this.responseText);
         //console.log(res);
         createModal(res.message, res.result);
         getCart();
     }
-    xhttp.onerror = function(err) {
+    xhttp.onerror = function (err) {
         console.log("Error");
         console.log(err);
     }
@@ -372,7 +362,7 @@ function getProducts(page = 1) {
     //delete first char in list[0]
     list[0] = list[0].substring(1);
 
-    for(var i = 0; i < list.length; i++) {
+    for (var i = 0; i < list.length; i++) {
         tmp = list[i].split("=");
         if (tmp[0] == "search")
             searchInput = tmp[1];
@@ -382,46 +372,45 @@ function getProducts(page = 1) {
 
 
     const xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
+    xhttp.onload = function () {
         //console.log(this.responseText);
-        if(!JSON.parse(this.responseText).result) {
+        if (!JSON.parse(this.responseText).result) {
             createModal(JSON.parse(this.responseText).message, false);
-        }   
+        }
         else {
             var res = JSON.parse(this.responseText).data;
             showProducts(res, page);
-        }   
+        }
     }
     xhttp.open("GET", "http://localhost/products?search=" + searchInput + "&category=" + categoryInput, true);
     xhttp.send();
 }
-function handleSearch()
-{
+function handleSearch() {
     const searchInput = document.getElementById("search");
     var pn = window.location.pathname;
     var host = window.location.origin;
-    if (pn != "/new.html" && pn != "/sale.html" && pn != "/category.html")
-    {
+    if (pn != "/new.html" && pn != "/sale.html" && pn != "/category.html") {
         window.location.href = host + "/new.html?search=" + searchInput.value;
     }
-    else 
-        window.location.href = host + pn +"?search=" + searchInput.value;
+    else
+        window.location.href = host + pn + "?search=" + searchInput.value;
 }
-function showProducts(products, page = 1)
-{
+function showProducts(products, page = 1) {
     const productDiv = document.getElementById("product-list");
     productDiv.innerHTML = "";
     var result = "";
     var pS = (page - 1) * 6, pE = pS + 6;
-    products.slice(pS, pE).forEach((product)=>{
+    products.slice(pS, pE).forEach((product) => {
         result += `
-            <div class="card m-3 d-inline-block" style="width: 18rem;">
+            <div class="card" style="width: 30%; margin: 0 3% 3% 0">
                 <img src="${product.imageURL}" class="card-img-top" onerror="this.onerror=null; this.src='https://media.istockphoto.com/id/1216251206/vector/no-image-available-icon.jpg?s=170667a&w=0&k=20&c=N-XIIeLlhUpm2ZO2uGls-pcVsZ2FTwTxZepwZe4DuE4=';">
-                <div class="card-body">
-                    <h5 class="card-title">${product.name}</h5>
-                    <p class="card-text">${product.description}</p>
-                    <a href="./product-detail.html?productID=${product.productID}" class="btn btn-primary">Go somewhere</a>
-                    <button onclick="handleAddToCart(${product.productID})" class="btn btn-primary">Add to cart</button>
+                <div class="card-body" style="height:25%">
+                    <h5 class="card-title" style="text-align:center;">${product.name}</h5>
+                    <p class="card-text" style="text-align:center; font-weight: bold">Price: $${product.price}</p>
+                </div>
+                <div class="card-footer" style="text-align:center;"> 
+                    <a href="./product-detail.html?productID=${product.productID}" class="btn btn-primary">Detail</a>   
+                    <button onclick="handleAddToCart(${product.productID})" class="btn btn-danger">Add to cart</button>
                 </div>
             </div>`;
     })
@@ -437,49 +426,46 @@ function showProducts(products, page = 1)
     pageDiv.innerHTML = result;
 
 }
-function getCategories()
-{
+function getCategories() {
     const xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
+    xhttp.onload = function () {
         //console.log(this.responseText);
-        if(!JSON.parse(this.responseText).result) {
+        if (!JSON.parse(this.responseText).result) {
             createModal(JSON.parse(this.responseText).message, false);
-        }   
+        }
         else {
             var res = JSON.parse(this.responseText).data;
             showCategories(res);
-        }   
+        }
     }
     xhttp.open("GET", "http://localhost/category", true);
     xhttp.send();
 }
-function showCategories(categories)
-{
+function showCategories(categories) {
     const categoryDiv = document.getElementById("category-list");
     categoryDiv.innerHTML = "";
     var result = "";
-    categories.forEach((category)=>{
+    categories.forEach((category) => {
         result += `<h3>${category.name}</h3>`;
     })
     categoryDiv.innerHTML = result;
 }
 
-function getOrder()
-{
+function getOrder() {
     const xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
+    xhttp.onload = function () {
         //console.log(this.responseText);
 
-        if(!JSON.parse(this.responseText).result) {
+        if (!JSON.parse(this.responseText).result) {
             createModal(JSON.parse(this.responseText).message, false);
-        }   
+        }
         else {
             var res = JSON.parse(this.responseText).data;
             //console.log(res);
             handleResponseOrder(res);
-        }   
+        }
     }
-    xhttp.onerror = function(err) {
+    xhttp.onerror = function (err) {
         console.log("Error");
         console.log(err);
     }
@@ -502,14 +488,14 @@ function handleResponseOrder(orders) {
     const orderDiv = document.getElementById("order");
     orderDiv.innerHTML = "";
     var result = "";
-    orders.forEach((order)=>{
+    orders.forEach((order) => {
         //show block which have orderID, orderDate, shippingDate, completeDate, totalPrice, shippingAddress, paymentMethod, orderStatus of order
         result += `<div class="card m-3" style="width: 18rem;">
                 <div class="card-body">
                 <h5 class="card-title">Order ID: ${order.orderID}</h5>
                 <p class="card-text">Order Date: ${order.orderDate}</p>
                 <p class="card-text">Shipping Date: ${order.shippingDate}</p>
-                <p class="card-text">Complete Date: ${order.completeDate?order.completeDate:"None"}</p>
+                <p class="card-text">Complete Date: ${order.completeDate ? order.completeDate : "None"}</p>
                 <p class="card-text">Total Price: ${order.totalPrice}</p>
                 <p class="card-text">Shipping Address: ${order.shippingAddress}</p>
                 <p class="card-text">Payment Method: ${order.paymentMethod}</p>
@@ -525,18 +511,18 @@ function handleResponseOrder(orders) {
 
 function getOrderDetail() {
     const xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
+    xhttp.onload = function () {
         //console.log(this.responseText);
 
-        if(!JSON.parse(this.responseText).result) {
+        if (!JSON.parse(this.responseText).result) {
             createModal(JSON.parse(this.responseText).message, false);
-        }   
+        }
         else {
             var res = JSON.parse(this.responseText).data;
             handleResponseOrderDetail(res);
-        }   
+        }
     }
-    xhttp.onerror = function(err) {
+    xhttp.onerror = function (err) {
         console.log("Error");
         console.log(err);
     }
@@ -565,7 +551,7 @@ function handleResponseOrderDetail(order) {
                 <h5 class="card-title">Order ID: ${order.orderID}</h5>
                 <p class="card-text">Order Date: ${order.orderDate}</p>
                 <p class="card-text">Shipping Date: ${order.shippingDate}</p>
-                <p class="card-text">Complete Date: ${order.completeDate?order.completeDate:"None"}</p>
+                <p class="card-text">Complete Date: ${order.completeDate ? order.completeDate : "None"}</p>
                 <p class="card-text">Total Price: ${order.totalPrice}</p>
                 <p class="card-text">Shipping Address: ${order.shippingAddress}</p>
                 <p class="card-text">Payment Method: ${order.paymentMethod}</p>
@@ -574,7 +560,7 @@ function handleResponseOrderDetail(order) {
                 </div>
     `;
 
-    order.products.forEach((product)=>{
+    order.products.forEach((product) => {
         result += `
             <div class="card m-3" style="width: 18rem;">
                 <img src="${product.imageURL}" class="card-img-top" alt="product 1">
@@ -609,23 +595,23 @@ function validateForm() {
         createModal("Invalid email address", false);
         return false;
     }
-    if (phone.length != 10){
+    if (phone.length != 10) {
         createModal("Invalid phone", false);
         return false;
     }
-    if (firstName.length < 2 || firstName.length > 30){
+    if (firstName.length < 2 || firstName.length > 30) {
         createModal("Invalid first name.", false);
         return false;
     }
-    if (lastName.length < 2 || lastName.length > 30){
+    if (lastName.length < 2 || lastName.length > 30) {
         createModal("Invalid last name.", false);
         return false;
     }
-    if (age < 0){
+    if (age < 0) {
         createModal("Invalid age", false);
         return false;
     }
-    if (imageURL.length >= 1000){
+    if (imageURL.length >= 1000) {
         createModal("Invalid link", false);
         return false;
     }
@@ -651,32 +637,32 @@ function createModal(message, isSuccess = true) {
     modalHtml += '</div>';
     modalHtml += '</div>';
     modalHtml += '</div>';
-  
+
     $(modalHtml).modal('show');
     // Lắng nghe sự kiện 'show.bs.modal' để chặn chuyển trang khi modal được mở
-    $('#createModalModal').on('show.bs.modal', function(e) {
+    $('#createModalModal').on('show.bs.modal', function (e) {
         $(this).data('bs.modal').isShown = false;
     });
 
     // Lắng nghe sự kiện 'hide.bs.modal' để cho phép chuyển trang khi modal bị đóng
-    $('#createModalModal').on('hide.bs.modal', function(e) {
+    $('#createModalModal').on('hide.bs.modal', function (e) {
         $(this).data('bs.modal').isShown = false;
     });
-    
+
 }
-  
+
 function getProductDetail() {
     const xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
+    xhttp.onload = function () {
         //console.log(this.responseText);
-        if(!JSON.parse(this.responseText).result) {
+        if (!JSON.parse(this.responseText).result) {
             createModal(JSON.parse(this.responseText).message);
-        }   
+        }
         else {
             var res = JSON.parse(this.responseText).data;
             //console.log(res);
             showProductDetail(res);
-        }   
+        }
     }
     //?productID=1
     var productID = window.location.search.split("=")[1];
@@ -686,11 +672,11 @@ function getProductDetail() {
 
 function getProductDetail2() {
     const xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
+    xhttp.onload = function () {
         //console.log(this.responseText);
-        if(!JSON.parse(this.responseText).result) {
+        if (!JSON.parse(this.responseText).result) {
             createModal(JSON.parse(this.responseText).message);
-        }   
+        }
         else {
             var res = JSON.parse(this.responseText).data;
             console.log(res);
@@ -701,7 +687,7 @@ function getProductDetail2() {
             updateForm.querySelector("#productDescription").value = res.description;
             updateForm.querySelector("#productImage").value = res.imageURL;
             updateForm.querySelector("#image").src = res.imageURL;
-        }   
+        }
     }
     //?productID=1
     var productID = window.location.search.split("=")[1];
@@ -709,8 +695,7 @@ function getProductDetail2() {
     xhttp.send();
 }
 
-function handleImageChange()
-{
+function handleImageChange() {
     var image = document.getElementById("productImage").value;
     document.getElementById("image").src = image;
 }
@@ -753,9 +738,9 @@ function showProductDetail(res) {
             --percent: calc(4.3/5*100%);
         }
         `;
-        // --percent: calc([gia tri sao trung binh]/5*100%);
+    // --percent: calc([gia tri sao trung binh]/5*100%);
     headTag.appendChild(styleTag);
-    for(var i = 0; i < res.review.length; i++) {
+    for (var i = 0; i < res.review.length; i++) {
         //comment
         productDetailHTML += `
             <div id="comment-block" class="container">
@@ -798,11 +783,9 @@ function showProductDetail(res) {
     `;
     productDetail.innerHTML = productDetailHTML;
 }
-function handleComment()
-{
-    if (document.getElementById("title").value == "" 
-        || document.getElementById("text").value == "")
-    {
+function handleComment() {
+    if (document.getElementById("title").value == ""
+        || document.getElementById("text").value == "") {
         createModal("Please fill all fields", false);
         return;
     }
@@ -812,15 +795,15 @@ function handleComment()
     }
 
     var xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
+    xhttp.onload = function () {
         //console.log(this.responseText);
-        if(!JSON.parse(this.responseText).result) {
+        if (!JSON.parse(this.responseText).result) {
             createModal(JSON.parse(this.responseText).message);
-        }   
+        }
         else {
             createModal("Comment successfully");
             getProductDetail();
-        }   
+        }
     }
     xhttp.open("POST", "http://localhost/product/review", true);
     xhttp.setRequestHeader("Content-type", "application/json");
@@ -834,19 +817,18 @@ function handleComment()
     }));
 }
 
-function getUserList()
-{
+function getUserList() {
     var xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
+    xhttp.onload = function () {
         //console.log(this.responseText);
-        if(!JSON.parse(this.responseText).result) {
+        if (!JSON.parse(this.responseText).result) {
             createModal(JSON.parse(this.responseText).message);
-        }   
+        }
         else {
             var res = JSON.parse(this.responseText).data;
             //console.log(res);
             showUserList(res);
-        }   
+        }
     }
     xhttp.open("POST", "http://localhost/admin/userlist", true);
     xhttp.setRequestHeader("Content-type", "application/json");
@@ -855,8 +837,7 @@ function getUserList()
     }));
 }
 
-function showUserList(users)
-{
+function showUserList(users) {
     const userListDiv = document.getElementById("user-list");
     userListDiv.innerHTML = "";
     users.forEach(user => {
@@ -871,21 +852,20 @@ function showUserList(users)
         `;
     });
 
-}  
+}
 
-function handleUpdateProduct()
-{
+function handleUpdateProduct() {
     const updateForm = document.getElementById('update-form');
     const xhttp = new XMLHttpRequest();
     xhttp.open("POST", "http://localhost/admin/product/update", true);
     xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.onload = function() {
+    xhttp.onload = function () {
         console.log(this.responseText);
         var res = JSON.parse(this.responseText);
         console.log(res);
         createModal(res.message);
     }
-    xhttp.onerror = function(err) {
+    xhttp.onerror = function (err) {
         console.log("Error");
         console.log(err);
     }
@@ -902,19 +882,18 @@ function handleUpdateProduct()
     xhttp.send(data);
 }
 
-function handleAddProduct()
-{
+function handleAddProduct() {
     const updateForm = document.getElementById('add-product-form');
     const xhttp = new XMLHttpRequest();
     xhttp.open("POST", "http://localhost/admin/product/add", true);
     xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.onload = function() {
+    xhttp.onload = function () {
         console.log(this.responseText);
         var res = JSON.parse(this.responseText);
         console.log(res);
         createModal(res.message);
     }
-    xhttp.onerror = function(err) {
+    xhttp.onerror = function (err) {
         console.log("Error");
         console.log(err);
     }
@@ -926,24 +905,23 @@ function handleAddProduct()
         imageURL: updateForm.querySelector('#productImage').value,
         categoryID: 1
     });
-    
+
     xhttp.send(data);
 }
 
-function handleApplyCoupon()
-{
+function handleApplyCoupon() {
     var couponCode = document.getElementById("coupon").value;
     const xhttp = new XMLHttpRequest();
     xhttp.open("POST", "http://localhost/cart/coupon", true);
     xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.onload = function() {
+    xhttp.onload = function () {
         console.log(this.responseText);
         var res = JSON.parse(this.responseText);
         console.log(res);
         createModal(res.message, res.result);
         getCart();
     }
-    xhttp.onerror = function(err) {
+    xhttp.onerror = function (err) {
         console.log("Error");
         console.log(err);
     }
@@ -951,7 +929,7 @@ function handleApplyCoupon()
         token: getCookieValueByName('token'),
         couponCode: couponCode
     });
-    
+
     xhttp.send(data);
 }
 
@@ -959,10 +937,8 @@ function handleApplyCoupon()
 // Check cookie is valid!
 if (getCookieValueByName('token')) {
 }
-else 
-{
-    if (window.location.pathname != "/signup-login.html")
-    {
+else {
+    if (window.location.pathname != "/signup-login.html") {
         alert("You need to login first!");
         window.location.pathname = "/signup-login.html";
     }
