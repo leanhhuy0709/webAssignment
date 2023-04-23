@@ -38,7 +38,7 @@ function handleLogin()
     xhr.onload = function() {
         console.log(this.responseText);
         var response = JSON.parse(this.responseText);
-        createModal(response.message, res.result);
+        createModal(response.message, response.result);
         if (response.result)
         {
             var token = response.token;
