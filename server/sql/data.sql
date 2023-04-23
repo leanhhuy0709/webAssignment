@@ -27,37 +27,37 @@ INSERT INTO category(name) VALUES ("Make-up");
 
 -- Dạng cơ bản khi insert product, image phải ở ngay sau sản phẩm thêm vào
 INSERT INTO product(productID, name, price, categoryID, supplierID, brandID, description) VALUES
-(1, "Avene Moisturizing Cream", 200000, 1, 1, 1, "Avene Moisturizing Cream moisturizes and protects the skin from sun damage, making it soft and smooth." );
+(1, "Avene Moisturizing Cream", 35, 1, 1, 1, "Avene Moisturizing Cream moisturizes and protects the skin from sun damage, making it soft and smooth." );
 
 INSERT INTO product(name, price, categoryID, supplierID, brandID, description) VALUES
-("Kerastase Hair Essence", 500000, 2, 1, 1, "Kerastase Hair Essence helps to nourish hair, reduce breakage and repair damaged hair."),
-("Innisfree Powder", 300000, 3, 1, 1, "Innisfree Powder has a smooth texture that covers skin imperfections well, making the skin look brighter and smoother."),
-("Laneige Cleanser", 250000, 1, 1, 1, "Laneige Facial Cleanser helps to clear skin, tighten pores, and brighten skin."),
-("The Saem Concealer", 150000, 3, 1, 1, "The Saem Concealer helps cover skin imperfections such as acne, dark spots, freckles,..."),
-("Neutrogena Moisturizing Cream", 200000, 1, 1, 1, "Neutrogena Moisturizing Cream deeply hydrates the skin, making it softer and smoother."),
-("Pantene shampoo", 120000, 2, 1, 1, "Pantene shampoo cleans hair, nourishes hair and makes hair stronger."),
-("Maybelline Mascara", 150000, 3, 1, 1, "Maybelline Mascara thickens, curls, and makes them look longer."),
-("Lancome perfume", 2500000, 3, 1, 1, "Lancome perfume has a gentle, luxurious fragrance that makes you confident and seductive."),
-("Kiehl's Acne Serum", 300000, 1, 1, 1, "Kiehl's Acne Serum helps clear up acne and helps prevent it from coming back."),
-("Dove Shower Gel", 80000, 2, 1, 1, "Dove Body Wash helps to clean, nourish, and soften skin."),
-("Klairs Supple Preparation Facial Toner", 300000, 1, 1, 1, "A toner for all skin types that helps balance the skin's pH and provides moisture."),
-("The Ordinary Niacinamide 10% + Zinc 1%", 250000, 1, 1, 1, "The skin essence helps to tighten pores, fade dark spots and control oil for the skin."),
-("Cerave Foaming Facial Cleanser", 250000, 1, 1, 1, "Cerave Foaming Facial Cleanser gently removes dirt and impurities from the skin, while adding ingredients to help moisturize the skin.") ;
+("Kerastase Hair Essence", 30, 2, 1, 1, "Kerastase Hair Essence helps to nourish hair, reduce breakage and repair damaged hair."),
+("Innisfree Powder", 10, 3, 1, 1, "Innisfree Powder has a smooth texture that covers skin imperfections well, making the skin look brighter and smoother."),
+("Laneige Cleanser", 20, 1, 1, 1, "Laneige Facial Cleanser helps to clear skin, tighten pores, and brighten skin."),
+("The Saem Concealer", 7, 3, 1, 1, "The Saem Concealer helps cover skin imperfections such as acne, dark spots, freckles,..."),
+("Neutrogena Moisturizing Cream", 25, 1, 1, 1, "Neutrogena Moisturizing Cream deeply hydrates the skin, making it softer and smoother."),
+("Pantene shampoo", 18, 2, 1, 1, "Pantene shampoo cleans hair, nourishes hair and makes hair stronger."),
+("Maybelline Mascara", 15, 3, 1, 1, "Maybelline Mascara thickens, curls, and makes them look longer."),
+("Lancome perfume", 55, 3, 1, 1, "Lancome perfume has a gentle, luxurious fragrance that makes you confident and seductive."),
+("Kiehl's Acne Serum", 30, 1, 1, 1, "Kiehl's Acne Serum helps clear up acne and helps prevent it from coming back."),
+("Dove Shower Gel", 15, 2, 1, 1, "Dove Body Wash helps to clean, nourish, and soften skin."),
+("Klairs Supple Preparation Facial Toner", 12, 1, 1, 1, "A toner for all skin types that helps balance the skin's pH and provides moisture."),
+("The Ordinary Niacinamide 10% + Zinc 1%", 12, 1, 1, 1, "The skin essence helps to tighten pores, fade dark spots and control oil for the skin."),
+("Cerave Foaming Facial Cleanser", 28, 1, 1, 1, "Cerave Foaming Facial Cleanser gently removes dirt and impurities from the skin, while adding ingredients to help moisturize the skin.") ;
 
 INSERT INTO image VALUES 
 ("https://cdn.chanhtuoi.com/uploads/2021/07/kem-duong-am-phuc-hoi-da-avene-cicalfate-repair-cream-40ml-1-1.jpg", 1),
 ("https://myphamtocnhapkhau.com/upload/products/2022-11-04-12-05-05/tinhdaukerastase100ml-1.jpg", 2),
 ("https://mint07.com/wp-content/uploads/2020/03/phan-phu-innisfree-dang-bot-no-sebum-mineral-powder1.jpg", 3),
 ("https://cdn.chanhtuoi.com/uploads/2020/05/sua-rua-mat-laneige-00.jpg", 4),
-("https://product.hstatic.net/1000296801/product/bang-mau-kem-che-khuyet-diem-the-saem_e1c1d5978b7c4c4abed1d586a5043281.jpg", 5),
+("https://product.hstatic.net/1000379579/product/61reyrdk8-l_001521a6db0f474f85852ae9c87170be_master.jpg", 5),
 ("https://bizweb.dktcdn.net/thumb/1024x1024/100/382/633/products/kem-duong-am-neutrogena-hydro-boost-water-gel-50g.jpg?v=1643008556300", 6),
 ("https://product.hstatic.net/200000067158/product/pantene-hair-fall-control-shampoo-pdp_f12810c2b18c4c8085c623be24e02a0c.jpg", 7),
-("https://www.maybelline.vn/~/media/mny/vi_vn/2%20eyes/mascara/1%20volum%20express%20the%20magnum%20mascara/maybelline-eyes-mascara-colossal-waterproof-mascara-black-primary3.jpg", 8),
+("https://product.hstatic.net/1000006063/product/114_c186ba72d893459a88bf79fdf41d06d8_1024x1024.jpg", 8),
 ("https://theperfume.vn/wp-content/uploads/2021/07/nuoc-hoa-lancome-2.jpg", 9),
 ("https://shopmebebau.com/image/cache/catalog/%20X%E1%BB%8AT%20KHU%20MUI%20NIVEA/T07.22/e93ca3ae-1000x1000.jpg", 10),
 ("https://u-shop.vn/images/thumbs/0012666_tang-khan-sua-tam-dove-duong-am-chuyen-sau-500g_510.png", 11),
-("https://bloganchoi.com/wp-content/uploads/2019/04/nuoc-hoa-hong.jpg", 12),
-("https://cdn.chiaki.vn/unsafe/0x800/left/top/smart/filters:quality(75)/https://chiaki.vn/upload/product/2023/01/serum-the-ordinary-niacinamide-10-zinc-1-chong-viem-63c4b06bd97d1-16012023090323.jpg", 13),
+("https://product.hstatic.net/200000312421/product/toner-klair_be0faf06fa5f40f39b9cbe1f17e63ba3_grande.jpg", 12),
+("https://cf.shopee.vn/file/7ba53df7faf7fa3bbb7138bf9da6c874", 13),
 ("https://bizweb.dktcdn.net/100/345/186/files/sua-rua-mat-cerave-foaming-3.jpg?v=1621325346102", 14);
 
 INSERT INTO admin VALUES (1); -- Huy is admin

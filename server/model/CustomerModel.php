@@ -1,7 +1,7 @@
 <?php
     $SQLservername = "localhost";
     $SQLusername = "root";
-    $SQLpassword = "";
+    $SQLpassword = "123456";
     $SQLdbname = "oliviashop";
 
     function loginModel($username, $password)

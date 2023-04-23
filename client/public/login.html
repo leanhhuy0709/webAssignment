@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang = "en">
-
+<html lang="en">
 <head>
     <!--Default-->
     <title>Olivia</title>
@@ -14,38 +13,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <!--Web Image-->
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
-    <!--CSS-->
-    <link rel="stylesheet" href="./css/home.css">
-    <link rel="stylesheet" href="./css/cart.css">
     <!--Javascript-->
     <script src="./js/controller.js"></script>
 </head>
-
 <body>
-    <div id="nav"></div>
-    <script>
-        getHTML("nav", "nav.html")
-    </script>
-    <h1>SHOPPING BAG</h1>
-    <div id="cart-products"></div>
-
-    <script>
-        getCart()
-    </script>
-
-    <select id="payment">
-        <option value="momo">Momo</option>
-        <option value="bank">Agribank</option>
-    </select>
-    <button onclick="handlePayment(document.getElementById('payment').value)">Payment</button>
-
-    <div id="cart-info"></div>
-
-    <div id="footer"></div>
-    <script>
-        getHTML("footer", "footer.html")
-    </script>  
+    <form id="login-form">
+        <input id="username" type="text" placeholder="Type your username"> 
+        <br><br>
+        <input id="password" type="password" placeholder="Type your password"> 
+        <br><br>
+        <button type="button" onclick="handleLogin()">Log in</button>
+    </form>
 </body>
-
 </html>
-
