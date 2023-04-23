@@ -1,13 +1,17 @@
 h1 {
     margin: 20px 40px;
 }
-#cart {
+#cart-products {
     display: flex; 
     flex-direction: column;
     margin-left: 40px;
     border: 1px solid black;
-    border-bottom: none;
     width: 50%;
+    height: auto;
+}
+
+#cart-products:last-child {
+    border-bottom: none;
 }
 
 .product {

@@ -38,7 +38,7 @@ function handleLogin()
     xhr.onload = function() {
         console.log(this.responseText);
         var response = JSON.parse(this.responseText);
-        createModal(response.message, res.result);
+        createModal(response.message);
         if (response.result)
         {
             var token = response.token;
@@ -246,23 +246,28 @@ function handleResponseCart(products) {
     const productDiv = document.getElementById("cart-products");
     productDiv.innerHTML = "";
     var result = "";
-    products.data.forEach((product)=>{
-        result += `
-            <div class="product">
-                <div class="img"><img src="${product.imageURL}" alt="product 1"></div>
-                <div class="info">
-                    <h5>${product.name}</h5>
-                    <div class="quantity-price">
-                        <button onclick="handleAddToCart(${product.productID})"><span>&#43;</span></button>
-                        <div class="quantity">${product.quantity}</div>
-                        <button onclick="handleDeleteToCart(${product.productID})"><span>&#8722;</span></button>
-                        <div>Price: ${product.price}</div>
-                        <div id="total">${product.total}</div>
+    if(products.total == 0){
+        productDiv.innerHTML = `<div class="cart-empty">Cart empty</div>`;
+    }
+    else{
+        products.data.forEach((product)=>{
+            result += `
+                <div class="product">
+                    <div class="img"><img src="${product.imageURL}" alt="product 1"></div>
+                    <div class="info">
+                        <h5>${product.name}</h5>
+                        <div class="quantity-price">
+                            <button onclick="handleAddToCart(${product.productID})"><span>&#43;</span></button>
+                            <div class="quantity">${product.quantity}</div>
+                            <button onclick="handleDeleteToCart(${product.productID})"><span>&#8722;</span></button>
+                            <div>Price: ${product.price}</div>
+                            <div id="total">${product.total}</div>
+                        </div>
                     </div>
-                </div>
-            </div>`;
-    })
-    productDiv.innerHTML = result;
+                </div>`;
+        })
+        productDiv.innerHTML = result;
+    }
 
     const infoDiv = document.getElementById("cart-info");
     infoDiv.innerHTML = `
