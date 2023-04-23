@@ -69,6 +69,19 @@ class AdminController {
         $res = updateProductModel($name, $price, $categoryID, $supplierID, $brandID, $description, $imageURL, $productID);
         return json_encode($res);
     }
+
+    public static function deleteUser()
+    {
+        $body = file_get_contents('php://input');
+        $data = json_decode($body, true);
+        $check = checkIsValid($data, ['token']);
+        if (!$check["result"])
+            return json_encode($check);
+        $cookie = new CookieController();
+        $userID = $cookie->decodeCookie($data['token']);
+        $res = deleteUserModel($userID);
+        return json_encode($res);
+    }
 }
 
 ?>

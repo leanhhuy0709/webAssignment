@@ -46,7 +46,7 @@ BEGIN
     -- Update total price to max orderID
     UPDATE `order` SET totalPrice = (@total + 22000) * (100 - couponPercent) / 100 - couponValue WHERE orderID = @maxOrderID;
     -- Update shippingAddress
-    SELECT address INTO @address FROM address WHERE customerID = cusID;
+    SELECT address INTO @address FROM customer WHERE customerID = cusID;
     UPDATE `order` SET shippingAddress = @address WHERE orderID = @maxOrderID;
     -- Update paymentMethod
     UPDATE `order` SET paymentMethod = paMethod WHERE orderID = @maxOrderID;
@@ -109,6 +109,17 @@ BEGIN
     INSERT INTO cartApplyCoupon VALUES (cpCode, cID);
 END //
 
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS DeleteUser;
+DELIMITER //
+CREATE PROCEDURE DeleteUser(IN cusID INT)
+BEGIN
+	DELETE FROM `order` WHERE customerID = cusID;
+	DELETE FROM productAddToCart WHERE cartID IN (SELECT cartID FROM cart WHERE customerID = cusID);
+	DELETE FROM `cart` WHERE customerID = cusID;
+	DELETE FROM `Customer` WHERE customerID = cusID;
+END //
 DELIMITER ;
 
 -- CALL ApplyCoupon("welcomef2", 1);

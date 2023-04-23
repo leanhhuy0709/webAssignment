@@ -114,4 +114,49 @@
             return $result;
         }
     }
+
+    function deleteUserModel($userID)
+    {
+        global $SQLservername, $SQLusername, $SQLpassword, $SQLdbname;
+        // Create connection
+        $conn = new mysqli($SQLservername, $SQLusername, $SQLpassword, $SQLdbname);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        //Check i isAdmin?
+        $stmt = $conn->prepare("SELECT * FROM admin WHERE adminId = ?");
+        $stmt->bind_param("i", $userID);
+        $stmt->execute();
+        $SQLresult = $stmt->get_result();
+        if ($SQLresult->num_rows > 0) {
+            while($row = $SQLresult->fetch_assoc()) {
+                $result = array(
+                    "result" => false,
+                    "message" => "Can't delete admin"
+                );
+                return $result;
+            }
+        }
+        $stmt = $conn->prepare("CALL DeleteUser(?);");
+        $stmt->bind_param("i", $userID);
+        try {
+            $stmt->execute();
+            $result = array(
+                "result" => true,
+                "message" => "Delete user successfully"
+            );
+        }
+        catch (Exception $e) {
+            $result = array(
+                "result" => false,
+                "message" => $e->getMessage()
+            );
+        }
+        finally {
+            $conn->close();
+            $stmt->close();
+            return $result;
+        }
+    }
 ?>

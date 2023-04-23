@@ -1,8 +1,7 @@
 DROP DATABASE IF EXISTS`oliviashop`;
+SET SQL_SAFE_UPDATES = 0;
 CREATE DATABASE IF NOT EXISTS `oliviashop` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 USE `oliviashop`;
-
-
 
 CREATE TABLE `customer` (
 	`customerID` int primary key AUTO_INCREMENT,
@@ -14,15 +13,9 @@ CREATE TABLE `customer` (
     `age` int,
     `email` varchar(255),
     `phoneNumber` varchar(255),
+    `address` varchar(255),
     `DOB` date,
     `imageURL` varchar(255)
-);
-
-CREATE TABLE `address` (
-    `address` varchar(255),
-	`customerID` int,
-    primary key (`customerID`, `address`),
-    foreign key (`customerID`) references `customer`(`customerID`)
 );
 
 CREATE TABLE `paymentMethod` (

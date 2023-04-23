@@ -27,7 +27,8 @@
                     $result = $row["customerID"];
                     $result = array(
                         "id" => $row["customerID"],
-                        "message" => "Login successfully"
+                        "message" => "Login successfully",
+                        "isAdmin" => false
                     );
                 }
             } 
@@ -43,7 +44,8 @@
                         $result = $row["customerID"];
                         $result = array(
                             "id" => $row["customerID"],
-                            "message" => "Login successfully"
+                            "message" => "Login successfully",
+                            "isAdmin" => false
                         );
                     }
                 }
@@ -51,15 +53,32 @@
                 {
                     $result = array(
                         "id" => -1,
-                        "message" => "Wrong username or password" 
+                        "message" => "Wrong username or password",
+                        "isAdmin" => false
                     );
+                }
+            }
+
+            if ($result["id"] != -1)
+            {
+                $result["isAdmin"] = false;
+                $stmt->close();
+                $stmt = $conn->prepare("SELECT * FROM admin WHERE adminId = ?");
+                $stmt->bind_param("i", $result["id"]);
+                $stmt->execute();
+                $SQLresult = $stmt->get_result();
+                if ($SQLresult->num_rows > 0) {
+                    while($row = $SQLresult->fetch_assoc()) {
+                        $result["isAdmin"] = true;
+                    }
                 }
             }
         }
         catch (Exception $e) {
             $result = array(
                 "id" => -1,
-                "message" => $e->getMessage()
+                "message" => $e->getMessage(),
+                "isAdmin" => false
             );
         }
         finally {
@@ -80,15 +99,10 @@
             die("Connection failed: " . $conn->connect_error);
         }
         // Prepare and bind the INSERT statement
-        $stmt = $conn->prepare("INSERT INTO customer(username, password, fname, lname, gender, age, email, phoneNumber, DOB, imageURL) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-        $stmt->bind_param("sssssisiss", $username, $password, $fname, $lname, $gender, $age, $email, $phone, $DOB, $imageURL);
+        $stmt = $conn->prepare("INSERT INTO customer(username, password, fname, lname, gender, age, email, phoneNumber, DOB, imageURL, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+        $stmt->bind_param("sssssisiss", $username, $password, $fname, $lname, $gender, $age, $email, $phone, $DOB, $imageURL, $address);
         $result = 1;
         try {
-            $stmt->execute();
-            $stmt->close();
-            //insert address
-            $stmt = $conn->prepare("INSERT INTO address(address, customerID) VALUES (?, (SELECT MAX(customerID) FROM Customer));");
-            $stmt->bind_param("s", $address);
             $stmt->execute();
             $stmt->close();
             //insert cart
@@ -407,7 +421,7 @@
             die("Connection failed: " . $conn->connect_error);
         }
         // Prepare and bind the INSERT statement
-        $stmt = $conn->prepare("SELECT username, fname, lname, gender, age, DOB, email, phoneNumber, imageURL 
+        $stmt = $conn->prepare("SELECT username, fname, lname, gender, age, DOB, email, phoneNumber, imageURL, address 
                         FROM customer 
                         WHERE customer.customerID = ?;");
         $stmt->bind_param("i", $userID);
@@ -421,21 +435,6 @@
                 }
             }
             $result = $result[0];
-            $stmt->close();
-            //get address
-            $stmt = $conn->prepare("SELECT address.address
-                            FROM address 
-                            WHERE address.customerID = ?;");
-            $stmt->bind_param("i", $userID);
-            $stmt->execute();
-            $SQLresult = $stmt->get_result();
-            $address = array();
-            if ($SQLresult->num_rows > 0) {
-                while($row = $SQLresult->fetch_assoc()) {
-                    $address[] = $row["address"];
-                }
-            }
-            $result["address"] = $address;
             $result = array(
                 "result" => true,
                 "message" => "Get user info successfully",
@@ -638,7 +637,7 @@
             $stmt->execute();
             $result = array(
                 "result" => true,
-                "message" => "Get cart id successfully"
+                "message" => "Payment successfully"
             );
         }
         catch (Exception $e) {
@@ -704,6 +703,14 @@
                 }
             }
             $result["review"] = $reviewResult;
+            $result["averageStar"] = 0;
+            for($i = 0; $i < count($reviewResult); $i++)
+            {
+                $result["averageStar"] += $reviewResult[$i]["rating"];
+            }
+            if (count($reviewResult) == 0) $result["averageStar"] = 2.5; 
+            else $result["averageStar"] /= count($reviewResult);
+            $result["numComment"] = count($reviewResult);
             $result = array(
                 "result" => true,
                 "message" => "Get product detail successfully",

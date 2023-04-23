@@ -100,5 +100,10 @@ else if ($_SERVER['REQUEST_URI'] === '/admin/product/update')
     $admin = new AdminController();
     echo $admin->updateProduct();
 }
+else if ($_SERVER['REQUEST_URI'] === '/admin/user/delete')
+{
+    $admin = new AdminController();
+    echo $admin->deleteUser();
+}
 else echo $tmp;
 ?>

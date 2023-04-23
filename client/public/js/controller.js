@@ -80,7 +80,8 @@ function handleSignUp() {
         gender: document.querySelector('input[name="gender"]:checked').value,
         age: form.querySelector("#age").value,
         DOB: form.querySelector("#DOB").value,
-        imageURL: form.querySelector("#imageURL").value
+        imageURL: form.querySelector("#imageURL").value,
+        address: form.querySelector("#address").value
     });
     xhr.send(data);
 }
@@ -94,10 +95,11 @@ function handleResponseUser(response, isEdit = false) {
             <div class="card mb-4">
                 <div class="card-body text-center">
                     <img src="${response.imageURL}" alt="avatar"
-                    class="rounded-circle img-fluid" style="width: 150px;">
+                    class="rounded-circle img-fluid" style="width: 150px;"
+                    onerror="this.onerror=null; this.src='https://static.vecteezy.com/system/resources/previews/008/442/086/original/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg';">
                     <h5 class="my-3">${response.fname + " " + response.lname}</h5>
                     <p class="text-muted mb-1">${response.username}</p>
-                    <p class="text-muted mb-4">${response.address[0]}</p>
+                    <p class="text-muted mb-4">${response.address}</p>
                     <div class="d-flex justify-content-center mb-2">
                         <button type="button" class="btn m-1 btn-brand-color" onclick="editUserProfile()">Edit</button>
                         <button type="button" class="btn m-1 btn-brand-color" onclick="${isEdit?"handleUpdateUser()":"createModal('You have to press edit before updating!', false)"}">Update</button>
@@ -131,7 +133,7 @@ function handleResponseUser(response, isEdit = false) {
                     </div><hr>
                     <div class="row">
                         <div class="col-sm-3"><p class="mb-0">Address</p></div>
-                        <div class="col-sm-9"><p class="text-muted mb-0">${isEdit?'<input id="address" class="input w-100" value="' + response.address[0] + '">':response.address[0]}</p></div>
+                        <div class="col-sm-9"><p class="text-muted mb-0">${isEdit?'<input id="address" class="input w-100" value="' + response.address + '">':response.address}</p></div>
                     </div><hr>
                     <div class="row">
                         <div class="col-sm-3"><p class="mb-0">ImageURL</p></div>
@@ -249,7 +251,8 @@ function handleResponseCart(products) {
     products.data.forEach((product)=>{
         result += `
             <div class="product">
-                <div class="img"><img src="${product.imageURL}" alt="product 1"></div>
+                <div class="img"><img src="${product.imageURL}" alt="product 1"
+                onerror="this.onerror=null; this.src='https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg';"></div>
                 <div class="info">
                     <h5>${product.name}</h5>
                     <div class="quantity-price">
@@ -572,7 +575,7 @@ function handleResponseOrderDetail(order) {
     order.products.forEach((product)=>{
         result += `
             <div class="card m-3" style="width: 18rem;">
-                <img src="${product.imageURL}" class="card-img-top" alt="product 1">
+                <img src="${product.imageURL}" class="card-img-top" alt="product 1" onerror="this.onerror=null; this.src='https://media.istockphoto.com/id/1216251206/vector/no-image-available-icon.jpg?s=170667a&w=0&k=20&c=N-XIIeLlhUpm2ZO2uGls-pcVsZ2FTwTxZepwZe4DuE4=';">
                 <div class="card-body">
                     <h5 class="card-title">${product.name}</h5>
                     <p class="card-text">${product.description}</p>
@@ -721,16 +724,15 @@ function showProductDetail(res) {
         <div class="container">
             <div class="row">
                 <div class="col-6">
-                    <img src="${res.imageURL[0]}" alt="" style="width: 100%;">
+                    <img src="${res.imageURL[0]}" alt="" style="width: 100%;" onerror="this.onerror=null; this.src='https://media.istockphoto.com/id/1216251206/vector/no-image-available-icon.jpg?s=170667a&w=0&k=20&c=N-XIIeLlhUpm2ZO2uGls-pcVsZ2FTwTxZepwZe4DuE4=';">
                 </div>
                 <div class="col-6 product-info">
                     <h1>${res.name}</h1>
-                    <p style=“--percent: calc(1);”>4.3<meter class="average-rating" min="0" max="5"></meter></p>
                     <!-- Cho gia tri sao trung binh nhu vi du duoi day-->
-                    <!-- <p>${res.averageStar}<meter class="average-rating" min="0" max="5"></meter></p>-->
+                    <p>${res.averageStar}<meter class="average-rating" min="0" max="5"></meter></p>
                     <h3>${res.price} đồng</h3>
-                    <button class="btn btn-primary buy-now" onclick="buyNow(${res.productID})">Buy now</button>
-                    <button class="btn btn-primary" onclick="handleAddToCart(${res.productID})">Add to cart</button>
+                    <button type="button" class="btn btn-primary buy-now" onclick="buyNow(${res.productID})">Buy now</button>
+                    <button type="button" class="btn btn-primary" onclick="handleAddToCart(${res.productID})">Add to cart</button>
                     <a class="btn btn-primary" href="./admin-updateproduct.html?productID=${res.productID}">Edit</a>
                 </div>
             </div>
@@ -745,7 +747,7 @@ function showProductDetail(res) {
     const styleTag = document.createElement("style");
     styleTag.innerHTML = `
         :root {
-            --percent: calc(4.3/5*100%);
+            --percent: calc(${res.averageStar}/5*100%);
         }
         `;
         // --percent: calc([gia tri sao trung binh]/5*100%);
@@ -756,18 +758,21 @@ function showProductDetail(res) {
             <div id="comment-block" class="container">
                 <div class="row">
                     <div class="col-2">
-                        <img src="${res.review[i].imageURL}" alt="No Image">
+                        <img src="${res.review[i].imageURL}" alt="No Image" onerror="this.onerror=null; this.src='https://static.vecteezy.com/system/resources/previews/008/442/086/original/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg';">
                     </div>
                     <div class="col-2 name">
                         <h3>${res.review[i].fname + " " + res.review[i].lname}</h3>
                         <p>${res.review[i].rating} star</p>
                     </div>
-                    <div class="col-8">
+                    <div class="col-6">
                         <div class="detail">
                             <h3>${res.review[i].title}</h3>
                             <p>${res.review[i].text}</p>
                             <p>${res.review[i].reviewDate}</p>
                         </div>
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-brand-color">Delete</button>
                     </div>
                 </div>
             </div>
@@ -854,19 +859,69 @@ function showUserList(users)
 {
     const userListDiv = document.getElementById("user-list");
     userListDiv.innerHTML = "";
+    var result = `
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Image</th>
+                <th scope="col">Username</th>
+                <th scope="col">Last name</th>
+                <th scope="col">First name</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone number</th>
+                <th scope="col">Date of birth</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>`;
+    console.log(users[0]);
     users.forEach(user => {
-        userListDiv.innerHTML += `
-            <div class="user">
-                <div class="user-info">
-                    <img src="${user.imageURL}" alt="No Image">
-                    <h3>${user.fname + " " + user.lname}</h3>
-                    <p>${user.email}</p>
-                </div>
-            </div>
+        result += `
+        <tr>
+            <th scope="row">${user.customerID}</th>
+            <td><img class="rounded-circle" src="${user.imageURL}" width="50px" height="50px" onerror="this.onerror=null; this.src='https://static.vecteezy.com/system/resources/previews/008/442/086/original/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg';"></td>
+            <td>${user.username}</td>
+            <td>${user.lname}</td>
+            <td>${user.fname}</td>
+            <td>${user.gender}</td>
+            <td>${user.email}</td>
+            <td>${user.phoneNumber}</td>
+            <td>${user.DOB}</td>
+            <td><button class="btn btn-brand-color" onclick="handleDeleteUser()">Delete</button></td>
+        </tr>
         `;
     });
+    result += `
+            </tbody>
+        </table>
+    </div>`;
+    userListDiv.innerHTML = result;
 
-}  
+} 
+
+function handleDeleteUser(userID)
+{
+    var xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+        //console.log(this.responseText);
+        if(!JSON.parse(this.responseText).result) {
+            createModal(JSON.parse(this.responseText).message);
+        }   
+        else {
+            createModal("Delete user successfully");
+            getUserList();
+        }   
+    }
+    xhttp.open("POST", "http://localhost/admin/user/delete", true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify({
+        "token": getCookieValueByName('token'),
+        "userID": userID
+    }));
+}
 
 function handleUpdateProduct()
 {

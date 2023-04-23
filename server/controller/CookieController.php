@@ -3,7 +3,6 @@ require_once('model/CustomerModel.php');
 class CookieController {
     public static function decodeCookie($cookie)
     {
-
         $magicNum = (int) $cookie;
         $key = "my_secret_key"; // Khóa bí mật
 
@@ -16,9 +15,7 @@ class CookieController {
         $magicNum = $magicNum + 1000 + strlen($key);
 
         return strval($magicNum);
-    }
-
-    
+    }    
 }
 
 

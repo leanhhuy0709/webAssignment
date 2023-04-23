@@ -83,3 +83,5 @@ FROM cart
 JOIN cartApplyCoupon ON cart.cartID = cartApplyCoupon.cartID
 JOIN Coupon ON cartApplyCoupon.couponCode = Coupon.couponCode
 WHERE cart.cartID = ?;
+
+

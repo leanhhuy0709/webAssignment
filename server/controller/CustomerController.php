@@ -29,14 +29,15 @@ class CustomerController {
         $password = $data['password'];
         //Token nó vì không lưu tk, mk trong database!!!
         $res = loginModel($username, $password); // Trả về id người dùng
-        $result = array("message" => $res["message"], "result" => $res["id"] != -1);
+        $result = array("message" => $res["message"], "result" => $res["id"] != -1, "isAdmin" => $res["isAdmin"]);
         if ($res["id"] != -1)
         {
             $key = "my_secret_key"; // Khóa bí mật
 
             // Thông tin payload để mã hóa vào token
             $payload = array(
-                "id" => $res["id"]
+                "id" => $res["id"],
+                "isAdmin" => $res["isAdmin"]
             );
 
             $cookie = new CookieController();
@@ -67,8 +68,7 @@ class CustomerController {
         $phone = $data['phone'];
         $DOB = $data['DOB'];
         $imageURL = $data['imageURL'];
-        //$address = $data['address'];
-        $address = "None";
+        $address = $data['address'];
         //Token nó vì không lưu tk, mk trong database!!!
         $res = signupModel($username, $password, $fname, $lname, $gender, $age, $email, $phone, $DOB, $imageURL, $address); // Trả về id người dùng
 
@@ -269,5 +269,6 @@ class CustomerController {
         $res = cartApplyCouponModel($userID, $couponCode);
         return json_encode($res);
     }
+
 }
 ?>
