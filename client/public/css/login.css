@@ -1,0 +1,139 @@
+:root {
+    --dark-blue: #00264d;
+}
+*{
+    box-sizing: border-box;
+}
+body{
+    padding: 0;
+    margin: 0;
+    font-family:Arial, Helvetica, sans-serif;
+}
+h1{
+    color: var(--dark-blue);
+    font-size: 2.5em;
+    margin: 0;
+}
+.container{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    margin-top: 50px;
+}
+.create {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 3px solid rgba(0,38,77,0.5);
+    padding-left: 300px;
+}
+
+
+.create .header p{
+    font-size: 1.1em;
+    height: auto;
+    width: 350px;
+    margin: 0;
+}
+
+.create .header {
+    margin-bottom: 40px;
+    margin-top: 0;
+}
+.form, .other-options{
+    width: 380px;
+}
+input[type='text'],input[type='password']{
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    height: 50px;
+    width: 100%;
+    font-size: 15px;
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+label{
+    color: var(--dark-blue);
+    font-size: 1.1em;
+}
+.line-container{
+    margin: 30px 0;
+}
+.line {
+    width: 380px;
+    height: 45px;
+    position: relative;
+}
+.line::after, .line::before {
+    content: '';
+    position: absolute;
+    margin: auto;
+    height: 2px;
+    background: lightgray;
+    width: 45%;
+    top: 45%;
+}
+.line::after{
+    left: 0;
+}
+.line::before{
+    right: 0;
+}
+.center {
+    height: 30px;
+    width: 30px;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    padding-top: 10px;
+    text-align: center;
+    color: lightgray;
+}
+.btn {
+    width: 100%;
+    padding: 12px;
+    color: var(--dark-blue);
+    border: 2px solid var(--dark-blue);
+    border-radius: 20px;
+    margin: 0 0 20px 0;
+    display: inline-block;
+    font-size: 17px;
+    line-height: 20px;
+    text-align: center;
+    text-decoration: none;
+}  
+.dark-blue {
+    height: 50px;
+    margin: 30px 0 0 0;
+    border-radius: 20px;
+    font-size: 17px;
+    color: white;
+    background-color: var(--dark-blue);
+}
+.login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 100px;
+}
+
+
+.login .header{
+    margin-bottom: 50px;
+}
+
+.pass {
+    margin-top: 20px;
+}
+#name::placeholder {
+    color: var(--dark-blue);
+    font-weight: bold;
+}
+.forget-pass{
+    text-align: center;
+    text-decoration: none;
+    color: gray;
+    margin: 30px 0 120px 0;
+}
