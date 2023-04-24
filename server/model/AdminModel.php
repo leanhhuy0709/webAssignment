@@ -1,7 +1,7 @@
 <?php
     $SQLservername = "localhost";
     $SQLusername = "root";
-    $SQLpassword = "123456";
+    $SQLpassword = "";
     $SQLdbname = "oliviashop";
 
     function getUserListModel()

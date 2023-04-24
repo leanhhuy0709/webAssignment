@@ -311,8 +311,14 @@ function handleAddToCart(id) {
 }
 
 function buyNow(pID) {
-    handleAddToCart(pID);
-    window.location.pathname = "/cart.html";
+    const addToCartPromise = new Promise((resolve, reject) => {
+        handleAddToCart(pID);
+        resolve();
+    });
+
+    addToCartPromise.then(() => {
+        window.location.pathname = "/cart.html";
+    });
 }
 
 function handleLogout() {
