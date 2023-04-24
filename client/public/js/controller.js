@@ -137,7 +137,7 @@ function handleResponseUser(response, isEdit = false) {
                     </div><hr>
                     <div class="row">
                         <div class="col-sm-3"><p class="mb-0">Address</p></div>
-                        <div class="col-sm-9"><p class="text-muted mb-0">${isEdit?'<input id="address" class="input w-100" value="' + response.address + '">':response.address}</p></div>
+                        <div class="col-sm-9"><p class="text-muted mb-0">${isEdit ? '<input id="address" class="input w-100" value="' + response.address + '">' : response.address}</p></div>
                     </div><hr>
                     <div class="row">
                         <div class="col-sm-3"><p class="mb-0">ImageURL</p></div>
@@ -421,12 +421,12 @@ function showProducts(products, page = 1) {
             <div class="card" style="width: 30%; margin: 0 3% 3% 0">
                 <img src="${product.imageURL}" class="card-img-top" onerror="this.onerror=null; this.src='https://media.istockphoto.com/id/1216251206/vector/no-image-available-icon.jpg?s=170667a&w=0&k=20&c=N-XIIeLlhUpm2ZO2uGls-pcVsZ2FTwTxZepwZe4DuE4=';">
                 <div class="card-body" style="height:25%">
-                    <h5 class="card-title" style="text-align:center;">${product.name}</h5>
-                    <p class="card-text" style="text-align:center; font-weight: bold">Price: $${product.price}</p>
+                    <h5 class="card-title" style="text-align:center; font-size:2vw;" id="productcart-name">${product.name}</h5>
+                    <p class="card-text" style="text-align:center; font-weight: bold; font-size:2vw;">Price: $${product.price}</p>
                 </div>
                 <div class="card-footer" style="text-align:center;"> 
-                    <a href="./product-detail.html?productID=${product.productID}" class="btn btn-primary">Detail</a>   
-                    <button onclick="handleAddToCart(${product.productID})" class="btn btn-danger">Add to cart</button>
+                    <a href="./product-detail.html?productID=${product.productID}" class="btn btn-dark" style="text-align:center; font-size:2vw; width: 100%; border-radius: 10px">Detail</a>
+                    <button onclick="handleAddToCart(${product.productID})" class="btn btn-danger" style="text-align:center; font-size:2vw; width: 100%; margin-top: 3%; border-radius: 10px">Add to cart</button>
                 </div>
             </div>`;
     })
@@ -899,20 +899,19 @@ function showUserList(users) {
     </div>`;
     userListDiv.innerHTML = result;
 
-} 
+}
 
-function handleDeleteUser(userID)
-{
+function handleDeleteUser(userID) {
     var xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
+    xhttp.onload = function () {
         //console.log(this.responseText);
-        if(!JSON.parse(this.responseText).result) {
+        if (!JSON.parse(this.responseText).result) {
             createModal(JSON.parse(this.responseText).message);
-        }   
+        }
         else {
             createModal("Delete user successfully");
             getUserList();
-        }   
+        }
     }
     xhttp.open("POST", "http://localhost/admin/user/delete", true);
     xhttp.setRequestHeader("Content-type", "application/json");
