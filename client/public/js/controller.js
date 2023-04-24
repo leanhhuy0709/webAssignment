@@ -251,7 +251,7 @@ function handleResponseCart(products) {
     var result = "";
 
     if (products.total == 0) {
-        productDiv.innerHTML = `<div class="cart-empty">Cart empty</div>`;
+        productDiv.innerHTML = `<h4 id="cart-empty">Your cart is empty.</h4>`;
     }
     else {
         products.data.forEach((product) => {
@@ -275,15 +275,41 @@ function handleResponseCart(products) {
 
     const infoDiv = document.getElementById("cart-info");
     infoDiv.innerHTML = `
-    <p>couponName: ${products.couponName} </p>
-    <p>couponPercent: ${products.couponPercent} %</p>
-    <p>couponValue: ${products.couponValue}</p>
-    <p>total: ${products.total}</p>
-    <p>shippingCost: ${products.shippingCost}</p>
-    <p>totalWithShipping: ${products.totalWithShipping}</p>
-    <p>totalWithShippingAndCoupon: ${products.totalWithShippingAndCoupon}</p>
-    <p>Coupon: <input id="coupon"></p>
-    <button onclick="handleApplyCoupon()">Apply</button>
+        <h2>ORDER SUMMARY</h2>
+        <div class="sub-info">
+            <div class="name-info">Subtotal:</div>
+            <div class="price-info">$${products.total}</div>
+        </div>
+        <div class="sub-info">
+            <div class="name-info">Delivery:</div>
+            <div class="price-info">$${products.shippingCost}</div>
+        </div>
+        <div class="coupon-input">
+            <input id="coupon" placeholder="Enter your coupon">
+            <button onclick="handleApplyCoupon()">APPLY</button>
+        </div>
+        <div class="sub-info">
+            <div class="name-info">Coupon name:</div>
+            <div class="price-info">${products.couponName}</div>
+        </div>
+        <div class="sub-info">
+            <div class="name-info">Discount percent:</div>
+            <div class="price-info">-${products.couponPercent}%</div>
+        </div>
+        <div class="sub-info">
+            <div class="name-info">Coupon value:</div>
+            <div class="price-info">$${products.couponValue}</div>
+        </div>
+        <!--Ko can thiet phai de len
+        <div class="sub-info">
+            <div class="name-info">TotalWithShipping:</div>
+            <div class="price-info">$${products.totalWithShipping}</div>
+        </div>
+        -->
+        <div class="sub-info">
+            <div class="name-info">Total:</div>
+            <div class="price-info">$${products.totalWithShippingAndCoupon}</div>
+        </div>
     `;
 }
 
@@ -311,8 +337,14 @@ function handleAddToCart(id) {
 }
 
 function buyNow(pID) {
-    handleAddToCart(pID);
-    window.location.pathname = "/cart.html";
+    const addToCartPromise = new Promise((resolve, reject) => {
+        handleAddToCart(pID);
+        resolve();
+    });
+
+    addToCartPromise.then(() => {
+        window.location.pathname = "/cart.html";
+    });
 }
 
 function handleLogout() {
@@ -727,7 +759,6 @@ function showProductDetail(res) {
                 </div>
                 <div class="col-6 product-info">
                     <h1>${res.name}</h1>
-                    <!-- Cho gia tri sao trung binh nhu vi du duoi day-->
                     <p>${res.averageStar}<meter class="average-rating" min="0" max="5"></meter></p>
                     <h3>Price: $${res.price}</h3>
                     <button type="button" class="btn btn-primary buy-now" onclick="buyNow(${res.productID})">Buy now</button>
@@ -749,7 +780,6 @@ function showProductDetail(res) {
             --percent: calc(${res.averageStar}/5*100%);
         }
         `;
-    // --percent: calc([gia tri sao trung binh]/5*100%);
     headTag.appendChild(styleTag);
     for (var i = 0; i < res.review.length; i++) {
         //comment
