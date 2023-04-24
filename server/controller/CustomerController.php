@@ -74,11 +74,6 @@ class CustomerController {
 
         return json_encode($res);
     }
-    public static function logout()
-    {
-        setcookie('token', '', time() + 30*24*60*60);
-        return json_encode(array("message" => "Logout successfully"));
-    }
     
     public static function getProductsByCategoryAndSearch()
     {
@@ -190,7 +185,8 @@ class CustomerController {
         $userID = $cookie->decodeCookie($data['token']);
         $res = getOrdersModel($userID);
         return json_encode($res);
-    }
+    }//login, signup, getProductsByCategoryAndSearch, getCart, addProductToCart, deleteProductToCart, getUserInfo, 
+    //updateUserInfo, getOrders, getOrderDetail, payment, getProductDetail, comment, cartApplyCoupon
     public static function getOrderDetail() {
         $body = file_get_contents('php://input');
         $data = json_decode($body, true);
