@@ -1,13 +1,10 @@
 
 function getHTML(id, file) {
-    if(file == "nav.html")
-    {
-        if (localStorage.getItem("isAdmin") === 'true')
-        {
+    if (file == "nav.html") {
+        if (localStorage.getItem("isAdmin") === 'true') {
 
         }
-        else 
-        {
+        else {
             file = "nav-not-admin.html";
         }
     }
@@ -512,7 +509,7 @@ function handleResponseOrder(orders) {
                 <p class="card-text">Order Date: ${order.orderDate}</p>
                 <p class="card-text">Shipping Date: ${order.shippingDate}</p>
                 <p class="card-text">Complete Date: ${order.completeDate ? order.completeDate : "None"}</p>
-                <p class="card-text">Total Price: ${order.totalPrice}</p>
+                <p class="card-text">Total Price: $${order.totalPrice}</p>
                 <p class="card-text">Shipping Address: ${order.shippingAddress}</p>
                 <p class="card-text">Payment Method: ${order.paymentMethod}</p>
                 <p class="card-text">Order Status: ${order.orderStatus}</p>
@@ -568,7 +565,7 @@ function handleResponseOrderDetail(order) {
                 <p class="card-text">Order Date: ${order.orderDate}</p>
                 <p class="card-text">Shipping Date: ${order.shippingDate}</p>
                 <p class="card-text">Complete Date: ${order.completeDate ? order.completeDate : "None"}</p>
-                <p class="card-text">Total Price: ${order.totalPrice}</p>
+                <p class="card-text">Total Price: $${order.totalPrice}</p>
                 <p class="card-text">Shipping Address: ${order.shippingAddress}</p>
                 <p class="card-text">Payment Method: ${order.paymentMethod}</p>
                 <p class="card-text">Order Status: ${order.orderStatus}</p>
@@ -582,10 +579,9 @@ function handleResponseOrderDetail(order) {
                 <img src="${product.imageURL}" class="card-img-top" alt="product 1" onerror="this.onerror=null; this.src='https://media.istockphoto.com/id/1216251206/vector/no-image-available-icon.jpg?s=170667a&w=0&k=20&c=N-XIIeLlhUpm2ZO2uGls-pcVsZ2FTwTxZepwZe4DuE4=';">
                 <div class="card-body">
                     <h5 class="card-title">${product.name}</h5>
-                    <p class="card-text">${product.description}</p>
-                    <p class="card-text">Price: ${product.price}</p>
+                    <p class="card-text">Price: $${product.price}</p>
                     <p class="card-text">Quantity: ${product.quantity}</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <a href="#" class="btn btn-primary">Detail</a>
                 </div>
             </div>`;
     })
@@ -733,10 +729,10 @@ function showProductDetail(res) {
                     <h1>${res.name}</h1>
                     <!-- Cho gia tri sao trung binh nhu vi du duoi day-->
                     <p>${res.averageStar}<meter class="average-rating" min="0" max="5"></meter></p>
-                    <h3>${res.price} đồng</h3>
+                    <h3>Price: $${res.price}</h3>
                     <button type="button" class="btn btn-primary buy-now" onclick="buyNow(${res.productID})">Buy now</button>
                     <button type="button" class="btn btn-primary" onclick="handleAddToCart(${res.productID})">Add to cart</button>
-                    <a class="btn btn-primary" href="./admin-updateproduct.html?productID=${res.productID}"${localStorage.getItem("isAdmin")==="true"?"":" style='display:None;'"}>Edit</a>
+                    <a class="btn btn-primary" href="./admin-updateproduct.html?productID=${res.productID}"${localStorage.getItem("isAdmin") === "true" ? "" : " style='display:None;'"}>Edit</a>
                 </div>
             </div>
             <div class="description">
@@ -775,7 +771,7 @@ function showProductDetail(res) {
                         </div>
                     </div>
                     <div class="col-2">
-                        <button class="btn btn-brand-color" onclick="handleDeleteComment(${res.review[i].reviewID})"${localStorage.getItem("isAdmin")==="true"?"":" style='display:None;'"}>Delete</button>
+                        <button class="btn btn-brand-color" onclick="handleDeleteComment(${res.review[i].reviewID})"${localStorage.getItem("isAdmin") === "true" ? "" : " style='display:None;'"}>Delete</button>
                     </div>
                 </div>
             </div>
@@ -1000,18 +996,17 @@ function handleApplyCoupon() {
     xhttp.send(data);
 }
 
-function handleDeleteComment(reviewID)
-{
+function handleDeleteComment(reviewID) {
     var xhttp = new XMLHttpRequest();
-    xhttp.onload = function() {
+    xhttp.onload = function () {
         console.log(this.responseText);
-        if(!JSON.parse(this.responseText).result) {
+        if (!JSON.parse(this.responseText).result) {
             createModal(JSON.parse(this.responseText).message);
-        }   
+        }
         else {
             createModal("Delete comment successfully");
             getProductDetail();
-        }   
+        }
     }
     xhttp.open("POST", "http://localhost/admin/review/delete", true);
     xhttp.setRequestHeader("Content-type", "application/json");

@@ -238,12 +238,12 @@
             $result = array(
                 "data" => $result,
                 "total" => $total,
-                "shippingCost" => 22000,
-                "totalWithShipping" => $total + 22000,
+                "shippingCost" => 5,
+                "totalWithShipping" => $total + 5,
                 "couponName" => $couponName,
                 "couponPercent" => $couponPercent,
                 "couponValue" => $couponValue,
-                "totalWithShippingAndCoupon" => ($total + 22000) * (100 - $couponPercent) / 100 - $couponValue
+                "totalWithShippingAndCoupon" => ($total + 5) * (100 - $couponPercent) / 100 - $couponValue
             );
             $result = array(
                 "result" => true,

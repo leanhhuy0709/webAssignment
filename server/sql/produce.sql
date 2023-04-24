@@ -44,7 +44,7 @@ BEGIN
         
     SELECT MAX(orderID) FROM `order` INTO @maxOrderID;
     -- Update total price to max orderID
-    UPDATE `order` SET totalPrice = (@total + 22000) * (100 - couponPercent) / 100 - couponValue WHERE orderID = @maxOrderID;
+    UPDATE `order` SET totalPrice = (@total + 5) * (100 - couponPercent) / 100 - couponValue WHERE orderID = @maxOrderID;
     -- Update shippingAddress
     SELECT address INTO @address FROM customer WHERE customerID = cusID;
     UPDATE `order` SET shippingAddress = @address WHERE orderID = @maxOrderID;
