@@ -133,7 +133,7 @@
             while($row = $SQLresult->fetch_assoc()) {
                 $result = array(
                     "result" => false,
-                    "message" => "Can't delete admin"
+                    "message" => "You can't delete admin"
                 );
                 return $result;
             }
@@ -145,6 +145,37 @@
             $result = array(
                 "result" => true,
                 "message" => "Delete user successfully"
+            );
+        }
+        catch (Exception $e) {
+            $result = array(
+                "result" => false,
+                "message" => $e->getMessage()
+            );
+        }
+        finally {
+            $conn->close();
+            $stmt->close();
+            return $result;
+        }
+    }
+
+    function deleteCommentModel($reviewID)
+    {
+        global $SQLservername, $SQLusername, $SQLpassword, $SQLdbname;
+        // Create connection
+        $conn = new mysqli($SQLservername, $SQLusername, $SQLpassword, $SQLdbname);
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        $stmt = $conn->prepare("DELETE FROM review WHERE reviewID = ?");
+        $stmt->bind_param("i", $reviewID);
+        try {
+            $stmt->execute();
+            $result = array(
+                "result" => true,
+                "message" => "Delete comment successfully"
             );
         }
         catch (Exception $e) {

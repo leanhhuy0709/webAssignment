@@ -2,23 +2,27 @@
 require_once('model/AdminModel.php');
 require_once('controller/CookieController.php');
 require_once('controller/CustomerController.php');
+
+function isAdmin($token)
+{
+    $cookie = new CookieController();
+    return $cookie->decodeCookieIsAdmin($token);
+}
 class AdminController {
-    public static function isAdmin()
-    {
-        $cookie = new CookieController();
-        $body = file_get_contents('php://input');
-        $data = json_decode($body, true);
-        $userID = $cookie->decodeCookie($data['token']);
-    }
     public static function getUserList()
     {
         $body = file_get_contents('php://input');
         $data = json_decode($body, true);
 
-        $cookie = new CookieController();
-        //$userID = $cookie->decodeCookie($data['token']);
-        // tạm thời cho mọi người đều xem được danh sách user
+        $tmp = checkIsValid($data, ['token']);
+        if (!$tmp["result"])
+            return $tmp; 
 
+        if (!isAdmin($data['token']))
+            return json_encode(array(
+                "result" => false,
+                "message" => "You are not admin"
+            ));
 
         $res = getUserListModel();
         return json_encode($res);
@@ -29,12 +33,15 @@ class AdminController {
         $body = file_get_contents('php://input');
         $data = json_decode($body, true);
 
-        $tmp = checkIsValid($data, ['name', 'price', 'categoryID', 'description', 'imageURL']);
+        $tmp = checkIsValid($data, ['name', 'price', 'categoryID', 'description', 'imageURL', 'token']);
         if (!$tmp["result"])
             return $tmp; 
 
-        $cookie = new CookieController();
-        $userID = $cookie->decodeCookie($data['token']);
+        if (!isAdmin($data['token']))
+            return json_encode(array(
+                "result" => false,
+                "message" => "You are not admin"
+            ));
 
         $name = $data['name'];
         $price = $data['price'];
@@ -54,8 +61,15 @@ class AdminController {
         $body = file_get_contents('php://input');
         $data = json_decode($body, true);
 
-        $cookie = new CookieController();
-        $userID = $cookie->decodeCookie($data['token']);
+        $tmp = checkIsValid($data, ['name', 'price', 'categoryID', 'description', 'imageURL', 'token']);
+        if (!$tmp["result"])
+            return $tmp;
+
+        if (!isAdmin($data['token']))
+            return json_encode(array(
+                "result" => false,
+                "message" => "You are not admin"
+            ));
 
         $productID = $data['productID'];
         $name = $data['name'];
@@ -74,12 +88,33 @@ class AdminController {
     {
         $body = file_get_contents('php://input');
         $data = json_decode($body, true);
-        $check = checkIsValid($data, ['token']);
+        $check = checkIsValid($data, ['token', 'userID']);
         if (!$check["result"])
             return json_encode($check);
         $cookie = new CookieController();
         $userID = $cookie->decodeCookie($data['token']);
-        $res = deleteUserModel($userID);
+
+        $userIDIsDelete = $data['userID'];
+        $res = deleteUserModel($userIDIsDelete);
+        return json_encode($res);
+    }
+
+    public static function deleteComment()
+    {
+        $body = file_get_contents('php://input');
+        $data = json_decode($body, true);
+        $check = checkIsValid($data, ['token', 'commentID']);
+        if (!$check["result"])
+            return json_encode($check);
+        
+        if (!isAdmin($data['token']))
+            return json_encode(array(
+                "result" => false,
+                "message" => "You are not admin"
+            ));
+
+        $commentID = $data['commentID'];
+        $res = deleteCommentModel($commentID);
         return json_encode($res);
     }
 }

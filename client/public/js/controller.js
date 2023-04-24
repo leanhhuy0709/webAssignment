@@ -1,5 +1,16 @@
 
 function getHTML(id, file) {
+    if(file == "nav.html")
+    {
+        if (localStorage.getItem("isAdmin") === 'true')
+        {
+
+        }
+        else 
+        {
+            file = "nav-not-admin.html";
+        }
+    }
     //get tag by id
     const tag = document.getElementById(id);
     //load nav.html to nav
@@ -38,6 +49,7 @@ function handleLogin() {
             time.setTime(time.getTime() + (1 * 60 * 60 * 1000));   // 1 hour
             document.cookie = "token=" + token + "; expires=" + time.toUTCString() + "; path=/";
             window.location.pathname = "/home.html";
+            localStorage.setItem("isAdmin") = response.isAdmin;
         }
     }
 
@@ -311,6 +323,7 @@ function handleLogout() {
     time.setTime(time.getTime());
     document.cookie = "token=a; expires=" + time.toUTCString() + "; path=/";
     window.location.pathname = "/signup-login.html";
+    localStorage.clear();
 }
 
 function handleDeleteToCart(id, num = 1) {
@@ -723,7 +736,7 @@ function showProductDetail(res) {
                     <h3>${res.price} đồng</h3>
                     <button type="button" class="btn btn-primary buy-now" onclick="buyNow(${res.productID})">Buy now</button>
                     <button type="button" class="btn btn-primary" onclick="handleAddToCart(${res.productID})">Add to cart</button>
-                    <a class="btn btn-primary" href="./admin-updateproduct.html?productID=${res.productID}">Edit</a>
+                    <a class="btn btn-primary" href="./admin-updateproduct.html?productID=${res.productID}"${localStorage.getItem("isAdmin")==="true"?"":" style='display:None;'"}>Edit</a>
                 </div>
             </div>
             <div class="description">
@@ -762,7 +775,7 @@ function showProductDetail(res) {
                         </div>
                     </div>
                     <div class="col-2">
-                        <button class="btn btn-brand-color">Delete</button>
+                        <button class="btn btn-brand-color" onclick="handleDeleteComment(${res.review[i].reviewID})"${localStorage.getItem("isAdmin")==="true"?"":" style='display:None;'"}>Delete</button>
                     </div>
                 </div>
             </div>
@@ -876,7 +889,7 @@ function showUserList(users) {
             <td>${user.email}</td>
             <td>${user.phoneNumber}</td>
             <td>${user.DOB}</td>
-            <td><button class="btn btn-brand-color" onclick="handleDeleteUser()">Delete</button></td>
+            <td><button class="btn btn-brand-color" onclick="handleDeleteUser(${user.customerID})">Delete</button></td>
         </tr>
         `;
     });
@@ -988,9 +1001,31 @@ function handleApplyCoupon() {
     xhttp.send(data);
 }
 
+function handleDeleteComment(reviewID)
+{
+    var xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+        console.log(this.responseText);
+        if(!JSON.parse(this.responseText).result) {
+            createModal(JSON.parse(this.responseText).message);
+        }   
+        else {
+            createModal("Delete comment successfully");
+            getProductDetail();
+        }   
+    }
+    xhttp.open("POST", "http://localhost/admin/review/delete", true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify({
+        "token": getCookieValueByName('token'),
+        "commentID": reviewID
+    }));
+}
+
 
 // Check cookie is valid!
 if (getCookieValueByName('token')) {
+
 }
 else {
     if (window.location.pathname != "/signup-login.html") {

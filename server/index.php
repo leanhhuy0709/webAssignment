@@ -105,5 +105,10 @@ else if ($_SERVER['REQUEST_URI'] === '/admin/user/delete')
     $admin = new AdminController();
     echo $admin->deleteUser();
 }
-else echo $tmp;
+else if ($_SERVER['REQUEST_URI'] === '/admin/review/delete')
+{
+    $admin = new AdminController();
+    echo $admin->deleteComment();
+}
+else echo "Welcome to PHP Server!";
 ?>

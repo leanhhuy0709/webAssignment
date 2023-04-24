@@ -688,7 +688,7 @@
             }
             $result["imageURL"] = $imageResult;
             $stmt->close();
-            $stmt = $conn->prepare("SELECT fname, lname, imageURL, rating, title, text, reviewDate, status 
+            $stmt = $conn->prepare("SELECT reviewID, fname, lname, imageURL, rating, title, text, reviewDate, status 
                             FROM review 
                             JOIN customer ON review.customerID = customer.customerID
                             WHERE productID = ?
