@@ -23,10 +23,10 @@
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     <!--CSS-->
     <link rel="stylesheet" href="./css/home.css">
+    <link rel="stylesheet" href="./css/order-detail.css">
     <!--Javascript-->
     <script src="./js/controller.js"></script>
 </head>
-
 
 <body>
     <div id="nav"></div>
@@ -34,20 +34,32 @@
         getHTML("nav", "nav.html")
     </script>
 
-    <h3 style="text-align: center;">Order Detail</h3>
-    <div id="order-detail" style="display: flex; align-items: center; justify-content: center;"></div>
+    <h1>Order detail</h1>
+    <div id="order-detail">
+        
+    </div>
+    
+        <table class="table" id="product">
+            <thead><tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Detail</th>
+            </tr></thead>
+
+            <tbody id="product-detail"></tbody>
+
+        </table>
 
     <script>
         getOrderDetail()
     </script>
 
-
     <div id="footer"></div>
     <script>
         getHTML("footer", "footer.html")
     </script>
-
-
 
 </body>
 

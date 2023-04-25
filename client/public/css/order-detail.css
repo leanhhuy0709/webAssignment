@@ -1,0 +1,66 @@
+:root {
+    --light-blue: #03a9f4;
+}
+
+#order-detail{
+    width: 98%;
+    margin: auto;
+    font-size: 1.2em;
+}
+
+#order-detail tbody td{
+    height: 80px;
+    vertical-align: middle;
+}
+
+#order-detail tbody th{
+    vertical-align: middle;
+}
+
+h1{
+    text-align: center;
+    margin: 20px 0;
+}
+
+h2{
+    margin: 20px 0;
+}
+
+table{
+    text-align: center;
+}
+
+#product{
+    width: 90%;
+    margin: auto;
+    margin-bottom: 50px;
+}
+
+#product tbody td {
+    height: 160px;
+    vertical-align: middle;
+    font-size: 1.3em;
+}
+
+#product img {
+    height: 100%;
+    width: 55%;   
+}
+
+td#img-col{
+    width: 20%;
+}
+
+.show-more{
+    border: none;
+    background-color: var(--light-blue);
+    color: white;
+    border-radius: 20px;
+    font-size: 1em;
+}
+
+.show-more:hover{
+    background-color: white;
+    color: var(--light-blue);
+    border: 1px solid var(--light-blue);
+}
