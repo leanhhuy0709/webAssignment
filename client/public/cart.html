@@ -27,20 +27,24 @@
         getHTML("nav", "nav.html")
     </script>
     <h1>SHOPPING BAG</h1>
-    <div id="cart-products"></div>
+    <div class="cart">
+        <div id="cart-products"></div>
 
-    <script>
-        getCart()
-    </script>
-
-    <select id="payment">
-        <option value="momo">Momo</option>
-        <option value="bank">Agribank</option>
-    </select>
-    <button onclick="handlePayment(document.getElementById('payment').value)">Payment</button>
-
-    <div id="cart-info"></div>
-
+        <script>getCart()</script>
+        <div class="checkout">
+            <div id="cart-info"></div>
+            <div class="payment">
+                <h3>Payment method: </h3>
+                <select id="payment">
+                    <option value="Digital wallet">Digital wallet </option>
+                    <option value="Online banking">Online banking</option>
+                    <option value="COD">Cash on delivery</option>
+                </select>
+            </div>
+            <button id="checkout-btn" onclick="handlePayment(document.getElementById('payment').value)">PLACE ORDER</button>
+        </div>
+        
+    </div>
     <div id="footer"></div>
     <script>
         getHTML("footer", "footer.html")

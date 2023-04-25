@@ -1,0 +1,41 @@
+:root {
+    --light-blue: #03a9f4;
+}
+
+.order-container{
+    width: 98%;
+    margin: auto;
+    margin-bottom: 0;
+}
+
+h1{
+    text-align: center;
+    margin: 20px 0;
+}
+
+table {
+    text-align: center;
+}
+
+tbody{
+    line-height: 35px;
+}
+
+#empty-order{
+    text-align: center;
+    margin: 6.3% 0;
+    font-size: 3em;
+}
+
+.show-more{
+    border: none;
+    background-color: var(--light-blue);
+    color: white;
+    border-radius: 20px;
+}
+
+.show-more:hover{
+    background-color: white;
+    color: var(--light-blue);
+    border: 1px solid var(--light-blue);
+}

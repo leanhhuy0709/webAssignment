@@ -23,8 +23,11 @@
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     <!--CSS-->
     <link rel="stylesheet" href="./css/home.css">
+    <link rel="stylesheet" href="./css/order.css">
     <!--Javascript-->
     <script src="./js/controller.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 </head>
 
 
@@ -34,9 +37,28 @@
         getHTML("nav", "nav.html")
     </script>
 
-    <h3 style="text-align: center;">Orders</h3>
-    <div id="order" style="display: flex; align-items: center; justify-content: center;"></div>
+    <h1>Orders</h1>
+    <div class="order-container" id="order-table">
+        <table class="table table-hover .table-borderless">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Order Date</th>
+                    <th>Shipping Date</th>
+                    <th>Complete Date</th>
+                    <th>Total Price</th>
+                    <th>Shipping Address</th>
+                    <th>Payment Method</th>
+                    <th>Status</th>
+                    <th>Detail</th>
+                </tr>
+            </thead>
+            
+            <tbody id="order"></tbody>
 
+        </table>
+        <div id="empty-order">No orders yet</div>
+    </div>
     <script>
         getOrder();
     </script>
@@ -45,8 +67,6 @@
     <script>
         getHTML("footer", "footer.html")
     </script>
-
-
 
 </body>
 
