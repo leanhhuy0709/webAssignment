@@ -63,13 +63,12 @@ class CookieController {
         $chars = str_split($keyString);
         for($i = 0; $i < count($chars); $i++)
         {
-            $keyString .= chr((ord($key[$i]) - 2 + 122 - 48 + 1) % (122 - 48 + 1) + 48);
+            $keyString2 .= chr(ord($keyString[$i]) - 2);
         }
         $isAdmin = $isAdmin == "a9f9xa3";
 
-        if ($keyString != $key or $id <= 0)
-            return false;
-        
+        if ($keyString2 != $key or $id <= 0)
+            return -1;
         return $isAdmin;
     }   
 }
