@@ -99,8 +99,8 @@
             die("Connection failed: " . $conn->connect_error);
         }
         // Prepare and bind the INSERT statement
-        $stmt = $conn->prepare("INSERT INTO customer(username, password, fname, lname, gender, age, email, phoneNumber, DOB, imageURL, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-        $stmt->bind_param("sssssisiss", $username, $password, $fname, $lname, $gender, $age, $email, $phone, $DOB, $imageURL, $address);
+        $stmt = $conn->prepare("INSERT INTO customer(username, password, fname, lname, gender, age, email, phoneNumber, DOB, imageURL, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+        $stmt->bind_param("sssssisisss", $username, $password, $fname, $lname, $gender, $age, $email, $phone, $DOB, $imageURL, $address);
         $result = 1;
         try {
             $stmt->execute();

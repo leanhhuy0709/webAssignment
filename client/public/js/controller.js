@@ -46,7 +46,8 @@ function handleLogin() {
             time.setTime(time.getTime() + (1 * 60 * 60 * 1000));   // 1 hour
             document.cookie = "token=" + token + "; expires=" + time.toUTCString() + "; path=/";
             window.location.pathname = "/home.html";
-            localStorage.setItem("isAdmin") = response.isAdmin;
+            alert(response.isAdmin);
+            localStorage.setItem("isAdmin", response.isAdmin);
         }
     }
 
@@ -67,8 +68,9 @@ function handleSignUp() {
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.onload = function () {
         //console.log(this.responseText);
-        createModal("Sign up successfully!");
-        window.location.pathname = "/signup-login.html";
+        var res = JSON.parse(this.responseText);
+        createModal(res.message, res.result);
+        //window.location.pathname = "/signup-login.html";
     }
 
     const data = JSON.stringify({
