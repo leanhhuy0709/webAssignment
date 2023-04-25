@@ -1,4 +1,3 @@
-
 function getHTML(id, file) {
     if (file == "nav.html") {
         if (localStorage.getItem("isAdmin") === 'true') {
@@ -535,22 +534,30 @@ function handleResponseOrder(orders) {
     var result = "";
     orders.forEach((order) => {
         //show block which have orderID, orderDate, shippingDate, completeDate, totalPrice, shippingAddress, paymentMethod, orderStatus of order
-        result += `<div class="card m-3" style="width: 18rem;">
-                <div class="card-body">
-                <h5 class="card-title">Order ID: ${order.orderID}</h5>
-                <p class="card-text">Order Date: ${order.orderDate}</p>
-                <p class="card-text">Shipping Date: ${order.shippingDate}</p>
-                <p class="card-text">Complete Date: ${order.completeDate ? order.completeDate : "None"}</p>
-                <p class="card-text">Total Price: $${order.totalPrice}</p>
-                <p class="card-text">Shipping Address: ${order.shippingAddress}</p>
-                <p class="card-text">Payment Method: ${order.paymentMethod}</p>
-                <p class="card-text">Order Status: ${order.orderStatus}</p>
-                <a class="btn btn-primary" href="./order-detail.html?orderID=${order.orderID}">Order Detail</a>
-                </div>
-            </div>
+        result += `
+            <tr>
+                <td>${order.orderID}</td>
+                <td>${order.orderDate}</td>
+                <td>${order.shippingDate}</td>
+                <td>${order.completeDate ? order.completeDate : "None"}</td>
+                <td>$${order.totalPrice}</td>
+                <td>${order.shippingAddress}</td>
+                <td>${order.paymentMethod}</td>
+                <td>${order.orderStatus}</td>
+                <td>
+                    <a class="btn btn-primary show-more" href="./order-detail.html?orderID=${order.orderID}">Show more</a>
+                </td>
+            </tr>
         `;
     })
+    
     orderDiv.innerHTML = result;
+    if($('tbody').html() == "") {
+        document.getElementById("empty-order").style.display = "block";
+    }
+    else{
+        document.getElementById("empty-order").style.display = "none";
+    }
 }
 
 
