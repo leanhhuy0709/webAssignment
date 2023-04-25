@@ -42,7 +42,7 @@ function handleLogin() {
         if (response.result) {
             var token = response.token;
             var time = new Date();
-            time.setTime(time.getTime() + (1 * 60 * 60 * 1000));   // 1 hour
+            time.setTime(time.getTime() + (1 * 60 * 60 * 1000 * 24));   // 24 hour
             document.cookie = "token=" + token + "; expires=" + time.toUTCString() + "; path=/";
             localStorage.setItem("isAdmin", response.isAdmin);
         }
@@ -329,7 +329,7 @@ function handleAddToCart(id) {
     xhttp.onload = function () {
         var res = JSON.parse(this.responseText);
         //console.log(res);
-        //createModal(res.message);
+        createModal(res.message);
         if (window.location.pathname == "/cart")
             getCart();
     }
@@ -371,7 +371,7 @@ function handleDeleteToCart(id, num = 1) {
         //console.log(this.responseText);
         var res = JSON.parse(this.responseText);
         //console.log(res);
-        //createModal(res.message);
+        createModal(res.message);
         if (window.location.pathname == "/cart")
             getCart();
     }
@@ -709,7 +709,10 @@ function createModal(message, isSuccess = true, href = "") {
     modalHtml += '<div class="modal-content">';
     modalHtml += '<div class="modal-header bg-' + color + '">';
     modalHtml += '<h5 class="modal-title" id="createModalModalLabel">Alert</h5>';
-    modalHtml += `<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="window.location.pathname='${href}'">`;
+    if (href == "")
+        modalHtml += '<button type="button" class="close" data-dismiss="modal" aria-label="Close">';
+    else
+        modalHtml += `<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="window.location.pathname='${href}'">`;
     modalHtml += '<span aria-hidden="true">&times;</span>';
     modalHtml += '</button>';
     modalHtml += '</div>';
@@ -915,7 +918,7 @@ function getUserList() {
     xhttp.onload = function () {
         //console.log(this.responseText);
         if (!JSON.parse(this.responseText).result) {
-            createModal(JSON.parse(this.responseText).message);
+            createModal(JSON.parse(this.responseText).message, JSON.parse(this.responseText).result);
         }
         else {
             var res = JSON.parse(this.responseText).data;

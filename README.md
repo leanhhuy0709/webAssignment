@@ -4,7 +4,7 @@
 Cách 1:
 + Tải nodejs nếu máy tính chưa có
 + cd client -> npm install express (Để tải thư viện cần thiết)
-+ node index.js (Sau đó truy cập localhost:3000/login.html)
++ node index.js (Sau đó truy cập localhost:3000/)
 
 Cách 2:
 + Sử dụng Extension Live server của Visual Studio Code
