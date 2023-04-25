@@ -248,6 +248,12 @@
     }
 }
 
+@media screen and (max-width: 400px) {
+    .product-info p {
+        width: 200px;
+        margin: 10px 90% 10px 0;
+    }
+}
 
 
         
