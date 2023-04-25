@@ -46,7 +46,7 @@
     background-color: var(--light-blue) ;
 }
 
-.product-info .buy-now {
+#buy-now {
     margin-top: 10px;
     background-color: var(--light-blue);
     color: white;

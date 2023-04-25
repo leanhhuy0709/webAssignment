@@ -547,7 +547,7 @@ function handleResponseOrder(orders) {
         //show block which have orderID, orderDate, shippingDate, completeDate, totalPrice, shippingAddress, paymentMethod, orderStatus of order
         result += `
             <tr>
-                <td>${order.orderID}</td>
+                <th>${order.orderID}</th>
                 <td>${order.orderDate}</td>
                 <td>${order.shippingDate}</td>
                 <td>${order.completeDate ? order.completeDate : "None"}</td>
@@ -607,35 +607,51 @@ function getOrderDetail() {
 
 function handleResponseOrderDetail(order) {
     const orderDetailDiv = document.getElementById("order-detail");
+    const productDetailDiv = document.getElementById("product-detail");
     orderDetailDiv.innerHTML = "";
+    productDetailDiv.innerHTML = "";
+    var result2 ="";
     //show order detail: orderID, orderDate, shippingDate, completeDate, totalPrice, shippingAddress, paymentMethod, orderStatus of order
-    var result = `<div class="card m-3" style="width: 18rem;">
-                <div class="card-body">
-                <h5 class="card-title">Order ID: ${order.orderID}</h5>
-                <p class="card-text">Order Date: ${order.orderDate}</p>
-                <p class="card-text">Shipping Date: ${order.shippingDate}</p>
-                <p class="card-text">Complete Date: ${order.completeDate ? order.completeDate : "None"}</p>
-                <p class="card-text">Total Price: $${order.totalPrice}</p>
-                <p class="card-text">Shipping Address: ${order.shippingAddress}</p>
-                <p class="card-text">Payment Method: ${order.paymentMethod}</p>
-                <p class="card-text">Order Status: ${order.orderStatus}</p>
-                </div>
-                </div>
+    var result = `
+                <h2>Order information: </h2>
+                <table class="table" id="info">
+                    <thead><tr>
+                        <th>Order ID</th>
+                        <th>Order date</th>
+                        <th>Shipping date</th>
+                        <th>Complete date</th>
+                        <th>Total price</th>
+                        <th>Shipping address</th>
+                        <th>Payment method</th>
+                        <th>Order status</th>
+                    </tr></thead>
+                    <tbody><tr>
+                        <th>${order.orderID}</th>
+                        <td> ${order.orderDate}</td>
+                        <td>${order.shippingDate}</td>
+                        <td>${order.completeDate ? order.completeDate : "None"}</td>
+                        <td>$${order.totalPrice}</td>
+                        <td>${order.shippingAddress}</td>
+                        <td>${order.paymentMethod}</td>
+                        <td>${order.orderStatus}</td>
+                    </tr></tbody>
+                </table>
+                <h2>Products: </h2>
     `;
+    orderDetailDiv.innerHTML = result;
 
     order.products.forEach((product) => {
-        result += `
-            <div class="card m-3" style="width: 18rem;">
-                <img src="${product.imageURL}" class="card-img-top" alt="product 1" onerror="this.onerror=null; this.src='https://media.istockphoto.com/id/1216251206/vector/no-image-available-icon.jpg?s=170667a&w=0&k=20&c=N-XIIeLlhUpm2ZO2uGls-pcVsZ2FTwTxZepwZe4DuE4=';">
-                <div class="card-body">
-                    <h5 class="card-title">${product.name}</h5>
-                    <p class="card-text">Price: $${product.price}</p>
-                    <p class="card-text">Quantity: ${product.quantity}</p>
-                    <a href="#" class="btn btn-primary">Detail</a>
-                </div>
-            </div>`;
+        result2 += `
+            <tr>
+                <td id="img-col"><img src="${product.imageURL}" alt="product 1" onerror="this.onerror=null; this.src='https://media.istockphoto.com/id/1216251206/vector/no-image-available-icon.jpg?s=170667a&w=0&k=20&c=N-XIIeLlhUpm2ZO2uGls-pcVsZ2FTwTxZepwZe4DuE4=';"></td>
+                <td>${product.name}</td>
+                <td>$${product.price}</td>
+                <td>${product.quantity}</td>
+                <td><a href="#" class="btn btn-primary show-more">Show more</a><td>
+            </tr>
+            `;
     })
-    orderDetailDiv.innerHTML = result;
+    productDetailDiv.innerHTML = result2;
 }
 
 // Kiểm tra dữ liệu đầu vào
@@ -771,9 +787,9 @@ function showProductDetail(res, page = 1) {
                 </div>
                 <div class="col-6 product-info">
                     <h1>${res.name}</h1>
-                    <p>${res.averageStar}<meter class="average-rating" min="0" max="5"></meter></p>
+                    <p>${Math.ceil(res.averageStar * 10)/10}<meter class="average-rating" min="0" max="5"></meter></p>
                     <h3>Price: $${res.price}</h3>
-                    <button type="button" class="btn btn-primary" onclick="buyNow(${res.productID})">Buy now</button>
+                    <button type="button" class="btn btn-primary" id="buy-now" onclick="buyNow(${res.productID})">Buy now</button>
                     <button type="button" class="btn btn-primary" onclick="handleAddToCart(${res.productID})">Add to cart</button>
                     <button class="btn btn-primary" 
                     onclick="window.location.pathname='./product-update';"
@@ -824,10 +840,18 @@ function showProductDetail(res, page = 1) {
             </div>
         `;
     }
+    var maxPage = Math.ceil(res.review.length / 6);
+    productDetailHTML += `<div class="d-flex justify-content-center">`;
+    for (var i = 1; i <= maxPage; i++) {
+        productDetailHTML += `<button class="btn btn-primary m-2" onclick="getProductDetail(${i})">${i}</button>`;
+    }
+    productDetailHTML += `</div>`;
 
+    productDetail.innerHTML = productDetailHTML;
+    
     productDetailHTML += `   
     <div class="write-comment container">
-        <h2>What do you thing about this product ?</h2>
+        <h2>What do you think about this product ?</h2>
         <div class="input-name">
             <input type="text" id="title" placeholder="Overview">
             <span class="underline-animation"></span>
@@ -843,13 +867,6 @@ function showProductDetail(res, page = 1) {
         <button onclick="handleComment()">Comment</button>
     </div>
     `;
-    var maxPage = Math.ceil(res.review.length / 6);
-    productDetailHTML += `<div class="d-flex justify-content-center">`;
-    for (var i = 1; i <= maxPage; i++) {
-        productDetailHTML += `<button class="btn btn-primary m-2" onclick="getProductDetail(${i})">${i}</button>`;
-    }
-    productDetailHTML += `</div>`;
-
     productDetail.innerHTML = productDetailHTML;
 }
 function handleComment() {
