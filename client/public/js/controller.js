@@ -789,8 +789,8 @@ function showProductDetail(res, page = 1) {
     productDetailHTML += `
         <div class="container">
             <div class="row">
-                <div class="col-6">
-                    <img src="${res.imageURL[0]}" alt="" style="width: 100%;" onerror="this.onerror=null; this.src='https://media.istockphoto.com/id/1216251206/vector/no-image-available-icon.jpg?s=170667a&w=0&k=20&c=N-XIIeLlhUpm2ZO2uGls-pcVsZ2FTwTxZepwZe4DuE4=';">
+                <div class="col-6 img">
+                    <img src="${res.imageURL[0]}" alt="" onerror="this.onerror=null; this.src='https://media.istockphoto.com/id/1216251206/vector/no-image-available-icon.jpg?s=170667a&w=0&k=20&c=N-XIIeLlhUpm2ZO2uGls-pcVsZ2FTwTxZepwZe4DuE4=';">
                 </div>
                 <div class="col-6 product-info">
                     <h1>${res.name}</h1>

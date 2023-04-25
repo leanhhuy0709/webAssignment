@@ -94,10 +94,10 @@
                         BSPRow.innerHTML = `
                             <div class="card m-3" style="width: 18rem; height: 36rem;">
                                 <img src="${product.imageURL}" class="card-img-top" alt="product 1">
-                                <div class="card-body">
+                                <div class="card-body" style="text-align: center;">
                                     <h5 class="card-title">${product.name}</h5>
                                     <p class="card-text">${product.description}</p>
-                                    <a href="./product-detail?productID=${product.productID}" class="btn btn-primary">Go somewhere</a>
+                                    <a href="./product-detail?productID=${product.productID}" class="btn btn-primary">Detail</a>
                                 </div>
                             </div>`;
                         BSPTable.appendChild(BSPRow);
