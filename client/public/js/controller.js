@@ -10,7 +10,8 @@ function getHTML(id, file) {
     //get tag by id
     const tag = document.getElementById(id);
     //load nav.html to nav
-    fetch(file)
+    var href = window.location.origin + "/" + file;
+    fetch(href)
         .then(response => response.text())
         .then(text => {
             tag.innerHTML = text;
@@ -43,10 +44,9 @@ function handleLogin() {
             var time = new Date();
             time.setTime(time.getTime() + (1 * 60 * 60 * 1000));   // 1 hour
             document.cookie = "token=" + token + "; expires=" + time.toUTCString() + "; path=/";
-            //window.location.pathname = "/home.html";
             localStorage.setItem("isAdmin", response.isAdmin);
         }
-        createModal(response.message, response.result, "/home.html");
+        createModal(response.message, response.result, "/");
     }
 
     const data = JSON.stringify({
@@ -80,7 +80,6 @@ function handleSignUp() {
             form.querySelector("#imageURL").value = "";
             form.querySelector("#address").value = "";
         }
-        //window.location.pathname = "/signup-login.html";
     }
 
     const data = JSON.stringify({
@@ -329,9 +328,9 @@ function handleAddToCart(id) {
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function () {
         var res = JSON.parse(this.responseText);
-        console.log(res);
-        createModal(res.message);
-        if (window.location.pathname == "/cart.html")
+        //console.log(res);
+        //createModal(res.message);
+        if (window.location.pathname == "/cart")
             getCart();
     }
     xhttp.onerror = function (err) {
@@ -354,7 +353,7 @@ function buyNow(pID) {
         resolve();
     });
     addToCartPromise.then(() => {
-        window.location.pathname = "/cart.html";
+        window.location.pathname = "/cart";
     });
 }
 
@@ -362,7 +361,7 @@ function handleLogout() {
     var time = new Date();
     time.setTime(time.getTime());
     document.cookie = "token=a; expires=" + time.toUTCString() + "; path=/";
-    window.location.pathname = "/signup-login.html";
+    window.location.pathname = "/login";
     localStorage.clear();
 }
 
@@ -372,8 +371,8 @@ function handleDeleteToCart(id, num = 1) {
         //console.log(this.responseText);
         var res = JSON.parse(this.responseText);
         //console.log(res);
-        createModal(res.message);
-        if (window.location.pathname == "/cart.html")
+        //createModal(res.message);
+        if (window.location.pathname == "/cart")
             getCart();
     }
     xhttp.onerror = function (err) {
@@ -445,8 +444,8 @@ function handleSearch() {
     const searchInput = document.getElementById("search");
     var pn = window.location.pathname;
     var host = window.location.origin;
-    if (pn != "/new.html" && pn != "/sale.html" && pn != "/category.html") {
-        window.location.href = host + "/new.html?search=" + searchInput.value;
+    if (pn != "/olivia-cosmetics-new" && pn != "/olivia-cosmetics-sale" && pn != "/olivia-cosmetics-category") {
+        window.location.href = host + "/olivia-cosmetics-new?search=" + searchInput.value;
     }
     else
         window.location.href = host + pn + "?search=" + searchInput.value;
@@ -465,7 +464,7 @@ function showProducts(products, page = 1) {
                     <p class="card-text" style="text-align:center; font-weight: bold; font-size:2vw;">Price: $${product.price}</p>
                 </div>
                 <div class="card-footer" style="text-align:center;"> 
-                    <a href="./product-detail.html?productID=${product.productID}" class="btn btn-dark" style="text-align:center; font-size:2vw; width: 100%; border-radius: 10px">Detail</a>
+                    <a href="./product-detail?productID=${product.productID}" class="btn btn-dark" style="text-align:center; font-size:2vw; width: 100%; border-radius: 10px">Detail</a>
                     <button onclick="handleAddToCart(${product.productID})" class="btn btn-danger" style="text-align:center; font-size:2vw; width: 100%; margin-top: 3%; border-radius: 10px">Add to cart</button>
                 </div>
             </div>`;
@@ -557,7 +556,7 @@ function handleResponseOrder(orders) {
                 <td>${order.paymentMethod}</td>
                 <td>${order.orderStatus}</td>
                 <td>
-                    <a class="btn btn-primary show-more" href="./order-detail.html?orderID=${order.orderID}">Show more</a>
+                    <a class="btn btn-primary show-more" href="./order-detail?orderID=${order.orderID}">Show more</a>
                 </td>
             </tr>
         `;
@@ -687,7 +686,7 @@ function createModal(message, isSuccess = true, href = "") {
     modalHtml += '<div class="modal-content">';
     modalHtml += '<div class="modal-header bg-' + color + '">';
     modalHtml += '<h5 class="modal-title" id="createModalModalLabel">Alert</h5>';
-    modalHtml += '<button type="button" class="close" data-dismiss="modal" aria-label="Close">';
+    modalHtml += `<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="window.location.pathname='${href}'">`;
     modalHtml += '<span aria-hidden="true">&times;</span>';
     modalHtml += '</button>';
     modalHtml += '</div>';
@@ -705,6 +704,8 @@ function createModal(message, isSuccess = true, href = "") {
     modalHtml += '</div>';
     $(modalHtml).modal('show');
 }
+
+
 
 function getProductDetail(page = 1) {
     const xhttp = new XMLHttpRequest();
@@ -734,7 +735,7 @@ function getProductDetail2() {
         }
         else {
             var res = JSON.parse(this.responseText).data;
-            console.log(res);
+            //console.log(res);
             const updateForm = document.getElementById("update-form");
             updateForm.querySelector("#productTitle").value = res.name;
             updateForm.querySelector('#productID').value = res.productID;
@@ -775,7 +776,7 @@ function showProductDetail(res, page = 1) {
                     <button type="button" class="btn btn-primary" onclick="buyNow(${res.productID})">Buy now</button>
                     <button type="button" class="btn btn-primary" onclick="handleAddToCart(${res.productID})">Add to cart</button>
                     <button class="btn btn-primary" 
-                    onclick="window.location.pathname='./admin-updateproduct.html';"
+                    onclick="window.location.pathname='./product-update';"
                     ${localStorage.getItem("isAdmin") === "true" ? "" : " style='display:None;'"}>Edit</button>
                 </div>
             </div>
@@ -926,7 +927,7 @@ function showUserList(users) {
             </tr>
             </thead>
             <tbody>`;
-    console.log(users[0]);
+    //console.log(users[0]);
     users.forEach(user => {
         result += `
         <tr>
@@ -977,16 +978,15 @@ function handleUpdateProduct() {
     xhttp.open("POST", "http://localhost/admin/product/update", true);
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.onload = function () {
-        console.log(this.responseText);
+        //console.log(this.responseText);
         var res = JSON.parse(this.responseText);
-        console.log(res);
+        //console.log(res);
         createModal(res.message);
     }
     xhttp.onerror = function (err) {
         console.log("Error");
         console.log(err);
     }
-    console.log(updateForm.querySelector('#productID').value);
     const data = JSON.stringify({
         token: getCookieValueByName('token'),
         name: updateForm.querySelector('#productTitle').value,
@@ -1005,9 +1005,9 @@ function handleAddProduct() {
     xhttp.open("POST", "http://localhost/admin/product/add", true);
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.onload = function () {
-        console.log(this.responseText);
+        //console.log(this.responseText);
         var res = JSON.parse(this.responseText);
-        console.log(res);
+        //console.log(res);
         createModal(res.message);
     }
     xhttp.onerror = function (err) {
@@ -1032,9 +1032,9 @@ function handleApplyCoupon() {
     xhttp.open("POST", "http://localhost/cart/coupon", true);
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.onload = function () {
-        console.log(this.responseText);
+        //console.log(this.responseText);
         var res = JSON.parse(this.responseText);
-        console.log(res);
+        //console.log(res);
         createModal(res.message, res.result);
         getCart();
     }
@@ -1053,7 +1053,7 @@ function handleApplyCoupon() {
 function handleDeleteComment(reviewID) {
     var xhttp = new XMLHttpRequest();
     xhttp.onload = function () {
-        console.log(this.responseText);
+        //console.log(this.responseText);
         if (!JSON.parse(this.responseText).result) {
             createModal(JSON.parse(this.responseText).message);
         }
@@ -1076,9 +1076,9 @@ if (getCookieValueByName('token')) {
 
 }
 else {
-    if (window.location.pathname != "/signup-login.html") {
-        alert("You need to login first!");
-        window.location.pathname = "/signup-login.html";
+    if (window.location.pathname != "/login" && window.location.pathname != "/" && window.location.pathname != "/olivia-cosmetics-new" && window.location.pathname != "/olivia-cosmetics") {
+        alert("You need to login first");
+        window.location.pathname = "/login";
     }
 }
 

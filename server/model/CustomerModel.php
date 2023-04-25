@@ -692,7 +692,7 @@
                             FROM review 
                             JOIN customer ON review.customerID = customer.customerID
                             WHERE productID = ?
-                            ORDER BY reviewDate;");
+                            ORDER BY reviewDate DESC;");
             $stmt->bind_param("i", $productID);
             $stmt->execute();
             $SQLresult = $stmt->get_result();

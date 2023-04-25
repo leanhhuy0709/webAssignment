@@ -3,7 +3,7 @@
 
 <head>
     <!--Default-->
-    <title>Sale</title>
+    <title>Olivia Cosmetics</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--Bootstrap-->
@@ -56,10 +56,15 @@
                     </div>
                 </div>
             </div>
-            <div style="margin: 2% 0 2% 0;">
-                <button onclick="location.href='admin-addproduct.html'"
+            <div id="add-product-button" style="margin: 2% 0 2% 0;">
+                <button onclick="location.href='/product-add'"
                     class="btn btn-outline-dark rounded-pill mx-1">ADD PRODUCT</button>
             </div>
+            <script>
+                if(localStorage.getItem("isAdmin") === 'true');
+                else
+                    document.getElementById("add-product-button").style.display = "none";
+            </script>
             <br>
             <br>
             <br>

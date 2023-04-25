@@ -32,7 +32,7 @@ class CustomerController {
         $result = array("message" => $res["message"], "result" => $res["id"] != -1, "isAdmin" => $res["isAdmin"]);
         if ($res["id"] != -1)
         {
-            $key = "my_secret_key"; // Khóa bí mật
+            $key = "aptxadaq32fgsq"; // Khóa bí mật
 
             // Thông tin payload để mã hóa vào token
             $payload = array(

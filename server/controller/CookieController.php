@@ -3,7 +3,7 @@ require_once('model/CustomerModel.php');
 class CookieController {
     public static function decodeCookie($cookie)
     {
-        $key = "my_secret_key"; // Khóa bí mật
+        $key = "aptxadaq32fgsq"; // Khóa bí mật
         //id -> 5 char
         //isAdmin -> 4 char
         //key -> 4 char
