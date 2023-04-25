@@ -1,17 +1,17 @@
 USE `oliviashop`;
 -- customer
 INSERT INTO customer(username, password, fname, lname, gender, age, email, phoneNumber, DOB, imageURL, address) VALUES 
-("leanhhuy", "12345", "Huy", "Lê Anh", "Male", 20, "huy.leanh0709@hcmut.edu.vn", "0123456789", "2002-09-07", "https://randomuser.me/api/portraits/men/4.jpg", "160 Pasteur, Phường 6, Quận 3, Thành phố Hồ Chí Minh");
+("leanhhuy", "6ddd29a8fbcc70b82613c31c57bfed43", "Huy", "Lê Anh", "Male", 20, "huy.leanh0709@hcmut.edu.vn", "0123456789", "2002-09-07", "https://randomuser.me/api/portraits/men/4.jpg", "160 Pasteur, Phường 6, Quận 3, Thành phố Hồ Chí Minh");
 INSERT INTO customer(username, password, fname, lname, gender, age, email, phoneNumber, DOB, imageURL, address) VALUES 
-("ngoclan", "12345", "Lan", "Ngọc", "Female", 25, "lan.ngoc@example.com", "0123456789", "1998-01-01", "https://randomuser.me/api/portraits/women/1.jpg", "54A Nguyễn Chí Thanh, Đống Đa, Hà Nội"),
-("thanhtruc", "12345", "Trúc", "Thanh", "Female", 30, "thanh.truc@example.com", "0964827382", "1993-05-20", "https://randomuser.me/api/portraits/women/2.jpg", "43 Tây Sơn, Đống Đa, Hà Nội"),
-("thanhthao", "12345", "Thảo", "Thanh", "Female", 22, "thao.thanh@example.com", "0124356129", "2001-02-14", "https://randomuser.me/api/portraits/women/3.jpg", "36 Tràng Tiền, Hoàn Kiếm, Hà Nội"),
-("hongnhung", "12345", "Nhung", "Hồng", "Female", 27, "nhung.hong@example.com", "0938172635", "1996-08-15", "https://randomuser.me/api/portraits/women/4.jpg", "216 Nguyễn Thị Minh Khai, Phường 6, Quận 3, Thành phố Hồ Chí Minh"),
-("huyentrang", "12345", "Trang", "Huyền", "Female", 18, "trang.huyen@example.com", "0964347382", "2005-11-22", "https://randomuser.me/api/portraits/women/5.jpg", "Tòa nhà Keangnam, Phạm Hùng, Nam Từ Liêm, Hà Nội"),
-("thuytrang", "12345", "Trang", "Thuỳ", "Female", 33, "trang.thuy@example.com", "0123452289", "1988-03-10", "https://randomuser.me/api/portraits/women/6.jpg", "108 Lò Đúc, Hai Bà Trưng, Hà Nội"),
-("khabanh", "12345", "Bảnh", "Khá", "Male", 29, "banh.kha@example.com", "0938172635", "1992-06-08", "https://randomuser.me/api/portraits/men/1.jpg", "63 Trần Hưng Đạo, Hoàn Kiếm, Hà Nội"),
-("quangtrung", "12345", "Trung", "Quang", "Male", 21, "trung.quang@example.com", "0964827222", "2000-04-11", "https://randomuser.me/api/portraits/men/2.jpg", "60 Lý Thường Kiệt, Hoàn Kiếm, Hà Nội"),
-("hongquang", "12345", "Quang", "Lê Hồng", "Male", 23, "quang.hong@example.com", "0128126789", "1998-12-31", "https://randomuser.me/api/portraits/men/3.jpg", "63 Trần Hưng Đạo, Hoàn Kiếm, Hà Nội");
+("ngoclan", "6ddd29a8fbcc70b82613c31c57bfed43", "Lan", "Ngọc", "Female", 25, "lan.ngoc@example.com", "0123456789", "1998-01-01", "https://randomuser.me/api/portraits/women/1.jpg", "54A Nguyễn Chí Thanh, Đống Đa, Hà Nội"),
+("thanhtruc", "6ddd29a8fbcc70b82613c31c57bfed43", "Trúc", "Thanh", "Female", 30, "thanh.truc@example.com", "0964827382", "1993-05-20", "https://randomuser.me/api/portraits/women/2.jpg", "43 Tây Sơn, Đống Đa, Hà Nội"),
+("thanhthao", "6ddd29a8fbcc70b82613c31c57bfed43", "Thảo", "Thanh", "Female", 22, "thao.thanh@example.com", "0124356129", "2001-02-14", "https://randomuser.me/api/portraits/women/3.jpg", "36 Tràng Tiền, Hoàn Kiếm, Hà Nội"),
+("hongnhung", "6ddd29a8fbcc70b82613c31c57bfed43", "Nhung", "Hồng", "Female", 27, "nhung.hong@example.com", "0938172635", "1996-08-15", "https://randomuser.me/api/portraits/women/4.jpg", "216 Nguyễn Thị Minh Khai, Phường 6, Quận 3, Thành phố Hồ Chí Minh"),
+("huyentrang", "8ef978e36bcaaee8e862495c679d57d7", "Trang", "Huyền", "Female", 18, "trang.huyen@example.com", "0964347382", "2005-11-22", "https://randomuser.me/api/portraits/women/5.jpg", "Tòa nhà Keangnam, Phạm Hùng, Nam Từ Liêm, Hà Nội"),
+("thuytrang", "8ef978e36bcaaee8e862495c679d57d7", "Trang", "Thuỳ", "Female", 33, "trang.thuy@example.com", "0123452289", "1988-03-10", "https://randomuser.me/api/portraits/women/6.jpg", "108 Lò Đúc, Hai Bà Trưng, Hà Nội"),
+("khabanh", "8ef978e36bcaaee8e862495c679d57d7", "Bảnh", "Khá", "Male", 29, "banh.kha@example.com", "0938172635", "1992-06-08", "https://randomuser.me/api/portraits/men/1.jpg", "63 Trần Hưng Đạo, Hoàn Kiếm, Hà Nội"),
+("quangtrung", "8ef978e36bcaaee8e862495c679d57d7", "Trung", "Quang", "Male", 21, "trung.quang@example.com", "0964827222", "2000-04-11", "https://randomuser.me/api/portraits/men/2.jpg", "60 Lý Thường Kiệt, Hoàn Kiếm, Hà Nội"),
+("hongquang", "8ef978e36bcaaee8e862495c679d57d7", "Quang", "Lê Hồng", "Male", 23, "quang.hong@example.com", "0128126789", "1998-12-31", "https://randomuser.me/api/portraits/men/3.jpg", "63 Trần Hưng Đạo, Hoàn Kiếm, Hà Nội");
 
 INSERT INTO cart(customerID) VALUES (1), (2), (3), (4), (5), (6), (7), (8), (9), (10);
 

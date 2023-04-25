@@ -5,17 +5,23 @@ class CookieController {
     {
         $key = "aptxadaq32fgsq"; // Khóa bí mật
         //id -> 5 char
-        //isAdmin -> 4 char
-        //key -> 4 char
-        $val = 0;
-        $chars = str_split($key);
+        //key -> 14 char
+        //isAdmin -> 7 char
+        $id = substr($cookie, 0, 5);
+        $keyString = substr($cookie, 5, 14);
+        $isAdmin = substr($cookie, 19, 7);
+
+        $id = intval((intval($id) - 14142)/19);
+        $keyString2 = "";
+        $chars = str_split($keyString);
         for($i = 0; $i < count($chars); $i++)
         {
-            $val += ord($key[$i]);
+            $keyString2 .= chr(ord($keyString[$i]) - 2);
         }
-        $val %= 1000;
-        $id = intval(substr($cookie, 0, 5)) - 10000;
-        $isAdmin = substr($cookie, 8, 2) == "44";
+        $isAdmin = $isAdmin == "a9f9xa3";
+
+        if ($keyString2 != $key or $id <= 0)
+            return -1;
         return $id;
     }
     public static function encodeCookie($payload, $key)
@@ -24,39 +30,46 @@ class CookieController {
         $isAdmin = $payload["isAdmin"];
         $val = 0;
         $chars = str_split($key);
+        $keyString = "";
         for($i = 0; $i < count($chars); $i++)
         {
-            $val += ord($key[$i]);
+            $keyString .= chr(ord($key[$i]) + 2);
         }
         $val %= 1000;
         //id -> 5 char
         //key -> 4 char
         //isAdmin -> 4 char
         $result = "";
-        $idString = strval($id + 10000);
+        $idString = strval($id * 19 + 14142);
         if ($isAdmin)
-            $isAdminString = "44";
+            $isAdminString = "a9f9xa3";
         else
-            $isAdminString = "35";
-        $keyString = strval($val);
+            $isAdminString = "f73ne82";
         $result = $idString . $keyString . $isAdminString;
         return $result;
     } 
     public static function decodeCookieIsAdmin($cookie)
     {
-        $key = "my_secret_key"; // Khóa bí mật
+        $key = "aptxadaq32fgsq"; // Khóa bí mật
         //id -> 5 char
-        //isAdmin -> 4 char
-        //key -> 4 char
-        $val = 0;
-        $chars = str_split($key);
+        //key -> 14 char
+        //isAdmin -> 7 char
+        $id = substr($cookie, 0, 5);
+        $keyString = substr($cookie, 5, 14);
+        $isAdmin = substr($cookie, 19, 7);
+
+        $id = intval((intval($id) - 14142)/19);
+        $keyString2 = "";
+        $chars = str_split($keyString);
         for($i = 0; $i < count($chars); $i++)
         {
-            $val += ord($key[$i]);
+            $keyString .= chr((ord($key[$i]) - 2 + 122 - 48 + 1) % (122 - 48 + 1) + 48);
         }
-        $val %= 1000;
-        $id = intval(substr($cookie, 0, 5)) - 10000;
-        $isAdmin = substr($cookie, 8, 2) == "44";
+        $isAdmin = $isAdmin == "a9f9xa3";
+
+        if ($keyString != $key or $id <= 0)
+            return false;
+        
         return $isAdmin;
     }   
 }

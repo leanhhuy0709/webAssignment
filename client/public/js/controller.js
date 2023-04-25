@@ -614,6 +614,7 @@ function handleResponseOrderDetail(order) {
     //show order detail: orderID, orderDate, shippingDate, completeDate, totalPrice, shippingAddress, paymentMethod, orderStatus of order
     var result = `
                 <h2>Order information: </h2>
+                <div class="table-responsive">
                 <table class="table" id="info">
                     <thead><tr>
                         <th>Order ID</th>
@@ -636,9 +637,13 @@ function handleResponseOrderDetail(order) {
                         <td>${order.orderStatus}</td>
                     </tr></tbody>
                 </table>
+                </div>
                 <h2>Products: </h2>
     `;
     orderDetailDiv.innerHTML = result;
+
+    result2 += `<div class="table-responsive">
+    <table class="table">`;
 
     order.products.forEach((product) => {
         result2 += `
@@ -647,10 +652,12 @@ function handleResponseOrderDetail(order) {
                 <td>${product.name}</td>
                 <td>$${product.price}</td>
                 <td>${product.quantity}</td>
-                <td><a href="#" class="btn btn-primary show-more">Show more</a><td>
+                <td><a href="/product-detail?productID=${product.productID}" class="btn btn-primary show-more">Show more</a><td>
             </tr>
             `;
     })
+    result2 += `</table>
+    </div>`;
     productDetailDiv.innerHTML = result2;
 }
 

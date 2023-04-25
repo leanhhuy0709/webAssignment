@@ -15,6 +15,12 @@ function checkIsValid($data, $string)
     );
 }
 
+function encodePassword($psw)
+{
+    $salt = "aptxadaq32fgsq";
+    return md5($psw.$salt);
+}
+
 class CustomerController {
     public static function login()
     {
@@ -26,7 +32,7 @@ class CustomerController {
             return json_encode($check);//
 
         $username = $data['username'];
-        $password = $data['password'];
+        $password = encodePassword($data['password']);
         //Token nó vì không lưu tk, mk trong database!!!
         $res = loginModel($username, $password); // Trả về id người dùng
         $result = array("message" => $res["message"], "result" => $res["id"] != -1, "isAdmin" => $res["isAdmin"]);
@@ -59,7 +65,7 @@ class CustomerController {
             return json_encode($check);
 
         $username = $data['username'];
-        $password = $data['password'];
+        $password = encodePassword($data['password']);
         $fname = $data['fname'];
         $lname = $data['lname'];
         $gender = $data['gender'];
@@ -185,8 +191,7 @@ class CustomerController {
         $userID = $cookie->decodeCookie($data['token']);
         $res = getOrdersModel($userID);
         return json_encode($res);
-    }//login, signup, getProductsByCategoryAndSearch, getCart, addProductToCart, deleteProductToCart, getUserInfo, 
-    //updateUserInfo, getOrders, getOrderDetail, payment, getProductDetail, comment, cartApplyCoupon
+    }
     public static function getOrderDetail() {
         $body = file_get_contents('php://input');
         $data = json_decode($body, true);
