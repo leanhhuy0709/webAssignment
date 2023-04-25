@@ -38,16 +38,15 @@ function handleLogin() {
     xhr.onload = function () {
         console.log(this.responseText);
         var response = JSON.parse(this.responseText);
-        createModal(response.message, response.result);
         if (response.result) {
             var token = response.token;
             var time = new Date();
             time.setTime(time.getTime() + (1 * 60 * 60 * 1000));   // 1 hour
             document.cookie = "token=" + token + "; expires=" + time.toUTCString() + "; path=/";
-            window.location.pathname = "/home.html";
-            alert(response.isAdmin);
+            //window.location.pathname = "/home.html";
             localStorage.setItem("isAdmin", response.isAdmin);
         }
+        createModal(response.message, response.result, "/home.html");
     }
 
     const data = JSON.stringify({
@@ -69,6 +68,18 @@ function handleSignUp() {
         //console.log(this.responseText);
         var res = JSON.parse(this.responseText);
         createModal(res.message, res.result);
+        if (res.result) {
+            form.querySelector("#username").value = "";
+            form.querySelector("#password").value = "";
+            form.querySelector("#email").value = "";
+            form.querySelector("#phone").value = "";
+            form.querySelector("#fname").value = "";
+            form.querySelector("#lname").value = "";
+            form.querySelector("#age").value = "";
+            form.querySelector("#DOB").value = "";
+            form.querySelector("#imageURL").value = "";
+            form.querySelector("#address").value = "";
+        }
         //window.location.pathname = "/signup-login.html";
     }
 
@@ -342,7 +353,6 @@ function buyNow(pID) {
         handleAddToCart(pID);
         resolve();
     });
-
     addToCartPromise.then(() => {
         window.location.pathname = "/cart.html";
     });
@@ -670,7 +680,7 @@ function validateForm() {
     }
 }
 
-function createModal(message, isSuccess = true) {
+function createModal(message, isSuccess = true, href = "") {
     var color = isSuccess ? "success" : "danger";
     var modalHtml = '<div class="modal fade" id="createModalModal" tabindex="-1" role="dialog" aria-labelledby="createModalModalLabel" aria-hidden="true">';
     modalHtml += '<div class="modal-dialog" role="document">';
@@ -685,26 +695,18 @@ function createModal(message, isSuccess = true) {
     modalHtml += '<p>' + message + '</p>';
     modalHtml += '</div>';
     modalHtml += '<div class="modal-footer">';
-    modalHtml += '<button type="button" class="btn btn-' + color + '" data-dismiss="modal">OK</button>';
+    if (href == "")
+        modalHtml += '<button type="button" class="btn btn-' + color + '" data-dismiss="modal">OK</button>';
+    else 
+        modalHtml += `<button type="button" class="btn btn-${color}" data-dismiss="modal" onclick="window.location.pathname='${href}'">OK</button>`;
     modalHtml += '</div>';
     modalHtml += '</div>';
     modalHtml += '</div>';
     modalHtml += '</div>';
-
     $(modalHtml).modal('show');
-    // Lắng nghe sự kiện 'show.bs.modal' để chặn chuyển trang khi modal được mở
-    $('#createModalModal').on('show.bs.modal', function (e) {
-        $(this).data('bs.modal').isShown = false;
-    });
-
-    // Lắng nghe sự kiện 'hide.bs.modal' để cho phép chuyển trang khi modal bị đóng
-    $('#createModalModal').on('hide.bs.modal', function (e) {
-        $(this).data('bs.modal').isShown = false;
-    });
-
 }
 
-function getProductDetail() {
+function getProductDetail(page = 1) {
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function () {
         //console.log(this.responseText);
@@ -714,7 +716,7 @@ function getProductDetail() {
         else {
             var res = JSON.parse(this.responseText).data;
             //console.log(res);
-            showProductDetail(res);
+            showProductDetail(res, page);
         }
     }
     //?productID=1
@@ -757,7 +759,7 @@ function setDefaultImage(img) {
     img.src = "https://static.vecteezy.com/system/resources/previews/005/337/799/original/icon-image-not-found-free-vector.jpg";
 }
 
-function showProductDetail(res) {
+function showProductDetail(res, page = 1) {
     var productDetail = document.getElementById("product-detail");
     var productDetailHTML = "";
     productDetailHTML += `
@@ -770,9 +772,11 @@ function showProductDetail(res) {
                     <h1>${res.name}</h1>
                     <p>${res.averageStar}<meter class="average-rating" min="0" max="5"></meter></p>
                     <h3>Price: $${res.price}</h3>
-                    <button type="button" class="btn btn-primary buy-now" onclick="buyNow(${res.productID})">Buy now</button>
+                    <button type="button" class="btn btn-primary" onclick="buyNow(${res.productID})">Buy now</button>
                     <button type="button" class="btn btn-primary" onclick="handleAddToCart(${res.productID})">Add to cart</button>
-                    <a class="btn btn-primary" href="./admin-updateproduct.html?productID=${res.productID}"${localStorage.getItem("isAdmin") === "true" ? "" : " style='display:None;'"}>Edit</a>
+                    <button class="btn btn-primary" 
+                    onclick="window.location.pathname='./admin-updateproduct.html';"
+                    ${localStorage.getItem("isAdmin") === "true" ? "" : " style='display:None;'"}>Edit</button>
                 </div>
             </div>
             <div class="description">
@@ -790,7 +794,10 @@ function showProductDetail(res) {
         }
         `;
     headTag.appendChild(styleTag);
-    for (var i = 0; i < res.review.length; i++) {
+
+    var pS = (page - 1) * 6, pE = pS + 6;
+
+    for (var i = pS; i < res.review.length && i < pE; i++) {
         //comment
         productDetailHTML += `
             <div id="comment-block" class="container">
@@ -816,6 +823,7 @@ function showProductDetail(res) {
             </div>
         `;
     }
+
     productDetailHTML += `   
     <div class="write-comment container">
         <h2>What do you thing about this product ?</h2>
@@ -834,6 +842,13 @@ function showProductDetail(res) {
         <button onclick="handleComment()">Comment</button>
     </div>
     `;
+    var maxPage = Math.ceil(res.review.length / 6);
+    productDetailHTML += `<div class="d-flex justify-content-center">`;
+    for (var i = 1; i <= maxPage; i++) {
+        productDetailHTML += `<button class="btn btn-primary m-2" onclick="getProductDetail(${i})">${i}</button>`;
+    }
+    productDetailHTML += `</div>`;
+
     productDetail.innerHTML = productDetailHTML;
 }
 function handleComment() {
