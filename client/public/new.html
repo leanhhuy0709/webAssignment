@@ -2,9 +2,9 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
     <!--Default-->
     <title>Olivia Cosmetics</title>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--Bootstrap-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
@@ -18,7 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" >
     <!--Web Image-->
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     <!--CSS-->
@@ -35,10 +35,10 @@
         getHTML("nav", "nav.html")
     </script>
     <!-- Header -->
-    <br>
+
     <div class="container">
         <div class="row justify-content-center">
-
+            
             <h1>NEW ARRIVALS</h1>
             <div class="container">
                 <div class="row justify-content-center" style="font-size:2vw">
@@ -56,7 +56,8 @@
                     </div>
                 </div>
             </div>
-            <div id="add-product-button" style="margin: 2% 0 2% 0;">
+            
+            <div id="add-product-button" style="margin: 2% 0 2% 0;width: 100%;text-align: center;">
                 <button onclick="location.href='/product-add'"
                     class="btn btn-outline-dark rounded-pill mx-1">ADD PRODUCT</button>
             </div>
@@ -65,16 +66,12 @@
                 else
                     document.getElementById("add-product-button").style.display = "none";
             </script>
-            <br>
-            <br>
-            <br>
-            <div class="product-item justify-content-center">
-                <div id="product-list" class="products-wrapper">
-                    <script>getProducts();</script>
-                </div>
-                <div id="page-list"></div>
+        </div>
+        <div class="product-item justify-content-center">
+            <div id="product-list" class="products-wrapper">
+                <script>getProducts();</script>
             </div>
-
+            <div id="page-list"></div>
         </div>
     </div>
 
@@ -83,8 +80,7 @@
     <script>
         getHTML("footer", "footer.html")
     </script>
-    <!-- Footer -->
-    </div>
+
 </body>
 
 </html>

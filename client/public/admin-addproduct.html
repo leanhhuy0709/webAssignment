@@ -2,9 +2,10 @@
 <html lang="en">
 
 <head>
+    <meta charset="UTF-8">
     <!--Default-->
     <title>Olivia Cosmetics</title>
-    <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--Bootstrap-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
@@ -18,7 +19,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" >
     <!--Web Image-->
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     <!--CSS-->
@@ -47,7 +48,7 @@
         <div class="idandprice row">
             <div class="mb-3 col-sm-4">
                 <label for="price" style="font-weight: bold;">Price $ </label>
-                <input type="text" class="form-control" id="price" placeholder="Enter price" name="price"
+                <input type="number" class="form-control" id="price" placeholder="Enter price" name="price"
                     style="border-radius: 20px; width: 100%;">
             </div>
         </div>
@@ -56,7 +57,7 @@
         <label for="productImage" style="font-weight: bold; margin-right: 2%;">Product Image </label>
         <input style="border-radius: 20px; width: 100%;" placeholder="Enter Image URL" class="form-control"
             id="productImage" name="productImage" onchange="handleImageChange()"> <br>
-        <img id="image" height="200px" onerror="setDefaultImage(document.getElementById('image'))">
+        <img id="image" src="./" alt="Product image" height="200" onerror="setDefaultImage(document.getElementById('image'))">
         <br>
         <br>
 

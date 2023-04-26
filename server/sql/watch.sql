@@ -70,6 +70,7 @@ select * from address;
 INSERT INTO cart(customerID) VALUES ((SELECT MAX(customerID) FROM Customer));
 
 SELECT * from product;
+select * from image;
 
 
 SELECT * from image;

@@ -143,7 +143,8 @@
                         FROM product
                         LEFT JOIN image ON product.productID = image.productID
                         JOIN category ON category.categoryID = product.categoryID
-                        WHERE category.name LIKE ? AND product.name LIKE ?;");
+                        WHERE category.name LIKE ? AND product.name LIKE ? 
+                        ORDER BY product.productID;");
         $stmt->bind_param("ss", $category, $search);
         try {
             $stmt->execute();
@@ -235,6 +236,8 @@
                     $couponPercent = $row["percent"];
                 }
             }
+            $totalWithShippingAndCoupon = intval(($total + 5) * (100 - $couponPercent) / 100 - $couponValue);
+            if ($totalWithShippingAndCoupon < 0) $totalWithShippingAndCoupon = 0;
             $result = array(
                 "data" => $result,
                 "total" => $total,
@@ -243,7 +246,7 @@
                 "couponName" => $couponName,
                 "couponPercent" => $couponPercent,
                 "couponValue" => $couponValue,
-                "totalWithShippingAndCoupon" => ($total + 5) * (100 - $couponPercent) / 100 - $couponValue
+                "totalWithShippingAndCoupon" => $totalWithShippingAndCoupon
             );
             $result = array(
                 "result" => true,
@@ -465,15 +468,10 @@
             die("Connection failed: " . $conn->connect_error);
         }
         // Prepare and bind the INSERT statement
-        $stmt = $conn->prepare("UPDATE customer SET fname = ?, lname = ?, DOB = ?, phoneNumber = ?, email = ?, imageURL = ? WHERE customerID = ?;");
-        $stmt->bind_param("ssssssi", $fname, $lname, $DOB, $phone, $email, $imageURL, $userID);
+        $stmt = $conn->prepare("UPDATE customer SET fname = ?, lname = ?, DOB = ?, phoneNumber = ?, email = ?, imageURL = ?, address = ? WHERE customerID = ?;");
+        $stmt->bind_param("sssssssi", $fname, $lname, $DOB, $phone, $email, $imageURL, $address, $userID);
 
         try {
-            $stmt->execute();
-            $stmt->close();
-            //update address
-            $stmt = $conn->prepare("UPDATE address SET address = ? WHERE customerID = ?;");
-            $stmt->bind_param("si", $address, $userID);
             $stmt->execute();
             $result = array(
                 "result" => true,
@@ -492,7 +490,6 @@
             return $result;
         }
     }
-    //Doing ..., don't use anything below this line
     function getOrdersModel($userID)
     {
         global $SQLservername, $SQLusername, $SQLpassword, $SQLdbname;

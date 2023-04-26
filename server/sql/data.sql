@@ -63,3 +63,4 @@ INSERT INTO image VALUES
 INSERT INTO admin VALUES (1); -- Huy is admin
 INSERT INTO coupon VALUES ("welcome", "Welcome to Olivia", 0, 5, 1);
 INSERT INTO coupon VALUES ("welcome2", "Welcome to Olivia", 10, 0, 1);
+INSERT INTO coupon VALUES ("olivia", "Olivia Big sale", 30, 0, 1);

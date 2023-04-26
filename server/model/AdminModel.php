@@ -58,7 +58,7 @@
             $stmt->execute();
             $stmt->close();
             //insert address
-            $stmt = $conn->prepare("INSERT INTO image VALUES (?, (SELECT MAX(customerID) FROM Customer));");
+            $stmt = $conn->prepare("INSERT INTO image VALUES (?, (SELECT MAX(productID) FROM product));");
             $stmt->bind_param("s", $imageURL);
             $stmt->execute();
             $result = array(

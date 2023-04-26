@@ -27,17 +27,17 @@
                 <a class="nav-link font-weight-bold" href="/user-list">User List <span class="sr-only">(current)</span></a>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
+        <div class="form-inline my-2 my-lg-0">
             <div class="input-group ml-2 my-2">
-                <input id ="search" type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="Search">
+                <input id ="search" type="text" class="form-control" placeholder="Search" aria-label="Search">
                 <div class="input-group-append">
-                    <button class="btn btn-outline-dark input-group-text" type="button" onclick="handleSearch()"><i class="fas fa-search" style="font-size: 23px;"></i></button>
+                    <button class="btn btn-outline-dark input-group-text" type="button" onclick="handleSearch()" aria-label="Button"><i class="fas fa-search" style="font-size: 23px;"></i></button>
                 </div>
             </div>
 
             <a href="/user" class="btn btn-outline-dark ml-2 my-sm-0 my-2 form-control font-weight-bold"><i class="fas fa-user" style="font-size: 23px;"></i> User info</a>
             <a class="btn btn-outline-dark ml-2 my-sm-0 my-2 form-control font-weight-bold" href="/cart"><i class="fas fa-shopping-cart" style="font-size: 23px;"></i> Cart</a>
             <button type="button" class="btn btn-outline-dark ml-2 my-sm-0 my-2 form-control font-weight-bold" onclick="handleLogout()"><i class="fas fa-power-off" style="font-size: 23px;"></i> Logout</button>
-        </form>
+        </div>
     </div>
 </nav>

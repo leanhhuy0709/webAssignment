@@ -167,7 +167,7 @@ function editUserProfile() {
 function getUserInfo(isEdit = false) {
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function () {
-        console.log(this.responseText)
+        //console.log(this.responseText)
         if (!JSON.parse(this.responseText).result) {
             createModal(JSON.parse(this.responseText).message, false);
         }
@@ -256,7 +256,7 @@ function getCart() {
 }
 
 function handleResponseCart(products) {
-    console.log(products);
+    //console.log(products);
     const productDiv = document.getElementById("cart-products");
     productDiv.innerHTML = "";
     var result = "";
@@ -458,9 +458,9 @@ function showProducts(products, page = 1) {
     products.slice(pS, pE).forEach((product) => {
         result += `
             <div class="card" style="width: 30%; margin: 0 3% 3% 0">
-                <img src="${product.imageURL}" class="card-img-top" onerror="this.onerror=null; this.src='https://media.istockphoto.com/id/1216251206/vector/no-image-available-icon.jpg?s=170667a&w=0&k=20&c=N-XIIeLlhUpm2ZO2uGls-pcVsZ2FTwTxZepwZe4DuE4=';">
+                <img alt="Product Image" src="${product.imageURL}" class="card-img-top" onerror="this.onerror=null; this.src='https://media.istockphoto.com/id/1216251206/vector/no-image-available-icon.jpg?s=170667a&w=0&k=20&c=N-XIIeLlhUpm2ZO2uGls-pcVsZ2FTwTxZepwZe4DuE4=';">
                 <div class="card-body" style="height:25%">
-                    <h5 class="card-title" style="text-align:center; font-size:2vw;" id="productcart-name">${product.name}</h5>
+                    <h5 class="card-title" style="text-align:center; font-size:2vw;">${product.name}</h5>
                     <p class="card-text" style="text-align:center; font-weight: bold; font-size:2vw;">Price: $${product.price}</p>
                 </div>
                 <div class="card-footer" style="text-align:center;"> 
@@ -648,7 +648,7 @@ function handleResponseOrderDetail(order) {
     order.products.forEach((product) => {
         result2 += `
             <tr>
-                <td id="img-col"><img src="${product.imageURL}" alt="product 1" onerror="this.onerror=null; this.src='https://media.istockphoto.com/id/1216251206/vector/no-image-available-icon.jpg?s=170667a&w=0&k=20&c=N-XIIeLlhUpm2ZO2uGls-pcVsZ2FTwTxZepwZe4DuE4=';"></td>
+                <td id="img-col"><img alt="Product Image" src="${product.imageURL}" alt="product 1" onerror="this.onerror=null; this.src='https://media.istockphoto.com/id/1216251206/vector/no-image-available-icon.jpg?s=170667a&w=0&k=20&c=N-XIIeLlhUpm2ZO2uGls-pcVsZ2FTwTxZepwZe4DuE4=';"></td>
                 <td>${product.name}</td>
                 <td>$${product.price}</td>
                 <td>${product.quantity}</td>
@@ -793,7 +793,7 @@ function showProductDetail(res, page = 1) {
         <div class="container">
             <div class="row">
                 <div class="col-6 img">
-                    <img src="${res.imageURL[0]}" alt="" onerror="this.onerror=null; this.src='https://media.istockphoto.com/id/1216251206/vector/no-image-available-icon.jpg?s=170667a&w=0&k=20&c=N-XIIeLlhUpm2ZO2uGls-pcVsZ2FTwTxZepwZe4DuE4=';">
+                    <img alt="Product Image" src="${res.imageURL[0]}" alt="" onerror="this.onerror=null; this.src='https://media.istockphoto.com/id/1216251206/vector/no-image-available-icon.jpg?s=170667a&w=0&k=20&c=N-XIIeLlhUpm2ZO2uGls-pcVsZ2FTwTxZepwZe4DuE4=';">
                 </div>
                 <div class="col-6 product-info">
                     <h1>${res.name}</h1>
@@ -830,7 +830,7 @@ function showProductDetail(res, page = 1) {
             <div id="comment-block" class="container">
                 <div class="row">
                     <div class="col-2">
-                        <img src="${res.review[i].imageURL}" alt="No Image" onerror="this.onerror=null; this.src='https://static.vecteezy.com/system/resources/previews/008/442/086/original/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg';">
+                        <img alt="User Image" src="${res.review[i].imageURL}" alt="No Image" onerror="this.onerror=null; this.src='https://static.vecteezy.com/system/resources/previews/008/442/086/original/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg';">
                     </div>
                     <div class="col-2 name">
                         <h3>${res.review[i].fname + " " + res.review[i].lname}</h3>
@@ -959,7 +959,7 @@ function showUserList(users) {
         result += `
         <tr>
             <th scope="row">${user.customerID}</th>
-            <td><img class="rounded-circle" src="${user.imageURL}" width="50px" height="50px" onerror="this.onerror=null; this.src='https://static.vecteezy.com/system/resources/previews/008/442/086/original/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg';"></td>
+            <td><img alt="User Image" class="rounded-circle" src="${user.imageURL}" width="50px" height="50px" onerror="this.onerror=null; this.src='https://static.vecteezy.com/system/resources/previews/008/442/086/original/illustration-of-human-icon-user-symbol-icon-modern-design-on-blank-background-free-vector.jpg';"></td>
             <td>${user.username}</td>
             <td>${user.lname}</td>
             <td>${user.fname}</td>
@@ -1008,7 +1008,7 @@ function handleUpdateProduct() {
         //console.log(this.responseText);
         var res = JSON.parse(this.responseText);
         //console.log(res);
-        createModal(res.message);
+        createModal(res.message, res.result);
     }
     xhttp.onerror = function (err) {
         console.log("Error");
@@ -1028,6 +1028,18 @@ function handleUpdateProduct() {
 
 function handleAddProduct() {
     const updateForm = document.getElementById('add-product-form');
+
+    if (updateForm.querySelector('#productTitle').value == "")
+    {
+        createModal("Please input product name", false);
+        return;
+    }
+    if (updateForm.querySelector('#price').value == 0)
+    {
+        createModal("Price must be greater than 0", false);
+        return;
+    }
+
     const xhttp = new XMLHttpRequest();
     xhttp.open("POST", "http://localhost/admin/product/add", true);
     xhttp.setRequestHeader("Content-Type", "application/json");
@@ -1035,7 +1047,16 @@ function handleAddProduct() {
         //console.log(this.responseText);
         var res = JSON.parse(this.responseText);
         //console.log(res);
-        createModal(res.message);
+        createModal(res.message, res.result);
+        console.log(res);
+        if (res.result)
+        {
+            updateForm.querySelector('#productTitle').value = "";
+            updateForm.querySelector('#price').value = "";
+            updateForm.querySelector('#productDescription').value = "";
+            updateForm.querySelector('#productImage').value = "";
+        }
+        
     }
     xhttp.onerror = function (err) {
         console.log("Error");
