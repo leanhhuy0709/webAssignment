@@ -77,7 +77,7 @@ SELECT * from image;
 UPDATE product SET name = "12", price = "23", categoryID = 1, supplierID = 1, brandID = 1, description = "123" WHERE productID = 1;
 INSERT INTO product(name, price, categoryID, supplierID, brandID, description) VALUES ("123", 12, 1, 1, 1, "só");
 
-INSERT INTO cartApplyCoupon VALUES ("welcome", 1);
+-- INSERT INTO cartApplyCoupon VALUES ("welcome", 1);
 
 SELECT cart.cartID, Coupon.CouponCode, name, percent, value, adminID
 FROM cart
