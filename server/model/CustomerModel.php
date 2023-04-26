@@ -1,92 +1,92 @@
 <?php
-    $SQLservername = "localhost";
-    $SQLusername = "root";
-    $SQLpassword = "";
-    $SQLdbname = "oliviashop";
-
-    function loginModel($username, $password)
-    {
-        global $SQLservername, $SQLusername, $SQLpassword, $SQLdbname;
-        // Create connection
-        $conn = new mysqli($SQLservername, $SQLusername, $SQLpassword, $SQLdbname);
-        // Check connection
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
-        // Prepare and bind the INSERT statement
-        $stmt = $conn->prepare("SELECT * FROM customer WHERE username = ? AND password = ?;");
-        $stmt->bind_param("ss", $username, $password);
-
-        $result = "";
-
-        try {
-            $stmt->execute();
-            $SQLresult = $stmt->get_result();
-            if ($SQLresult->num_rows > 0) {
-                while($row = $SQLresult->fetch_assoc()) {
-                    $result = $row["customerID"];
-                    $result = array(
-                        "id" => $row["customerID"],
-                        "message" => "Login successfully",
-                        "isAdmin" => false
-                    );
-                }
-            } 
-            else
-            {
-                $stmt->close();
-                $stmt = $conn->prepare("SELECT * FROM customer WHERE email = ? AND password = ?;");
-                $stmt->bind_param("ss", $username, $password);
-                $stmt->execute();
-                $SQLresult = $stmt->get_result();
-                if ($SQLresult->num_rows > 0) {
-                    while($row = $SQLresult->fetch_assoc()) {
-                        $result = $row["customerID"];
-                        $result = array(
-                            "id" => $row["customerID"],
-                            "message" => "Login successfully",
-                            "isAdmin" => false
-                        );
-                    }
-                }
-                else 
-                {
-                    $result = array(
-                        "id" => -1,
-                        "message" => "Wrong username or password",
-                        "isAdmin" => false
-                    );
-                }
-            }
-
-            if ($result["id"] != -1)
-            {
-                $result["isAdmin"] = false;
-                $stmt->close();
-                $stmt = $conn->prepare("SELECT * FROM admin WHERE adminId = ?");
-                $stmt->bind_param("i", $result["id"]);
-                $stmt->execute();
-                $SQLresult = $stmt->get_result();
-                if ($SQLresult->num_rows > 0) {
-                    while($row = $SQLresult->fetch_assoc()) {
-                        $result["isAdmin"] = true;
-                    }
-                }
-            }
-        }
-        catch (Exception $e) {
-            $result = array(
-                "id" => -1,
-                "message" => $e->getMessage(),
-                "isAdmin" => false
-            );
-        }
-        finally {
-            $stmt->close();
-            $conn->close();
-            return $result;
-        }
-    }
+     $SQLservername = "localhost";
+     $SQLusername = "root";
+     $SQLpassword = "";
+     $SQLdbname = "oliviashop";
+ 
+     function loginModel($username, $password)
+     {
+         global $SQLservername, $SQLusername, $SQLpassword, $SQLdbname;
+         // Create connection
+         $conn = new mysqli($SQLservername, $SQLusername, $SQLpassword, $SQLdbname);
+         // Check connection
+         if ($conn->connect_error) {
+             die("Connection failed: " . $conn->connect_error);
+         }
+         // Prepare and bind the INSERT statement
+         $stmt = $conn->prepare("SELECT * FROM customer WHERE username = ? AND password = ?;");
+         $stmt->bind_param("ss", $username, $password);
+ 
+         $result = "";
+ 
+         try {
+             $stmt->execute();
+             $SQLresult = $stmt->get_result();
+             if ($SQLresult->num_rows > 0) {
+                 while($row = $SQLresult->fetch_assoc()) {
+                     $result = $row["customerID"];
+                     $result = array(
+                         "id" => $row["customerID"],
+                         "message" => "Login successfully",
+                         "isAdmin" => false
+                     );
+                 }
+             } 
+             else
+             {
+                 $stmt->close();
+                 $stmt = $conn->prepare("SELECT * FROM customer WHERE email = ? AND password = ?;");
+                 $stmt->bind_param("ss", $username, $password);
+                 $stmt->execute();
+                 $SQLresult = $stmt->get_result();
+                 if ($SQLresult->num_rows > 0) {
+                     while($row = $SQLresult->fetch_assoc()) {
+                         $result = $row["customerID"];
+                         $result = array(
+                             "id" => $row["customerID"],
+                             "message" => "Login successfully",
+                             "isAdmin" => false
+                         );
+                     }
+                 }
+                 else 
+                 {
+                     $result = array(
+                         "id" => -1,
+                         "message" => "Wrong username or password",
+                         "isAdmin" => false
+                     );
+                 }
+             }
+ 
+             if ($result["id"] != -1)
+             {
+                 $result["isAdmin"] = false;
+                 $stmt->close();
+                 $stmt = $conn->prepare("SELECT * FROM admin WHERE adminId = ?");
+                 $stmt->bind_param("i", $result["id"]);
+                 $stmt->execute();
+                 $SQLresult = $stmt->get_result();
+                 if ($SQLresult->num_rows > 0) {
+                     while($row = $SQLresult->fetch_assoc()) {
+                         $result["isAdmin"] = true;
+                     }
+                 }
+             }
+         }
+         catch (Exception $e) {
+             $result = array(
+                 "id" => -1,
+                 "message" => $e->getMessage(),
+                 "isAdmin" => false
+             );
+         }
+         finally {
+             $stmt->close();
+             $conn->close();
+             return $result;
+         }
+     }
 
     function signupModel($username, $password, $fname, $lname, $gender, $age, $email, $phone, $DOB, $imageURL, $address)
     {

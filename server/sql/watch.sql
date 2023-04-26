@@ -86,4 +86,4 @@ JOIN Coupon ON cartApplyCoupon.couponCode = Coupon.couponCode
 WHERE cart.cartID = ?;
 
 
-
+select * from customer;

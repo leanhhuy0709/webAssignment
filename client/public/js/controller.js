@@ -37,16 +37,19 @@ function handleLogin() {
     xhr.open("POST", "http://localhost/login", true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.onload = function () {
-        console.log(this.responseText);
+        //console.log(this.responseText);
         var response = JSON.parse(this.responseText);
+        console.log(response);
         if (response.result) {
             var token = response.token;
             var time = new Date();
             time.setTime(time.getTime() + (1 * 60 * 60 * 1000 * 24));   // 24 hour
             document.cookie = "token=" + token + "; expires=" + time.toUTCString() + "; path=/";
             localStorage.setItem("isAdmin", response.isAdmin);
+            createModal(response.message, response.result, "/");
         }
-        createModal(response.message, response.result, "/");
+        else 
+            createModal(response.message, response.result, "");
     }
 
     const data = JSON.stringify({
@@ -661,6 +664,19 @@ function handleResponseOrderDetail(order) {
     productDetailDiv.innerHTML = result2;
 }
 
+function checkInvalidChar(str_arr)
+{
+    for(var i = 0; i < str_arr.length; i++)
+    {
+        if (str_arr[i].search("<") != -1 && str_arr[i].search(">") != -1)
+        {
+            createModal("'<' or '>' is invalid", false);
+            return false;
+        }
+    }
+    return true;
+}
+
 // Kiểm tra dữ liệu đầu vào
 function validateForm() {
     const form = document.getElementById("signup-form");
@@ -675,6 +691,10 @@ function validateForm() {
     var DOB = form.querySelector("#DOB").value;
     var imageURL = form.querySelector("#imageURL").value;
     var regex = /\S+@\S+\.\S+/;
+
+    var tmp = checkInvalidChar([username, password, email, phone, firstName, lastName, imageURL])
+    if (!tmp) 
+        return false;
 
     if (!regex.test(email)) {
         createModal("Invalid email address", false);
